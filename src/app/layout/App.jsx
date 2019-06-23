@@ -9,11 +9,14 @@ import PeopleDashboard from "../../features/user/PeopleDashboard/PeopleDashboard
 import SettingsDashBoard from "../../features/user/Settings/SettingsDashboard";
 import UserDetailedPage from "../../features/user/UserDetailed/UserDetailedPage";
 import EventForm from "../../features/event/EventForm/EventForm";
+import ModalManager from "../../features/modals/ModalManager";
+import TestComponent from "../../features/testarea/TestComponent";
 
 class App extends Component {
   render() {
     return (
       <Fragment>
+        <ModalManager />
         <Route exact path="/" component={HomePage} />
         <Route
           path="/(.+)" // this means if the path is more than just a '/', it will render the respective component
@@ -27,6 +30,7 @@ class App extends Component {
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingsDashBoard} />
+                  <Route path="/test" component={TestComponent} />
                   <Route
                     path={["/createEvent", "/manage/:id"]}
                     component={EventForm}
