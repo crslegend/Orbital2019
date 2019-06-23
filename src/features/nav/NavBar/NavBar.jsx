@@ -43,16 +43,18 @@ class NavBar extends Component {
             <Fragment>
               <Menu.Item as={NavLink} to="/people" name="People" />
               <Menu.Item as={NavLink} to="/test" name="Test" />
-              <Menu.Item>
-                <Button
-                  as={Link}
-                  to="/createEvent"
-                  floated="right"
-                  positive
-                  inverted
-                  content="Create Event"
-                />
-              </Menu.Item>
+              {profile.userType === "tutor" && (
+                <Menu.Item>
+                  <Button
+                    as={Link}
+                    to="/createEvent"
+                    floated="right"
+                    positive
+                    inverted
+                    content="Create Event"
+                  />
+                </Menu.Item>
+              )}
             </Fragment>
           )}
 

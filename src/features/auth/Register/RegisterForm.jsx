@@ -1,10 +1,11 @@
 import React from "react";
-import { Form, Segment, Button, Radio, Label } from "semantic-ui-react";
+import { Label, Form, Segment, Button } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
 import { connect } from "react-redux";
 import { registerUser } from "../authActions";
 import { combineValidators, isRequired } from "revalidate";
+import RadioInput from "../../../app/common/form/RadioInput";
 
 const mapDispatchToProps = {
   registerUser
@@ -54,24 +55,23 @@ const RegisterForm = ({
               {error}
             </Label>
           )}
-          {/* <Form.Field>
-            <Radio
-              label="Tutor"
-              name="radioGroup"
+          <Form.Group inline>
+            <label>Sign Up As: </label>
+            <Field
+              name="userType"
+              type="radio"
               value="tutor"
-              checked={this.state.value === "tutor"}
-              onChange={this.handleChange}
+              label="Tutor"
+              component={RadioInput}
             />
-          </Form.Field>
-          <Form.Field>
-            <Radio
+            <Field
+              name="userType"
+              type="radio"
+              value="Tutor"
               label="Tutee"
-              name="radioGroup"
-              value="tutee"
-              checked={this.state.value === "tutee"}
-              onChange={this.handleChange}
+              component={RadioInput}
             />
-          </Form.Field> */}
+          </Form.Group>
           <Button
             disabled={invalid || submitting}
             fluid
