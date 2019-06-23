@@ -6,7 +6,7 @@ class EventListAttendee extends Component {
     const { attendee } = this.props;
     return (
       <List.Item>
-        <Image as="a" size="mini" circular src="/public/assets/user.png" />
+        <Image as="a" size="mini" circular src="/assets/user.png" />
       </List.Item>
     );
   }

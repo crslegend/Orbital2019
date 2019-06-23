@@ -67,7 +67,7 @@ const RegisterForm = ({
             <Field
               name="userType"
               type="radio"
-              value="Tutor"
+              value="tutee"
               label="Tutee"
               component={RadioInput}
             />

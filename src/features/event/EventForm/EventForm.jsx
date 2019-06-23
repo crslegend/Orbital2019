@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { updateEvent, createEvent } from "../eventActions";
-import cuid from "cuid";
+import { updateEvent, createEvent, cancelToggle } from "../eventActions";
 import { reduxForm, Field } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
@@ -14,24 +13,33 @@ import {
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
+import { withFirestore } from "react-redux-firebase";
+import { toastr } from "react-redux-toastr";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
 
   let event = {};
 
-  if (eventId && state.events.length > 0) {
-    event = state.events.filter(event => event.id === eventId)[0];
+  if (
+    state.firestore.ordered.events &&
+    state.firestore.ordered.events.length > 0
+  ) {
+    event =
+      state.firestore.ordered.events.filter(event => event.id === eventId)[0] ||
+      {};
   }
 
   return {
-    initialValues: event
+    initialValues: event,
+    event
   };
 };
 
 const mapDispatchToProps = {
   createEvent,
-  updateEvent
+  updateEvent,
+  cancelToggle
 };
 
 const validate = combineValidators({
@@ -56,18 +64,40 @@ const size = [
   { key: "6", text: "6", value: "6" }
 ];
 
+const subject = [
+  { key: "english", text: "English", value: "English" },
+  { key: "mathematics", text: "Mathematics", value: "Mathematics" },
+  { key: "science", text: "Science", value: "Science" },
+  { key: "chinese", text: "Chinese", value: "Chinese" },
+  { key: "malay", text: "Bahasa Melayu", value: "Bahasa Melayu" },
+  { key: "tamil", text: "Tamil", value: "Tamil" }
+];
+
 class EventForm extends Component {
-  onFormSubmit = values => {
-    if (this.props.initialValues.id) {
-      this.props.updateEvent(values);
-      this.props.history.push(`/events/${this.props.initialValues.id}`);
-    } else {
-      const newEvent = {
-        ...values,
-        id: cuid()
-      };
-      this.props.createEvent(newEvent);
-      this.props.history.push(`/events/${newEvent.id}`);
+  // state = {
+  //   venueLatLng: {}
+  // };
+
+  async componentDidMount() {
+    const { firestore, match } = this.props;
+    await firestore.setListener(`events/${match.params.id}`);
+  }
+
+  onFormSubmit = async values => {
+    // values.venueLatLng = this.state.venueLatLng
+    try {
+      if (this.props.initialValues.id) {
+        // if (Object.keys(values.venueLatLng).length === 0) {
+        //   values.venueLatLng = this.props.event.venueLatLng;
+        // }
+        this.props.updateEvent(values);
+        this.props.history.push(`/events/${this.props.initialValues.id}`);
+      } else {
+        let createdEvent = await this.props.createEvent(values);
+        this.props.history.push(`/events/${createdEvent.id}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -77,7 +107,9 @@ class EventForm extends Component {
       initialValues,
       invalid,
       submitting,
-      pristine
+      pristine,
+      event,
+      cancelToggle
     } = this.props;
     return (
       <Grid>
@@ -90,14 +122,15 @@ class EventForm extends Component {
             >
               <Field
                 name="subject"
-                component={TextInput}
-                placeholder="Subject tutoring (eg. Primary 4 Mathematics)"
+                component={SelectInput}
+                options={subject}
+                placeholder="Choose the subject to tutor"
               />
               <Field
                 name="description"
                 component={TextArea}
                 rows={3}
-                placeholder="Description of the class"
+                placeholder="Description of the class OR the topic of the subject"
               />
               <Field
                 name="size"
@@ -136,6 +169,13 @@ class EventForm extends Component {
               >
                 Cancel
               </Button>
+              <Button
+                type="button"
+                color={event.cancelled ? "green" : "red"}
+                floated="right"
+                content={event.cancelled ? "Reactivate Class" : "Cancel Class"}
+                onClick={() => cancelToggle(!event.cancelled, event.id)}
+              />
             </Form>
           </Segment>
         </Grid.Column>
@@ -144,7 +184,13 @@ class EventForm extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(reduxForm({ form: "eventForm", validate })(EventForm));
+export default withFirestore(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
+    reduxForm({ form: "eventForm", validate, enableReinitialize: true })(
+      EventForm
+    )
+  )
+);

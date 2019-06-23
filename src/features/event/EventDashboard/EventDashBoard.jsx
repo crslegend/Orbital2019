@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Grid } from "semantic-ui-react";
 import EventList from "../EventList/EventList";
 import { connect } from "react-redux";
-import { createEvent, updateEvent, deleteEvent } from "../eventActions";
+import { createEvent, updateEvent } from "../eventActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventActivity from "../EventActivity/EventActivity";
 import { firestoreConnect } from "react-redux-firebase";
@@ -14,8 +14,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   createEvent,
-  updateEvent,
-  deleteEvent
+  updateEvent
+  // deleteEvent
 };
 
 class EventDashBoard extends Component {
@@ -29,7 +29,7 @@ class EventDashBoard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventList events={events} deleteEvent={this.handleDeleteEvent} />
+          <EventList events={events} />
         </Grid.Column>
         <Grid.Column width={6}>
           <EventActivity />
