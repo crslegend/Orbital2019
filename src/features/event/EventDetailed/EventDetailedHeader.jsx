@@ -42,7 +42,15 @@ const EventDetailedHeader = ({
                   {event.date && format(event.date.toDate(), "EEEE do LLLL")}
                 </p>
                 <p>
-                  Tutor: <strong>{event.tutorName}</strong>
+                  Tutor:{" "}
+                  <strong>
+                    <Link
+                      to={`/profile/${event.tutorUid}`}
+                      style={{ color: "white" }}
+                    >
+                      {event.tutorName}
+                    </Link>
+                  </strong>
                 </p>
               </Item.Content>
             </Item>

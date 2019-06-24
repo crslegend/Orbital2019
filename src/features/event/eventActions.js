@@ -1,10 +1,3 @@
-import { UPDATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from "./eventConstants";
-import {
-  asyncActionStart,
-  asyncActionFinish,
-  asyncActionError
-} from "../async/asyncActions";
-import { fetchSampleData } from "../../app/data/mockApi";
 import { toastr } from "react-redux-toastr";
 import { createNewEvent } from "../../app/common/util/helpers";
 
@@ -73,18 +66,4 @@ export const cancelToggle = (cancelled, eventId) => async (
   } catch (error) {
     console.log(error);
   }
-};
-
-export const loadEvents = () => {
-  return async dispatch => {
-    try {
-      dispatch(asyncActionStart());
-      const events = await fetchSampleData();
-      dispatch({ type: FETCH_EVENTS, payload: { events } });
-      dispatch(asyncActionFinish());
-    } catch (error) {
-      console.log(error);
-      dispatch(asyncActionError());
-    }
-  };
 };

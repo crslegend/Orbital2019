@@ -14,7 +14,6 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
-import { toastr } from "react-redux-toastr";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
