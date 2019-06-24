@@ -6,6 +6,7 @@ import UserDetailedEvents from "./UserDetailedEvents";
 import UserDetailedSideBar from "./UserDetailedSidebar";
 import UserDetailedHeader from "./UserDetailedHeader";
 import { userDetailedQuery } from "../userQueries";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const mapStateToProps = (state, ownProps) => {
   let userUid = null;
@@ -23,14 +24,20 @@ const mapStateToProps = (state, ownProps) => {
   return {
     profile,
     userUid,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    requesting: state.firestore.status.requesting
   };
 };
 
 class UserDetailedPage extends Component {
   render() {
-    const { profile, auth, match } = this.props;
+    const { profile, auth, match, requesting } = this.props;
     const isCurrentUser = auth.uid === match.params.id;
+
+    // this below means if any request statuses in firestore when loading this page is
+    // true, then loading is set to true
+    const loading = Object.values(requesting).some(a => a === true);
+    if (loading) return <LoadingComponent />;
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
