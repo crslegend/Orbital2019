@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Segment, Image, Item, Header, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -16,7 +16,14 @@ const eventImageTextStyle = {
   color: "white"
 };
 
-const EventDetailedHeader = ({ event }) => {
+const EventDetailedHeader = ({
+  event,
+  isGoing,
+  isHost,
+  profile,
+  goingToEvent,
+  cancelGoingToEvent
+}) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -35,7 +42,7 @@ const EventDetailedHeader = ({ event }) => {
                   {event.date && format(event.date.toDate(), "EEEE do LLLL")}
                 </p>
                 <p>
-                  Hosted by <strong>{event.tutorName}</strong>
+                  Tutor: <strong>{event.tutorName}</strong>
                 </p>
               </Item.Content>
             </Item>
@@ -43,18 +50,31 @@ const EventDetailedHeader = ({ event }) => {
         </Segment>
       </Segment>
 
-      <Segment attached="bottom">
-        <Button>Cancel My Place</Button>
-        <Button color="teal">JOIN THIS EVENT</Button>
+      <Segment attached="bottom" clearing>
+        {!isHost && profile.userType === "tutee" && (
+          <Fragment>
+            {isGoing ? (
+              <Button onClick={() => cancelGoingToEvent(event)}>
+                Cancel My Place
+              </Button>
+            ) : (
+              <Button onClick={() => goingToEvent(event)} color="teal">
+                Join This Class
+              </Button>
+            )}
+          </Fragment>
+        )}
 
-        <Button
-          as={Link}
-          to={`/manage/${event.id}`}
-          color="orange"
-          floated="right"
-        >
-          Manage Event
-        </Button>
+        {isHost && (
+          <Button
+            as={Link}
+            to={`/manage/${event.id}`}
+            color="orange"
+            floated="right"
+          >
+            Edit Class Details
+          </Button>
+        )}
       </Segment>
     </Segment.Group>
   );

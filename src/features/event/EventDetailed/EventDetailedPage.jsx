@@ -5,8 +5,8 @@ import EventDetailedInfo from "./EventDetailedInfo";
 import EventDetailedSidebar from "./EventDetailedSidebar";
 import { connect } from "react-redux";
 import { withFirestore } from "react-redux-firebase";
-import { toastr } from "react-redux-toastr";
 import { objectToArray } from "../../../app/common/util/helpers";
+import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -23,29 +23,51 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    event
+    event,
+    auth: state.firebase.auth,
+    profile: state.firebase.profile
   };
+};
+
+const mapDispatchToProps = {
+  goingToEvent,
+  cancelGoingToEvent
 };
 
 class EventDetailedPage extends Component {
   async componentDidMount() {
-    const { firestore, match, history } = this.props;
-    let event = await firestore.get(`events/${match.params.id}`);
+    const { firestore, match } = this.props;
+    await firestore.setListener(`events/${match.params.id}`);
+  }
 
-    // if (!event.exist) {
-    //   history.push("/events");
-    //   toastr.error("Sorry", "Event not found");
-    // }
+  async componentWillUnmount() {
+    const { firestore, match } = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
   }
 
   render() {
-    const { event } = this.props;
+    const {
+      event,
+      auth,
+      profile,
+      goingToEvent,
+      cancelGoingToEvent
+    } = this.props;
     const attendees =
       event && event.attendees && objectToArray(event.attendees);
+    const isHost = event.tutorUid === auth.uid;
+    const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventDetailedHeader event={event} />
+          <EventDetailedHeader
+            event={event}
+            isGoing={isGoing}
+            isHost={isHost}
+            profile={profile}
+            goingToEvent={goingToEvent}
+            cancelGoingToEvent={cancelGoingToEvent}
+          />
           <EventDetailedInfo event={event} />
         </Grid.Column>
         <Grid.Column width={6}>
@@ -56,4 +78,9 @@ class EventDetailedPage extends Component {
   }
 }
 
-export default withFirestore(connect(mapStateToProps)(EventDetailedPage));
+export default withFirestore(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(EventDetailedPage)
+);
