@@ -21,7 +21,7 @@ const HomePage = ({ history }) => {
           />
           HelpDen
         </Header>
-        <Button onClick={() => history.push("/events")} size="huge" inverted>
+        <Button onClick={() => history.push("/classes")} size="huge" inverted>
           Get started
           <Icon name="right arrow" inverted />
         </Button>
