@@ -35,7 +35,7 @@ const UserDetailedHeader = ({ profile }) => {
             <Item.Content verticalAlign="bottom">
               <Header as="h1">{profile.displayName}</Header>
               <br />
-              <Header as="h3">{age}</Header>
+              <Header as="h3">Age: {age}</Header>
             </Item.Content>
           </Item>
         </Item.Group>
