@@ -38,7 +38,7 @@ class NavBar extends Component {
             <img src="/assets/logo.png" alt="logo" />
             HelpDen
           </Menu.Item>
-          <Menu.Item as={NavLink} exact to="/events" name="Events" />
+          <Menu.Item as={NavLink} exact to="/classes" name="Classes" />
           {authenticated && (
             <Fragment>
               <Menu.Item as={NavLink} to="/people" name="People" />

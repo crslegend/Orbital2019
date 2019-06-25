@@ -25,8 +25,8 @@ class App extends Component {
               <NavBar />
               <Container className="main">
                 <Switch key={this.props.location.key}>
-                  <Route exact path="/events" component={EventDashBoard} />
-                  <Route path="/events/:id" component={EventDetailedPage} />
+                  <Route exact path="/classes" component={EventDashBoard} />
+                  <Route path="/classes/:id" component={EventDetailedPage} />
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingsDashBoard} />
