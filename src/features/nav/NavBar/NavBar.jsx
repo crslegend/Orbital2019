@@ -51,7 +51,7 @@ class NavBar extends Component {
                     floated="right"
                     positive
                     inverted
-                    content="Create Event"
+                    content="Create A New Class"
                   />
                 </Menu.Item>
               )}
