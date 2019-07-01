@@ -8,6 +8,8 @@ import { objectToArray } from "../../../app/common/util/helpers";
 class EventListItem extends Component {
   render() {
     const { event } = this.props;
+    const attendees =
+      event && event.attendees && objectToArray(event.attendees);
     return (
       <Segment.Group>
         <Segment>
@@ -28,6 +30,14 @@ class EventListItem extends Component {
                     ribbon="right"
                     color="red"
                     content="This class has been cancelled"
+                  />
+                )}
+                {attendees && attendees.length >= event.size && (
+                  <Label
+                    style={{ middle: "-40px" }}
+                    ribbon="right"
+                    color="orange"
+                    content="This class is full"
                   />
                 )}
               </Item.Content>
