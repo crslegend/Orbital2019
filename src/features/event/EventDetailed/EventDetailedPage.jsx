@@ -67,6 +67,7 @@ class EventDetailedPage extends Component {
             profile={profile}
             goingToEvent={goingToEvent}
             cancelGoingToEvent={cancelGoingToEvent}
+            attendees={attendees}
           />
           <EventDetailedInfo event={event} />
         </Grid.Column>

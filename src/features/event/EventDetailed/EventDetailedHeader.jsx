@@ -22,7 +22,8 @@ const EventDetailedHeader = ({
   isHost,
   profile,
   goingToEvent,
-  cancelGoingToEvent
+  cancelGoingToEvent,
+  attendees
 }) => {
   return (
     <Segment.Group>
@@ -66,9 +67,17 @@ const EventDetailedHeader = ({
                 Cancel My Place
               </Button>
             ) : (
-              <Button onClick={() => goingToEvent(event)} color="teal">
-                Join This Class
-              </Button>
+              [
+                attendees && attendees.length < event.size ? (
+                  <Button onClick={() => goingToEvent(event)} color="teal">
+                    Join This Class
+                  </Button>
+                ) : (
+                  <Button disabled color="teal">
+                    Class is Full
+                  </Button>
+                )
+              ]
             )}
           </Fragment>
         )}
