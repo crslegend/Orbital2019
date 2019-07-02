@@ -7,6 +7,7 @@ import UserDetailedSideBar from "./UserDetailedSidebar";
 import UserDetailedHeader from "./UserDetailedHeader";
 import { userDetailedQuery } from "../userQueries";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { getUserEvents } from "../userActions";
 
 const mapStateToProps = (state, ownProps) => {
   let userUid = null;
@@ -25,13 +26,35 @@ const mapStateToProps = (state, ownProps) => {
     profile,
     userUid,
     auth: state.firebase.auth,
-    requesting: state.firestore.status.requesting
+    requesting: state.firestore.status.requesting,
+    events: state.events,
+    eventsLoading: state.async.loading
   };
 };
 
+const mapDispatchToProps = {
+  getUserEvents
+};
+
 class UserDetailedPage extends Component {
+  async componentDidMount() {
+    let events = await this.props.getUserEvents(this.props.userUid);
+    console.log(events);
+  }
+
+  changeTab = (e, data) => {
+    this.props.getUserEvents(this.props.userUid, data.activeIndex);
+  };
+
   render() {
-    const { profile, auth, match, requesting } = this.props;
+    const {
+      profile,
+      auth,
+      match,
+      requesting,
+      events,
+      eventsLoading
+    } = this.props;
     const isCurrentUser = auth.uid === match.params.id;
 
     // this below means if any request statuses in firestore when loading this page is
@@ -42,13 +65,20 @@ class UserDetailedPage extends Component {
       <Grid>
         <UserDetailedHeader profile={profile} />
         {isCurrentUser && <UserDetailedSideBar />}
-        <UserDetailedEvents />
+        <UserDetailedEvents
+          events={events}
+          eventsLoading={eventsLoading}
+          changeTab={this.changeTab}
+        />
       </Grid>
     );
   }
 }
 
-export default connect(mapStateToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   firestoreConnect((auth, userUid) => userDetailedQuery(auth, userUid))(
     UserDetailedPage
   )
