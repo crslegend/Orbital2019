@@ -74,7 +74,7 @@ class EventListItem extends Component {
             to={`/classes/${event.id}`}
             color="teal"
             floated="right"
-            content="View"
+            content="View Class Details"
           />
         </Segment>
       </Segment.Group>
