@@ -32,7 +32,7 @@ class EventListItem extends Component {
                     content="This class has been cancelled"
                   />
                 )}
-                {attendees && attendees.length >= event.size && (
+                {attendees && attendees.length > event.size && (
                   <Label
                     style={{ middle: "-40px" }}
                     ribbon="right"

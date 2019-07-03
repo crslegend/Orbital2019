@@ -68,7 +68,7 @@ const EventDetailedHeader = ({
               </Button>
             ) : (
               [
-                attendees && attendees.length < event.size ? (
+                attendees && attendees.length < event.size + 1 ? (
                   <Button onClick={() => goingToEvent(event)} color="teal">
                     Join This Class
                   </Button>
