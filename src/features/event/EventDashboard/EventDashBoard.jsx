@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Grid, Button, Loader } from "semantic-ui-react";
 import EventList from "../EventList/EventList";
 import { connect } from "react-redux";
@@ -26,6 +26,8 @@ const mapDispatchToProps = {
 };
 
 class EventDashBoard extends Component {
+  contextRef = createRef();
+
   state = {
     moreEvents: false,
     loadingInitial: true,
@@ -70,12 +72,14 @@ class EventDashBoard extends Component {
     return (
       <Grid>
         <Grid.Column width={10} only="computer">
-          <EventList
-            loading={loading}
-            events={loadedEvents}
-            moreEvents={moreEvents}
-            getNextEvents={this.getNextEvents}
-          />
+          <div ref={this.contextRef}>
+            <EventList
+              loading={loading}
+              events={loadedEvents}
+              moreEvents={moreEvents}
+              getNextEvents={this.getNextEvents}
+            />
+          </div>
         </Grid.Column>
         <Grid.Column width={16} only="mobile">
           <EventList
@@ -94,7 +98,7 @@ class EventDashBoard extends Component {
           />
         </Grid.Column>
         <Grid.Column width={6} only="computer">
-          <EventActivity activities={activities} />
+          <EventActivity activities={activities} contextRef={this.contextRef} />
         </Grid.Column>
         <Grid.Column width={10}>
           <Loader active={loading} />
