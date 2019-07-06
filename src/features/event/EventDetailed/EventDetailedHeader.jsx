@@ -68,14 +68,26 @@ const EventDetailedHeader = ({
               </Button>
             ) : (
               [
-                attendees && attendees.length < event.size + 1 ? (
+                !event.cancelled &&
+                attendees &&
+                attendees.length < event.size + 1 ? (
                   <Button onClick={() => goingToEvent(event)} color="teal">
                     Join This Class
                   </Button>
                 ) : (
-                  <Button disabled color="teal">
-                    Class is Full
-                  </Button>
+                  [
+                    event.cancelled &&
+                    attendees &&
+                    attendees.length < event.size + 1 ? (
+                      <Button disabled color="teal">
+                        Class Cancelled
+                      </Button>
+                    ) : (
+                      <Button disabled color="teal">
+                        Class is Full
+                      </Button>
+                    )
+                  ]
                 )
               ]
             )}

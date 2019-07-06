@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Card,
-  Grid,
-  Header,
-  Image,
-  Menu,
-  Segment,
-  Tab
-} from "semantic-ui-react";
+import { Card, Grid, Header, Image, Segment, Tab } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import format from "date-fns/format";
 
@@ -26,11 +18,11 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab }) => {
         <Tab
           onTabChange={(e, data) => changeTab(e, data)}
           panes={panes}
-          menu={{ secondary: true, pointing: true }}
+          menu={{ secondary: true, pointing: true, className: "wrapped" }}
         />
         <br />
 
-        <Card.Group itemsPerRow={5}>
+        <Card.Group itemsPerRow={2} only="mobile">
           {events &&
             events.map(event => (
               <Card as={Link} to={`/classes/${event.id}`} key={event.id}>

@@ -60,7 +60,7 @@ class EventDashBoard extends Component {
     if (this.state.loadingInitial) return <LoadingComponent />;
     return (
       <Grid>
-        <Grid.Column width={10}>
+        <Grid.Column width={10} only="computer">
           <EventList
             loading={loading}
             events={loadedEvents}
@@ -68,7 +68,23 @@ class EventDashBoard extends Component {
             getNextEvents={this.getNextEvents}
           />
         </Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column width={16} only="mobile">
+          <EventList
+            loading={loading}
+            events={loadedEvents}
+            moreEvents={moreEvents}
+            getNextEvents={this.getNextEvents}
+          />
+        </Grid.Column>
+        <Grid.Column width={16} only="tablet">
+          <EventList
+            loading={loading}
+            events={loadedEvents}
+            moreEvents={moreEvents}
+            getNextEvents={this.getNextEvents}
+          />
+        </Grid.Column>
+        <Grid.Column width={6} only="computer">
           <EventActivity />
         </Grid.Column>
         <Grid.Column width={10}>
