@@ -19,7 +19,10 @@ const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
   return (
     <Segment>
       <Header dividing size="large" content="About Me" />
-      <p>Complete your profile to get the most out of this site</p>
+      <p>
+        Complete your profile to let other tutors and tutees know more about
+        you!
+      </p>
       <Form onSubmit={handleSubmit(updateProfile)}>
         <Form.Group inline>
           <label>Tell us your status: </label>
@@ -62,6 +65,13 @@ const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
           type="text"
           component={TextInput}
           placeholder="Occupation"
+        />
+        <Field
+          width={8}
+          name="school"
+          type="text"
+          component={TextInput}
+          placeholder="Name of school currently studying in"
         />
         {/* <Field
           width={8}

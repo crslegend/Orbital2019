@@ -13,13 +13,16 @@ class BasicPage extends Component {
       <Segment>
         <Header dividing size="large" content="Basics" />
         <Form onSubmit={handleSubmit(updateProfile)}>
-          <Field
-            width={8}
-            name="displayName"
-            type="text"
-            component={TextInput}
-            placeholder="Full Name"
-          />
+          <Form.Group inline>
+            <label>Full Name</label>
+            <Field
+              width={8}
+              name="displayName"
+              type="text"
+              component={TextInput}
+              placeholder="Full Name"
+            />
+          </Form.Group>
           <Form.Group inline>
             <label>Gender: </label>
             <Field
@@ -37,17 +40,38 @@ class BasicPage extends Component {
               component={RadioInput}
             />
           </Form.Group>
-          <Field
-            width={8}
-            name="dateOfBirth"
-            component={DateInput}
-            placeholder="Date of Birth"
-            dateFormat="dd LLL yyyy"
-            showYearDropdown={true}
-            showMonthDropdown={true}
-            dropdownMode="select"
-            maxDate={addYears(new Date(), -18)}
-          />
+          <Form.Group inline>
+            <label>I am a: </label>
+            <Field
+              name="userType"
+              type="radio"
+              value="tutor"
+              label="Tutor"
+              component={RadioInput}
+            />
+            <Field
+              name="userType"
+              type="radio"
+              value="tutee"
+              label="Tutee"
+              component={RadioInput}
+            />
+          </Form.Group>
+          <Form.Group inline>
+            <label>Date of Birth</label>
+            <Field
+              width={8}
+              name="dateOfBirth"
+              component={DateInput}
+              placeholder="Choose Date of Birth"
+              dateFormat="dd LLL yyyy"
+              showYearDropdown={true}
+              showMonthDropdown={true}
+              dropdownMode="select"
+              maxDate={addYears(new Date(), -18)}
+            />
+          </Form.Group>
+
           {/* <Field
                         name='city'
                         placeholder='Home Town'

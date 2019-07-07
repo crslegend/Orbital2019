@@ -1,11 +1,12 @@
 import React from "react";
-import { Label, Form, Segment, Button } from "semantic-ui-react";
+import { Label, Form, Segment, Button, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
 import { connect } from "react-redux";
 import { registerUser } from "../authActions";
 import { combineValidators, isRequired } from "revalidate";
 import RadioInput from "../../../app/common/form/RadioInput";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const mapDispatchToProps = {
   registerUser
@@ -80,6 +81,8 @@ const RegisterForm = ({
           >
             Register
           </Button>
+          <Divider horizontal>Or</Divider>
+          <SocialLogin />
         </Segment>
       </Form>
     </div>
