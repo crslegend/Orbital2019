@@ -26,7 +26,7 @@ const SettingsNav = () => {
           content="Account"
         />
         <Menu.Item as={NavLink} to="/settings/account">
-          My Account
+          Change My Password
         </Menu.Item>
       </Menu>
     </Fragment>

@@ -6,6 +6,7 @@ import { getEventsforDashboard } from "../eventActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventActivity from "../EventActivity/EventActivity";
 import { firestoreConnect } from "react-redux-firebase";
+import SocialLoginModal from "../../modals/SocialLoginModal";
 
 const query = [
   {
@@ -18,7 +19,9 @@ const query = [
 const mapStateToProps = state => ({
   events: state.events,
   loading: state.async.loading,
-  activities: state.firestore.ordered.activity
+  activities: state.firestore.ordered.activity,
+  profile: state.firebase.profile,
+  auth: state.firebase.auth
 });
 
 const mapDispatchToProps = {
@@ -66,9 +69,17 @@ class EventDashBoard extends Component {
   };
 
   render() {
-    const { loading, activities } = this.props;
+    const { loading, activities, profile, auth } = this.props;
     const { moreEvents, loadedEvents } = this.state;
+    const authenticated = auth.isLoaded && !auth.isEmpty;
     if (this.state.loadingInitial) return <LoadingComponent />;
+    if (
+      authenticated &&
+      profile.userType !== "tutor" &&
+      profile.userType !== "tutee"
+    ) {
+      return <SocialLoginModal />;
+    }
     return (
       <Grid>
         <Grid.Column width={10} only="computer">
