@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Segment, Image, Item, Header, Button } from "semantic-ui-react";
+import { Segment, Image, Item, Header, Button, Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
@@ -95,14 +95,34 @@ const EventDetailedHeader = ({
         )}
 
         {isHost && (
-          <Button
-            as={Link}
-            to={`/manage/${event.id}`}
-            color="orange"
-            floated="right"
-          >
-            Edit Class Details
-          </Button>
+          <Fragment>
+            {event.cancelled ? (
+              <Fragment>
+                <Button
+                  as={Link}
+                  to={`/manage/${event.id}`}
+                  color="orange"
+                  floated="right"
+                >
+                  Edit Class Details
+                </Button>
+                <Label
+                  color="red"
+                  content="You have cancelled this class"
+                  size="large"
+                />
+              </Fragment>
+            ) : (
+              <Button
+                as={Link}
+                to={`/manage/${event.id}`}
+                color="orange"
+                floated="right"
+              >
+                Edit Class Details
+              </Button>
+            )}
+          </Fragment>
         )}
       </Segment>
     </Segment.Group>
