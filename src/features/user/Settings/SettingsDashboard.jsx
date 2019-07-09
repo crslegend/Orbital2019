@@ -12,7 +12,8 @@ import { updateProfile } from "../../user/userActions";
 
 const mapStateToProps = state => ({
   providerId: state.firebase.auth.providerData[0].providerId,
-  user: state.firebase.profile
+  user: state.firebase.profile,
+  auth: state.firebase.auth
 });
 
 const mapDispatchToProps = {
@@ -24,7 +25,8 @@ const SettingsDashboard = ({
   updatePassword,
   providerId,
   user,
-  updateProfile
+  updateProfile,
+  auth
 }) => {
   return (
     <Grid stackable>
@@ -56,7 +58,7 @@ const SettingsDashboard = ({
         </Switch>
       </Grid.Column>
       <Grid.Column width={4}>
-        <SettingsNav />
+        <SettingsNav auth={auth} />
       </Grid.Column>
     </Grid>
   );

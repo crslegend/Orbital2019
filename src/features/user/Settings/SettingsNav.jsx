@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Header, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
-const SettingsNav = () => {
+const SettingsNav = ({ auth }) => {
   return (
     <Fragment>
       <Menu vertical>
@@ -17,18 +17,20 @@ const SettingsNav = () => {
           My Photos
         </Menu.Item>
       </Menu>
-      <Menu vertical>
-        <Header
-          icon="settings"
-          attached
-          inverted
-          color="grey"
-          content="Account"
-        />
-        <Menu.Item as={NavLink} to="/settings/account">
-          Change My Password
-        </Menu.Item>
-      </Menu>
+      {!auth.emailVerified && (
+        <Menu vertical>
+          <Header
+            icon="settings"
+            attached
+            inverted
+            color="grey"
+            content="Account"
+          />
+          <Menu.Item as={NavLink} to="/settings/account">
+            Change My Password
+          </Menu.Item>
+        </Menu>
+      )}
     </Fragment>
   );
 };
