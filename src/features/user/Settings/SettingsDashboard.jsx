@@ -58,7 +58,7 @@ const SettingsDashboard = ({
         </Switch>
       </Grid.Column>
       <Grid.Column width={4}>
-        <SettingsNav auth={auth} />
+        <SettingsNav />
       </Grid.Column>
     </Grid>
   );

@@ -72,50 +72,57 @@ class EventDashBoard extends Component {
     const { loading, activities, profile, auth } = this.props;
     const { moreEvents, loadedEvents } = this.state;
     const authenticated = auth.isLoaded && !auth.isEmpty;
-    if (this.state.loadingInitial) return <LoadingComponent />;
+
     if (
       authenticated &&
       profile.userType !== "tutor" &&
       profile.userType !== "tutee"
     ) {
       return <SocialLoginModal />;
-    }
-    return (
-      <Grid>
-        <Grid.Column width={10} only="computer">
-          <div ref={this.contextRef}>
+    } else {
+      if (this.state.loadingInitial) {
+        return <LoadingComponent />;
+      }
+      return (
+        <Grid>
+          <Grid.Column width={10} only="computer">
+            <div ref={this.contextRef}>
+              <EventList
+                loading={loading}
+                events={loadedEvents}
+                moreEvents={moreEvents}
+                getNextEvents={this.getNextEvents}
+              />
+            </div>
+          </Grid.Column>
+          <Grid.Column width={16} only="mobile">
             <EventList
               loading={loading}
               events={loadedEvents}
               moreEvents={moreEvents}
               getNextEvents={this.getNextEvents}
             />
-          </div>
-        </Grid.Column>
-        <Grid.Column width={16} only="mobile">
-          <EventList
-            loading={loading}
-            events={loadedEvents}
-            moreEvents={moreEvents}
-            getNextEvents={this.getNextEvents}
-          />
-        </Grid.Column>
-        <Grid.Column width={16} only="tablet">
-          <EventList
-            loading={loading}
-            events={loadedEvents}
-            moreEvents={moreEvents}
-            getNextEvents={this.getNextEvents}
-          />
-        </Grid.Column>
-        <Grid.Column width={6} only="computer">
-          <EventActivity activities={activities} contextRef={this.contextRef} />
-        </Grid.Column>
-        <Grid.Column width={10}>
-          <Loader active={loading} />
-        </Grid.Column>
-      </Grid>
-    );
+          </Grid.Column>
+          <Grid.Column width={16} only="tablet">
+            <EventList
+              loading={loading}
+              events={loadedEvents}
+              moreEvents={moreEvents}
+              getNextEvents={this.getNextEvents}
+            />
+          </Grid.Column>
+          <Grid.Column width={6} only="computer">
+            <EventActivity
+              activities={activities}
+              contextRef={this.contextRef}
+            />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <Loader active={loading} />
+          </Grid.Column>
+        </Grid>
+      );
+    }
   }
 }
 
