@@ -40,7 +40,7 @@ class EventDashBoard extends Component {
   async componentDidMount() {
     let next = await this.props.getEventsforDashboard();
 
-    if (next && next.docs && next.docs.length > 1) {
+    if (next && next.docs && next.docs.length >= 1) {
       this.setState({
         moreEvents: true,
         loadingInitial: false
@@ -75,7 +75,8 @@ class EventDashBoard extends Component {
 
     if (
       authenticated &&
-      (profile.userType !== "tutor" || profile.userType !== "tutee")
+      profile.userType !== "tutor" &&
+      profile.userType !== "tutee"
     ) {
       return <SocialLoginModal />;
     } else {
