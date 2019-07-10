@@ -10,10 +10,10 @@ const firebaseConfig = {
   authDomain: "helpden-ba041.firebaseapp.com",
   databaseURL: "https://helpden-ba041.firebaseio.com",
   projectId: "helpden-ba041",
-  storageBucket: "",
+  storageBucket: "helpden-ba041.appspot.com",
   messagingSenderId: "310292320562",
   appId: "1:310292320562:web:20241ac3c8af09c5"
-};
+}; 
 
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();

@@ -25,7 +25,7 @@ class NavBar extends Component {
 
   handleSignOut = () => {
     this.props.firebase.logout();
-    this.props.history.push("/");
+    this.props.history.push("/classes");
   };
 
   render() {
@@ -34,7 +34,7 @@ class NavBar extends Component {
     return (
       <Menu inverted fixed="top">
         <Container>
-          <Menu.Item as={NavLink} exact to="/" header>
+          <Menu.Item as={Link} to="/classes" header>
             <img src="/assets/logo.png" alt="logo" />
             HelpDen
           </Menu.Item>
