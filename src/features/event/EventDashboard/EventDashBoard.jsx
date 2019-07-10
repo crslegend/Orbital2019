@@ -75,8 +75,7 @@ class EventDashBoard extends Component {
 
     if (
       authenticated &&
-      profile.userType !== "tutor" &&
-      profile.userType !== "tutee"
+      (profile.userType !== "tutor" || profile.userType !== "tutee")
     ) {
       return <SocialLoginModal />;
     } else {
