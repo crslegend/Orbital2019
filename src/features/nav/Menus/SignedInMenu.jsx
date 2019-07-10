@@ -16,7 +16,7 @@ const SignedInMenu = ({ signOut, profile, auth }) => {
               icon="plus"
             />
           )}
-          <Dropdown.Item text="My Events" icon="calendar" />
+          {/* <Dropdown.Item text="My Events" icon="calendar" /> */}
           {/* <Dropdown.Item text="My Network" icon="users" /> */}
           <Dropdown.Item
             as={Link}
