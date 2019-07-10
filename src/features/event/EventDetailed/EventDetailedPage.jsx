@@ -54,7 +54,11 @@ class EventDetailedPage extends Component {
       cancelGoingToEvent
     } = this.props;
     const attendees =
-      event && event.attendees && objectToArray(event.attendees);
+      event &&
+      event.attendees &&
+      objectToArray(event.attendees).sort((a, b) => {
+        return a.joinDate.toDate() - b.joinDate.toDate();
+      }); // to make sure tutor is always at the top of the going list
     const isHost = event.tutorUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     return (

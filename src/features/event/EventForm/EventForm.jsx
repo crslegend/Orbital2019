@@ -117,7 +117,7 @@ class EventForm extends Component {
     } = this.props;
     return (
       <Grid>
-        <Grid.Column width={10}>
+        <Grid.Column mobile={16} computer={10}>
           <Segment>
             <Header sub color="teal" content="Class Details" />
             <Form

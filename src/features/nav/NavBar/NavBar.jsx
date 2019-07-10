@@ -41,9 +41,9 @@ class NavBar extends Component {
           <Menu.Item as={NavLink} exact to="/classes" name="Classes" />
           {authenticated && (
             <Fragment>
-              <Menu.Item as={NavLink} to="/people" name="People" />
-              <Menu.Item as={NavLink} to="/test" name="Test" />
-              {profile.userType === "tutor" && (
+              {/* <Menu.Item as={NavLink} to="/people" name="People" />
+              <Menu.Item as={NavLink} to="/test" name="Test" /> */}
+              {/* {profile.userType === "tutor" && (
                 <Menu.Item>
                   <Button
                     as={Link}
@@ -54,7 +54,7 @@ class NavBar extends Component {
                     content="Create A New Class"
                   />
                 </Menu.Item>
-              )}
+              )} */}
             </Fragment>
           )}
 

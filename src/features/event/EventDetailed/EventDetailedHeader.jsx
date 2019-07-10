@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Segment, Image, Item, Header, Button } from "semantic-ui-react";
+import { Segment, Image, Item, Header, Button, Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
@@ -68,14 +68,26 @@ const EventDetailedHeader = ({
               </Button>
             ) : (
               [
-                attendees && attendees.length < event.size + 1 ? (
+                !event.cancelled &&
+                attendees &&
+                attendees.length < event.size + 1 ? (
                   <Button onClick={() => goingToEvent(event)} color="teal">
                     Join This Class
                   </Button>
                 ) : (
-                  <Button disabled color="teal">
-                    Class is Full
-                  </Button>
+                  [
+                    event.cancelled &&
+                    attendees &&
+                    attendees.length < event.size + 1 ? (
+                      <Button disabled color="teal">
+                        Class Cancelled
+                      </Button>
+                    ) : (
+                      <Button disabled color="teal">
+                        Class is Full
+                      </Button>
+                    )
+                  ]
                 )
               ]
             )}
@@ -83,14 +95,34 @@ const EventDetailedHeader = ({
         )}
 
         {isHost && (
-          <Button
-            as={Link}
-            to={`/manage/${event.id}`}
-            color="orange"
-            floated="right"
-          >
-            Edit Class Details
-          </Button>
+          <Fragment>
+            {event.cancelled ? (
+              <Fragment>
+                <Button
+                  as={Link}
+                  to={`/manage/${event.id}`}
+                  color="orange"
+                  floated="right"
+                >
+                  Edit Class Details
+                </Button>
+                <Label
+                  color="red"
+                  content="You have cancelled this class"
+                  size="large"
+                />
+              </Fragment>
+            ) : (
+              <Button
+                as={Link}
+                to={`/manage/${event.id}`}
+                color="orange"
+                floated="right"
+              >
+                Edit Class Details
+              </Button>
+            )}
+          </Fragment>
         )}
       </Segment>
     </Segment.Group>

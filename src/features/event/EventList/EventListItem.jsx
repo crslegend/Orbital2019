@@ -26,7 +26,7 @@ class EventListItem extends Component {
                 </Item.Description>
                 {event.cancelled && (
                   <Label
-                    style={{ top: "-40px" }}
+                    style={{ top: "-50px" }}
                     ribbon="right"
                     color="red"
                     content="This class has been cancelled"
@@ -74,7 +74,7 @@ class EventListItem extends Component {
             to={`/classes/${event.id}`}
             color="teal"
             floated="right"
-            content="View Class Details"
+            content="Class Details"
           />
         </Segment>
       </Segment.Group>

@@ -5,7 +5,8 @@ import {
   Form,
   Divider,
   Label,
-  Button
+  Button,
+  Icon
 } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
@@ -37,7 +38,7 @@ const AccountPage = ({
       <Header dividing size="large" content="Account" />
       {providerId && providerId === "password" && (
         <div>
-          <Header color="teal" sub content="Change password" />
+          <Header color="teal" content="Change password" />
           <p>Use this form to update your account settings</p>
           <Form onSubmit={handleSubmit(updatePassword)}>
             <Field
@@ -73,6 +74,44 @@ const AccountPage = ({
               content="Update Password"
             />
           </Form>
+        </div>
+      )}
+
+      {providerId && providerId === "facebook.com" && (
+        <div>
+          <Header
+            color="teal"
+            content="You are logged in through your Facebook account"
+          />
+          <p>Please visit Facebook to change your password</p>
+          <Button
+            type="button"
+            color="facebook"
+            href="https://fb.com/"
+            target="_blank" // adding this opens the website in a new tab
+          >
+            <Icon name="facebook" />
+            Go to Facebook
+          </Button>
+        </div>
+      )}
+
+      {providerId && providerId === "google.com" && (
+        <div>
+          <Header
+            color="teal"
+            content="You are logged in through your Google account"
+          />
+          <p>Please visit Google to change your password</p>
+          <Button
+            type="button"
+            color="google plus"
+            href="https://myaccount.google.com/"
+            target="_blank" // adding this opens the website in a new tab
+          >
+            <Icon name="google" />
+            Go to Google
+          </Button>
         </div>
       )}
     </Segment>
