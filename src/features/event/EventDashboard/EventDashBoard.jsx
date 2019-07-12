@@ -21,7 +21,8 @@ const mapStateToProps = state => ({
   loading: state.async.loading,
   activities: state.firestore.ordered.activity,
   profile: state.firebase.profile,
-  auth: state.firebase.auth
+  auth: state.firebase.auth,
+  providerData: state.firebase.auth.providerData
 });
 
 const mapDispatchToProps = {
@@ -69,12 +70,15 @@ class EventDashBoard extends Component {
   };
 
   render() {
-    const { loading, activities, profile, auth } = this.props;
+    const { loading, activities, profile, auth, providerData } = this.props;
     const { moreEvents, loadedEvents } = this.state;
     const authenticated = auth.isLoaded && !auth.isEmpty;
+    const providerId = providerData && providerData[0].providerId;
 
     if (
       authenticated &&
+      providerData &&
+      providerId !== "password" &&
       profile.userType !== "tutor" &&
       profile.userType !== "tutee"
     ) {
