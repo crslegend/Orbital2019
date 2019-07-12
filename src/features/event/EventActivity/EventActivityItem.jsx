@@ -17,7 +17,7 @@ class EventActivityItem extends Component {
               {activity.tutorName}
             </Feed.User>{" "}
             is teaching{" "}
-            <Link to={{ pathname: "/event/" + activity.eventId }}>
+            <Link to={{ pathname: "/classes/" + activity.eventId }}>
               {activity.subject}
             </Link>
           </div>
@@ -33,7 +33,7 @@ class EventActivityItem extends Component {
               {activity.tutorName}
             </Feed.User>{" "}
             has cancelled{" "}
-            <Link to={{ pathname: "/event/" + activity.eventId }}>
+            <Link to={{ pathname: "/classes/" + activity.eventId }}>
               {activity.subject}
             </Link>
           </div>
