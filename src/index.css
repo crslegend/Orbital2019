@@ -34,6 +34,18 @@ body {
   height: 100vh;
 }
 
+/* .masthead {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(
+    135deg,
+    rgb(26, 42, 108) 0%,
+    rgb(178, 31, 31) 69%,
+    rgb(253, 187, 45) 89%
+  ) !important;
+  height: 100vh;
+} */
+
 /* .masthead.segment {
   min-height: 700px;
   padding: 1em 0 !important;
@@ -78,6 +90,10 @@ body {
     rgb(32, 167, 172) 89%
   ) !important;
 }
+
+/* .ui.fixed.menu {
+  background-image: linear-gradient(to right, #da4453, #89216b);
+} */
 
 .ui.main.container,
 .main.segment {
