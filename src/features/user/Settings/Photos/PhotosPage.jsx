@@ -1,24 +1,42 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import { firestoreConnect } from "react-redux-firebase";
 import {
-  Image,
   Segment,
   Header,
   Divider,
   Grid,
-  Button,
-  Card
+  Button
 } from "semantic-ui-react";
 import DropzoneInput from "./DropzoneInput";
 import CropperInput from "./CropperInput";
 import { uploadProfileImage } from "../../userActions";
 import { toastr } from "react-redux-toastr";
+import UserPhotos from './UserPhotos';
+
+const query = ({auth}) => {
+    return [
+        {
+            collection: 'users',
+            doc: auth.uid,
+            subcollections: [{collection: 'photos'}],
+            storeAs: 'photos'
+        }
+    ]
+}
 
 const actions = {
   uploadProfileImage
 };
 
-const PhotosPage = ({ uploadProfileImage }) => {
+const mapState = (state) => ({
+    auth: state.firebase.auth,
+    profile: state.firebase.profile,
+    photos: state.firestore.ordered.photos
+})
+
+const PhotosPage = ({ uploadProfileImage, photos, profile }) => {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState(null);
 
@@ -35,7 +53,7 @@ const PhotosPage = ({ uploadProfileImage }) => {
       toastr.success("Success", "Photo has been uploaded");
     } catch (error) {
       console.log(error);
-      toastr.err("Oops", "Something went wrong");
+      toastr.error("Oops", "Something went wrong");
     }
   };
 
@@ -65,47 +83,39 @@ const PhotosPage = ({ uploadProfileImage }) => {
           <Header sub color="teal" content="Step 3 - Preview & Upload" />
           {files.length > 0 && (
             <Fragment>
-            <div
-              className="img-preview"
-              style={{
-                minHeight: "200px",
-                minWidth: "200px",
-                overflow: "hidden"
-              }}
-            />
-            <Button.Group>
-              <Button onClick={handleUploadImage} style={{width: '100px'}} positive icon='check'/>
-              <Button onClick={handleCancelCrop} style={{width: '100px'}} icon='close'/>
-            </Button.Group>
+              <div
+                className="img-preview"
+                style={{
+                  minHeight: "200px",
+                  minWidth: "200px",
+                  overflow: "hidden"
+                }}
+              />
+              <Button.Group>
+                <Button
+                  onClick={handleUploadImage}
+                  style={{ width: "100px" }}
+                  positive
+                  icon="check"
+                />
+                <Button
+                  onClick={handleCancelCrop}
+                  style={{ width: "100px" }}
+                  icon="close"
+                />
+              </Button.Group>
             </Fragment>
           )}
         </Grid.Column>
       </Grid>
 
       <Divider />
-      <Header sub color="teal" content="All Photos" />
-
-      <Card.Group itemsPerRow={5}>
-        <Card>
-          <Image src="https://randomuser.me/api/portraits/men/20.jpg" />
-          <Button positive>Main Photo</Button>
-        </Card>
-
-        <Card>
-          <Image src="https://randomuser.me/api/portraits/men/20.jpg" />
-          <div className="ui two buttons">
-            <Button basic color="green">
-              Main
-            </Button>
-            <Button basic icon="trash" color="red" />
-          </div>
-        </Card>
-      </Card.Group>
+      <UserPhotos photos={photos} profile={profile} />
     </Segment>
   );
 };
 
-export default connect(
-  null,
-  actions
-)(PhotosPage);
+export default compose(
+  connect(mapState, actions),
+  firestoreConnect(auth => query(auth))
+)(PhotosPage); 

@@ -75,13 +75,14 @@ class EventDashBoard extends Component {
 
     if (
       authenticated &&
-      (profile.userType !== "tutor" || profile.userType !== "tutee")
+      profile.userType !== "tutor" && 
+      profile.userType !== "tutee"
     ) {
       return <SocialLoginModal />;
     } else {
-      if (this.state.loadingInitial) {
+      /*if (this.state.loadingInitial) {
         return <LoadingComponent />;
-      }
+      }*/
       return (
         <Grid>
           <Grid.Column width={10} only="computer">

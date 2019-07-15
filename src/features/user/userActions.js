@@ -136,8 +136,8 @@ export const uploadProfileImage = (file, fileName) => async (
   getState,
   { getFirebase, getFirestore }
 ) => {
-  const firebase = getFirebase;
-  const firestore = getFirestore;
+  const firebase = getFirebase();
+  const firestore = getFirestore();
   const user = firebase.auth().currentUser;
   const path = `${user.uid}/user_images`;
   const options = {
@@ -146,7 +146,7 @@ export const uploadProfileImage = (file, fileName) => async (
   try {
     dispatch(asyncActionStart())
     // upload file to firebase storage 
-    let uploadedFile = await firebase.uploadFile(path, file, null, options)
+    let uploadedFile = await firebase.uploadFile(path, file, null, options);
     // get url of image 
     let downloadURL = await uploadedFile.uploadTaskSnapshot.ref.getDownloadURL();
     // get userdoc 
