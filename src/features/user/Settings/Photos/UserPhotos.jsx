@@ -1,7 +1,14 @@
 import React, { Fragment } from "react";
 import { Header, Card, Image, Button } from "semantic-ui-react";
+import { setMinutes } from "date-fns/esm";
 
-const UserPhotos = ({photos, profile}) => {
+const UserPhotos = ({photos, profile, deletePhoto, setMainPhoto}) => {
+    let filteredPhotos;
+    if (photos) {
+        filteredPhotos = photos.filter(photo => {
+            return photo.url !== profile.photoURL
+        })
+    }
   return (
     <Fragment>
       <Header sub color="teal" content="All Photos" />
@@ -11,15 +18,15 @@ const UserPhotos = ({photos, profile}) => {
           <Image src={profile.photoURL} />
           <Button positive>Main Photo</Button>
         </Card>
-        {photos &&
-          photos.map(photo => (
+        {filteredPhotos &&
+          filteredPhotos.map(photo => (
             <Card key={photo.id}>
               <Image src={photo.url} />
               <div className="ui two buttons">
-                <Button basic color="green">
+                <Button onClick={() => setMainPhoto(photo)}basic color="green">
                   Main
                 </Button>
-                <Button basic icon="trash" color="red" />
+                <Button onClick={() => deletePhoto(photo)} basic icon="trash" color="red" />
               </div>
             </Card>
           ))}

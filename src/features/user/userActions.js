@@ -6,6 +6,7 @@ import {
   asyncActionFinish
 } from "../async/asyncActions";
 import { FETCH_EVENTS, FETCH_USER_EVENTS } from "../event/eventConstants";
+import cuid from 'cuid';
 
 export const updateProfile = user => async (
   dispatch,
@@ -136,12 +137,13 @@ export const uploadProfileImage = (file, fileName) => async (
   getState,
   { getFirebase, getFirestore }
 ) => {
+  const imageName = cuid();
   const firebase = getFirebase();
   const firestore = getFirestore();
   const user = firebase.auth().currentUser;
   const path = `${user.uid}/user_images`;
   const options = {
-    name: fileName
+    name: imageName
   };
   try {
     dispatch(asyncActionStart())
@@ -166,7 +168,7 @@ export const uploadProfileImage = (file, fileName) => async (
       doc: user.uid,
       subcollections: [{collection: 'photos'}]
     }, {
-      name: fileName,
+      name: imageName,
       url: downloadURL
     })
     dispatch(asyncActionFinish())
@@ -176,3 +178,34 @@ export const uploadProfileImage = (file, fileName) => async (
   }
 
 };
+
+export const deletePhoto = (photo) => 
+async (dispatch, getState, {getFirebase, getFirestore}) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const user = firebase.auth().currentUser;
+  try {
+    await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
+    await firestore.delete({
+      collection: 'users',
+      doc: user.uid,
+      subcollections: [{collection: 'photos', doc: photo.id}]
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problem deleting the photo')
+  }
+}
+
+export const setMainPhoto = photo => 
+async (dispatch, getState, {getFirebase}) => {
+  const firebase = getFirebase();
+  try {
+    return await firebase.updateProfile({
+      photoURL: photo.url
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problem setting main photo');
+  }
+}
