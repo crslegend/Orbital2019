@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
-        "Dropdown"
+        "Dropdown",
+        "userdoc"
     ],
     "cSpell.ignoreWords": [
-        "dropzone"
+        "dropzone",
+        "subcollections"
     ]
 }

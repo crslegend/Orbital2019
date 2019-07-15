@@ -9,7 +9,8 @@ export const createNewEvent = (user, event) => {
         going: true,
         joinDate: new Date(),
         displayName: user.displayName,
-        isTutor: true
+        isTutor: true,
+        photoURL: user.photoURL
       }
     }
   };

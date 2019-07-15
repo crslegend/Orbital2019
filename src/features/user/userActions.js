@@ -6,6 +6,7 @@ import {
   asyncActionFinish
 } from "../async/asyncActions";
 import { FETCH_EVENTS, FETCH_USER_EVENTS } from "../event/eventConstants";
+import cuid from 'cuid';
 
 export const updateProfile = user => async (
   dispatch,
@@ -35,7 +36,7 @@ export const goingToEvent = event => async (
   const attendee = {
     going: true,
     joinDate: firestore.FieldValue.serverTimestamp(),
-    displayName: profile.displayName,
+    displayName: user.displayName,
     isTutor: false
   };
 
@@ -47,7 +48,8 @@ export const goingToEvent = event => async (
       eventId: event.id,
       userUid: user.uid,
       eventDate: event.date,
-      isTutor: false
+      isTutor: false,
+      photoURL: user.photoURL
     });
     toastr.success("Success", "You have signed up for this class");
   } catch (error) {
@@ -136,17 +138,18 @@ export const uploadProfileImage = (file, fileName) => async (
   getState,
   { getFirebase, getFirestore }
 ) => {
-  const firebase = getFirebase;
-  const firestore = getFirestore;
+  const imageName = cuid();
+  const firebase = getFirebase();
+  const firestore = getFirestore();
   const user = firebase.auth().currentUser;
   const path = `${user.uid}/user_images`;
   const options = {
-    name: fileName
+    name: imageName
   };
   try {
     dispatch(asyncActionStart())
     // upload file to firebase storage 
-    let uploadedFile = await firebase.uploadFile(path, file, null, options)
+    let uploadedFile = await firebase.uploadFile(path, file, null, options);
     // get url of image 
     let downloadURL = await uploadedFile.uploadTaskSnapshot.ref.getDownloadURL();
     // get userdoc 
@@ -166,7 +169,7 @@ export const uploadProfileImage = (file, fileName) => async (
       doc: user.uid,
       subcollections: [{collection: 'photos'}]
     }, {
-      name: fileName,
+      name: imageName,
       url: downloadURL
     })
     dispatch(asyncActionFinish())
@@ -176,3 +179,36 @@ export const uploadProfileImage = (file, fileName) => async (
   }
 
 };
+
+// user action to delete photo 
+export const deletePhoto = (photo) => 
+async (dispatch, getState, {getFirebase, getFirestore}) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const user = firebase.auth().currentUser;
+  try {
+    await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
+    await firestore.delete({
+      collection: 'users',
+      doc: user.uid,
+      subcollections: [{collection: 'photos', doc: photo.id}]
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problem deleting the photo')
+  }
+}
+
+// user action to change main profile photo, no need firestore
+export const setMainPhoto = photo => 
+async (dispatch, getState, {getFirebase}) => {
+  const firebase = getFirebase();
+  try {
+    return await firebase.updateProfile({
+      photoURL: photo.url
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problem setting main photo');
+  }
+}

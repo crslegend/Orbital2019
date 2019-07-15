@@ -15,8 +15,8 @@ class EventListItem extends Component {
         <Segment>
           <Item.Group>
             <Item>
-              <Item.Image size="tiny" circular src="/assets/user.png" />
-              <Item.Content>
+              <Item.Image size="small" src="/assets/classroom.jpg" />
+              <Item.Content verticalAlign="middle">
                 <Item.Header>{event.subject}</Item.Header>
                 <Item.Description>
                   Tutor:{" "}
