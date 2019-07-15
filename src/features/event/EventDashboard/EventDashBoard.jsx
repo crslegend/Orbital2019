@@ -84,9 +84,9 @@ class EventDashBoard extends Component {
     ) {
       return <SocialLoginModal />;
     } else {
-      /*if (this.state.loadingInitial) {
+      if (this.state.loadingInitial) {
         return <LoadingComponent />;
-      }*/
+      }
       return (
         <Grid>
           <Grid.Column width={10} only="computer">
