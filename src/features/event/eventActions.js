@@ -22,7 +22,8 @@ export const createEvent = event => {
         eventId: createdEvent.id,
         userUid: user.uid,
         eventDate: event.date,
-        isTutor: true
+        isTutor: true,
+        photoURL: user.photoURL
       });
       toastr.success("Success!", "A class has been created");
       return createdEvent;

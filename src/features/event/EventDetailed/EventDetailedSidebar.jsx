@@ -31,7 +31,7 @@ const EventDetailedSidebar = ({ attendees }) => {
                     Tutor
                   </Label>
                 )}
-                <Item.Image size="tiny" src="/assets/user.png" />
+                <Item.Image size="tiny" src={attendee.photoURL} />
                 <Item.Content verticalAlign="middle">
                   <Item.Header as="h3">
                     <Link to={`/profile/${attendee.id}`}>

@@ -14,7 +14,7 @@ const HomePage = ({ history }) => {
       <Container text>
         <Header as="h1" inverted>
           <Image
-            size="massive"
+            className="ui massive image"
             src="/assets/logo.png"
             alt="logo"
             style={{ marginBottom: 12 }}
