@@ -36,7 +36,7 @@ export const goingToEvent = event => async (
   const attendee = {
     going: true,
     joinDate: firestore.FieldValue.serverTimestamp(),
-    displayName: profile.displayName,
+    displayName: user.displayName,
     isTutor: false
   };
 
@@ -48,7 +48,8 @@ export const goingToEvent = event => async (
       eventId: event.id,
       userUid: user.uid,
       eventDate: event.date,
-      isTutor: false
+      isTutor: false,
+      photoURL: user.photoURL
     });
     toastr.success("Success", "You have signed up for this class");
   } catch (error) {
@@ -179,6 +180,7 @@ export const uploadProfileImage = (file, fileName) => async (
 
 };
 
+// user action to delete photo 
 export const deletePhoto = (photo) => 
 async (dispatch, getState, {getFirebase, getFirestore}) => {
   const firebase = getFirebase();
@@ -197,6 +199,7 @@ async (dispatch, getState, {getFirebase, getFirestore}) => {
   }
 }
 
+// user action to change main profile photo, no need firestore
 export const setMainPhoto = photo => 
 async (dispatch, getState, {getFirebase}) => {
   const firebase = getFirebase();

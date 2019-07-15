@@ -12,7 +12,7 @@ class EventListAttendee extends Component {
           to={`/profile/${attendee.id}`}
           size="mini"
           circular
-          src="/assets/user.png"
+          src={attendee.photoURL}
         />
       </List.Item>
     );
