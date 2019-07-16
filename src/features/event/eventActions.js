@@ -34,12 +34,70 @@ export const createEvent = event => {
 };
 
 export const updateEvent = event => {
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore();
+  return async (dispatch, getState) => {
+    const firestore = firebase.firestore();
     try {
-      await firestore.update(`events/${event.id}`, event);
+      dispatch(asyncActionStart());
+      let eventDocRef = firestore.collection("events").doc(event.id);
+      let dateEqual = getState().firestore.ordered.events[0].date.isEqual(
+        event.date
+      );
+      if (!dateEqual) {
+        let batch = firestore.batch();
+        batch.update(eventDocRef, event);
+
+        let eventAttendeeRef = firestore.collection("event_attendee");
+        let eventActivityRef = firestore.collection("activity");
+
+        // this query will give all the event attendees lists that matches with the eventId
+        let eventAttendeeQuery = await eventAttendeeRef.where(
+          "eventId",
+          "==",
+          event.id
+        );
+
+        // this query will give all the event activities that matches with the eventId
+        let eventActivityQuery = await eventActivityRef.where(
+          "eventId",
+          "==",
+          event.id
+        );
+
+        // get a snapshot of this query (array of events)
+        let eventAttendeeQuerySnap = await eventAttendeeQuery.get();
+
+        // get a snapshot of this query (array of event activities)
+        let eventActivityQuerySnap = await eventActivityQuery.get();
+
+        for (let i = 0; i < eventAttendeeQuerySnap.docs.length; i++) {
+          let eventAttendeeDocRef = await firestore
+            .collection("event_attendee")
+            .doc(eventAttendeeQuerySnap.docs[i].id);
+
+          batch.update(eventAttendeeDocRef, {
+            eventDate: event.date
+          });
+        }
+
+        for (let i = 0; i < eventActivityQuerySnap.docs.length; i++) {
+          let eventActivityDocRef = await firestore
+            .collection("activity")
+            .doc(eventActivityQuerySnap.docs[i].id);
+
+          batch.update(eventActivityDocRef, {
+            eventDate: event.date
+          });
+        }
+
+        await batch.commit();
+      } else {
+        await eventDocRef.update(event);
+      }
+      //await firestore.update(`events/${event.id}`, event);
+      dispatch(asyncActionFinish());
       toastr.success("Success!", "Class has been updated");
     } catch (error) {
+      dispatch(asyncActionError());
       toastr.error("Oops", "Something went wrong");
     }
   };
