@@ -6,7 +6,7 @@ import {
   asyncActionFinish
 } from "../async/asyncActions";
 import { FETCH_EVENTS, FETCH_USER_EVENTS } from "../event/eventConstants";
-import cuid from 'cuid';
+import cuid from "cuid";
 
 export const updateProfile = user => async (
   dispatch,
@@ -14,10 +14,43 @@ export const updateProfile = user => async (
   { getFirebase }
 ) => {
   const firebase = getFirebase();
+  const firestore = firebase.firestore();
   const { isLoaded, isEmpty, ...updatedUser } = user;
 
   try {
     await firebase.updateProfile(updatedUser);
+    // console.log(updatedUser);
+    // console.log(user);
+    // let userDocRef = firestore.collection("users").doc(user.uid);
+
+    // if (
+    //   getState().firestore.ordered.events[0].tutorName !==
+    //   updatedUser.displayName
+    // ) {
+    //   let batch = firestore.batch();
+    //   batch.update(userDocRef, updatedUser);
+
+    //   let eventsRef = firestore.collection("events");
+    //   let eventActivityRef = firestore.collection("activity");
+
+    //   let eventsQuery = await eventsRef.where("tutorUid", "==", user.uid);
+
+    //   let eventsQuerySnap = await eventsQuery.get();
+
+    //   for (let i = 0; i < eventsQuerySnap.docs.length; i++) {
+    //     let eventsQueryDocRef = await firestore
+    //       .collection("events")
+    //       .doc(eventsQuerySnap.docs[i].id);
+
+    //     batch.update(eventsQueryDocRef, {
+    //       tutorName: updatedUser.displayName
+    //     });
+    //   }
+    //   await batch.commit();
+    // } else {
+    //   userDocRef.update(updatedUser);
+    // }
+
     toastr.success("Success", "Your profile has been updated");
   } catch (error) {
     console.log(error);
@@ -147,68 +180,76 @@ export const uploadProfileImage = (file, fileName) => async (
     name: imageName
   };
   try {
-    dispatch(asyncActionStart())
-    // upload file to firebase storage 
+    dispatch(asyncActionStart());
+    // upload file to firebase storage
     let uploadedFile = await firebase.uploadFile(path, file, null, options);
-    // get url of image 
+    // get url of image
     let downloadURL = await uploadedFile.uploadTaskSnapshot.ref.getDownloadURL();
-    // get userdoc 
+    // get userdoc
     let userDoc = await firestore.get(`users/${user.uid}`);
-    // check if user has pp else update profile 
+    // check if user has pp else update profile
     if (!userDoc.data().photoURL) {
       await firebase.updateProfile({
         photoURL: downloadURL
       });
       await user.updateProfile({
         photoURL: downloadURL
-      })
+      });
     }
     // add image to firestore
-    await firestore.add({
-      collection: 'users',
-      doc: user.uid,
-      subcollections: [{collection: 'photos'}]
-    }, {
-      name: imageName,
-      url: downloadURL
-    })
-    dispatch(asyncActionFinish())
+    await firestore.add(
+      {
+        collection: "users",
+        doc: user.uid,
+        subcollections: [{ collection: "photos" }]
+      },
+      {
+        name: imageName,
+        url: downloadURL
+      }
+    );
+    dispatch(asyncActionFinish());
   } catch (error) {
-    console.log(error)
-    dispatch(asyncActionError)
+    console.log(error);
+    dispatch(asyncActionError);
   }
-
 };
 
-// user action to delete photo 
-export const deletePhoto = (photo) => 
-async (dispatch, getState, {getFirebase, getFirestore}) => {
+// user action to delete photo
+export const deletePhoto = photo => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const user = firebase.auth().currentUser;
   try {
     await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
     await firestore.delete({
-      collection: 'users',
+      collection: "users",
       doc: user.uid,
-      subcollections: [{collection: 'photos', doc: photo.id}]
-    })
+      subcollections: [{ collection: "photos", doc: photo.id }]
+    });
   } catch (error) {
     console.log(error);
-    throw new Error('Problem deleting the photo')
+    throw new Error("Problem deleting the photo");
   }
-}
+};
 
 // user action to change main profile photo, no need firestore
-export const setMainPhoto = photo => 
-async (dispatch, getState, {getFirebase}) => {
+export const setMainPhoto = photo => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
   const firebase = getFirebase();
   try {
     return await firebase.updateProfile({
       photoURL: photo.url
-    })
+    });
   } catch (error) {
     console.log(error);
-    throw new Error('Problem setting main photo');
+    throw new Error("Problem setting main photo");
   }
-}
+};

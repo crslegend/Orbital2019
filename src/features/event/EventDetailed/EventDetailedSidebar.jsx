@@ -13,34 +13,39 @@ const EventDetailedSidebar = ({ attendees }) => {
         inverted
         color="teal"
       >
-        {attendees && attendees.length}{" "}
-        {attendees && attendees.length === 1 ? "Person" : "People"} Going
+        {attendees && attendees.length - 1}{" "}
+        {attendees && attendees.length - 1 === 1 ? "Person" : "People"} Going
       </Segment>
       <Segment attached>
         <Item.Group divided>
           {attendees &&
-            attendees.map(attendee => (
-              <Item key={attendee.id} style={{ position: "relative" }}>
-                {attendee.isTutor && (
-                  <Label
-                    style={{ position: "absolute" }}
-                    color="red"
-                    ribbon="right"
-                    size="large"
-                  >
-                    Tutor
-                  </Label>
-                )}
-                <Item.Image size="tiny" src={attendee.photoURL || 'assets/user.png'} />
-                <Item.Content verticalAlign="middle">
-                  <Item.Header as="h3">
-                    <Link to={`/profile/${attendee.id}`}>
-                      {attendee.displayName}
-                    </Link>
-                  </Item.Header>
-                </Item.Content>
-              </Item>
-            ))}
+            attendees
+              .filter(attendee => attendee.isTutor === false)
+              .map(attendee => (
+                <Item key={attendee.id} style={{ position: "relative" }}>
+                  {attendee.isTutor && (
+                    <Label
+                      style={{ position: "absolute" }}
+                      color="red"
+                      ribbon="right"
+                      size="large"
+                    >
+                      Tutor
+                    </Label>
+                  )}
+                  <Item.Image
+                    size="tiny"
+                    src={attendee.photoURL || "assets/user.png"}
+                  />
+                  <Item.Content verticalAlign="middle">
+                    <Item.Header as="h3">
+                      <Link to={`/profile/${attendee.id}`}>
+                        {attendee.displayName}
+                      </Link>
+                    </Item.Header>
+                  </Item.Content>
+                </Item>
+              ))}
         </Item.Group>
       </Segment>
     </Fragment>

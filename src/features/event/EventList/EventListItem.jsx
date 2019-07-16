@@ -55,9 +55,9 @@ class EventListItem extends Component {
         <Segment secondary>
           <List horizontal>
             {event.attendees &&
-              objectToArray(event.attendees).map(attendee => (
-                <EventListAttendee key={attendee.id} attendee={attendee} />
-              ))}
+              objectToArray(event.attendees)
+                .filter(attendee => attendee.isTutor === false)
+                .map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)}
           </List>
         </Segment>
         <Segment clearing>

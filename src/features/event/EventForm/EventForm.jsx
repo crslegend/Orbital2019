@@ -34,7 +34,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     initialValues: event,
-    event
+    event,
+    loading: state.async.loading
   };
 };
 
@@ -101,7 +102,10 @@ class EventForm extends Component {
     values.locationLatLng = this.state.locationLatLng;
     try {
       if (this.props.initialValues.id) {
-        this.props.updateEvent(values);
+        // if (Object.keys(values.venueLatLng).length === 0) {
+        //   values.venueLatLng = this.props.event.venueLatLng;
+        // }
+        await this.props.updateEvent(values);
         this.props.history.push(`/classes/${this.props.initialValues.id}`);
       } else {
         let createdEvent = await this.props.createEvent(values);
@@ -133,7 +137,8 @@ class EventForm extends Component {
       submitting,
       pristine,
       event,
-      cancelToggle
+      cancelToggle,
+      loading
     } = this.props;
     return (
       <Grid>
@@ -189,6 +194,7 @@ class EventForm extends Component {
               />
               <Button
                 disabled={invalid || submitting || pristine}
+                loading={loading}
                 positive
                 type="submit"
               >
@@ -201,6 +207,7 @@ class EventForm extends Component {
                     : () => history.push("/classes")
                 }
                 type="button"
+                disabled={loading}
               >
                 Cancel
               </Button>
