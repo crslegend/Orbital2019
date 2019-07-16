@@ -1,3 +1,4 @@
+/*global google*/
 import React, { Component } from "react";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
@@ -7,6 +8,7 @@ import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
+import PlaceInput from "../../../app/common/form/PlaceInput"
 import {
   combineValidators,
   composeValidators,
@@ -14,6 +16,7 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -50,8 +53,9 @@ const validate = combineValidators({
       message: "Description needs to be at least 5 characters"
     })
   )(),
-  venue: isRequired("venue"),
-  date: isRequired("date")
+  location: isRequired({ message: "Please select a location" }),
+  venue: isRequired({ message: "Please enter a venue" }),
+  date: isRequired({ message: " Please select a date and time" })
 });
 
 const size = [
@@ -72,10 +76,16 @@ const subject = [
   { key: "tamil", text: "Tamil", value: "Tamil" }
 ];
 
+const nusLatLng = {
+  lat: 1.294732,
+  lng: 103.776565
+}
+
 class EventForm extends Component {
-  // state = {
-  //   venueLatLng: {}
-  // };
+
+  state = {
+    locationLatLng: {}
+  }
 
   async componentDidMount() {
     const { firestore, match } = this.props;
@@ -88,12 +98,9 @@ class EventForm extends Component {
   }
 
   onFormSubmit = async values => {
-    // values.venueLatLng = this.state.venueLatLng
+    values.locationLatLng = this.state.locationLatLng;
     try {
       if (this.props.initialValues.id) {
-        // if (Object.keys(values.venueLatLng).length === 0) {
-        //   values.venueLatLng = this.props.event.venueLatLng;
-        // }
         this.props.updateEvent(values);
         this.props.history.push(`/classes/${this.props.initialValues.id}`);
       } else {
@@ -104,6 +111,19 @@ class EventForm extends Component {
       console.log(error);
     }
   };
+
+  handleLocationSelect = selectedLocation => {
+    geocodeByAddress(selectedLocation)
+    .then(results => getLatLng(results[0]))
+    .then(latLng => {
+      this.setState({
+        locationLatLng: latLng
+      })
+    })
+    .then(() => {
+      this.props.change('location', selectedLocation)
+    }) 
+  }
 
   render() {
     const {
@@ -128,7 +148,7 @@ class EventForm extends Component {
                 name="subject"
                 component={SelectInput}
                 options={subject}
-                placeholder="Choose the subject to tutor"
+                placeholder="Select the subject to tutor"
               />
               <Field
                 name="description"
@@ -144,9 +164,20 @@ class EventForm extends Component {
               />
               <Header sub color="teal" content="Class Location Details" />
               <Field
+                name="location"
+                component={PlaceInput}
+                options={{
+                  location: new google.maps.LatLng(nusLatLng),
+                  radius: 800,
+                  types: ['establishment']
+                }}
+                onSelect={this.handleLocationSelect}
+                placeholder="Select Location"
+              />
+              <Field
                 name="venue"
                 component={TextInput}
-                placeholder="Enter Venue"
+                placeholder="Enter Venue Details (eg. classroom no.)"
               />
               <Field
                 name="date"

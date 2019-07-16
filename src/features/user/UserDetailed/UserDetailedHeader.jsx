@@ -21,14 +21,14 @@ const UserDetailedHeader = ({ profile }) => {
                 <Item.Image
                   avatar
                   size="small"
-                  src="https://randomuser.me/api/portraits/men/20.jpg"
+                  src={profile.photoURL}
                 />
               }
             >
               <Item.Image
                 avatar
                 size="small"
-                src="https://randomuser.me/api/portraits/men/20.jpg"
+                src={profile.photoURL}
               />
             </LazyLoad>
 

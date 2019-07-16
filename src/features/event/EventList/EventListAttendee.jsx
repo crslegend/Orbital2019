@@ -10,7 +10,6 @@ class EventListAttendee extends Component {
         <Popup
           trigger={
             <Image
-              key={attendee.id}
               src={attendee.photoURL || 'assets/user.png'}
               circular
               size="mini"

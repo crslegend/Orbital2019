@@ -49,14 +49,14 @@ class EventListItem extends Component {
             <Icon name="clock" />
             {format(event.date.toDate(), "EEEE do LLL")} at{" "}
             {format(event.date.toDate(), "h:mm a")} |
-            <Icon name="marker" /> {event.venue}
+            <Icon name="marker" /> {event.location}
           </span>
         </Segment>
         <Segment secondary>
           <List horizontal>
             {event.attendees &&
               objectToArray(event.attendees).map(attendee => (
-                <EventListAttendee attendee={attendee} />
+                <EventListAttendee key={attendee.id} attendee={attendee} />
               ))}
           </List>
         </Segment>
