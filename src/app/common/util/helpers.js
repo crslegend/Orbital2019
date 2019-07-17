@@ -3,6 +3,7 @@ export const createNewEvent = (user, event) => {
     ...event,
     tutorUid: user.uid,
     tutorName: user.displayName,
+    tutorPhotoURL: user.photoURL,
     created: new Date(),
     attendees: {
       [user.uid]: {

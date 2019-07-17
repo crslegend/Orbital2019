@@ -15,7 +15,8 @@ const newActivity = (type, event, id) => {
     // photoURL: newEvent.photoURL,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
     tutorUid: event.tutorUid,
-    eventId: id
+    eventId: id,
+    photoURL: event.tutorPhotoURL
   };
 };
 

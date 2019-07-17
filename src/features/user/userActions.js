@@ -70,7 +70,8 @@ export const goingToEvent = event => async (
     going: true,
     joinDate: firestore.FieldValue.serverTimestamp(),
     displayName: user.displayName,
-    isTutor: false
+    isTutor: false,
+    photoURL: user.photoURL
   };
 
   try {

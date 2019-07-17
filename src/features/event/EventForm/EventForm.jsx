@@ -8,7 +8,7 @@ import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
-import PlaceInput from "../../../app/common/form/PlaceInput"
+import PlaceInput from "../../../app/common/form/PlaceInput";
 import {
   combineValidators,
   composeValidators,
@@ -16,7 +16,7 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -80,13 +80,12 @@ const subject = [
 const nusLatLng = {
   lat: 1.294732,
   lng: 103.776565
-}
+};
 
 class EventForm extends Component {
-
   state = {
-    locationLatLng: {}
-  }
+    locationLatLng: nusLatLng
+  };
 
   async componentDidMount() {
     const { firestore, match } = this.props;
@@ -99,12 +98,12 @@ class EventForm extends Component {
   }
 
   onFormSubmit = async values => {
-    values.locationLatLng = this.state.locationLatLng;
     try {
+      values.locationLatLng = this.state.locationLatLng;
       if (this.props.initialValues.id) {
-        // if (Object.keys(values.venueLatLng).length === 0) {
-        //   values.venueLatLng = this.props.event.venueLatLng;
-        // }
+        if (Object.keys(values.locationLatLng).length === 0) {
+          values.locationLatLng = this.props.event.locationLatLng;
+        }
         await this.props.updateEvent(values);
         this.props.history.push(`/classes/${this.props.initialValues.id}`);
       } else {
@@ -118,16 +117,16 @@ class EventForm extends Component {
 
   handleLocationSelect = selectedLocation => {
     geocodeByAddress(selectedLocation)
-    .then(results => getLatLng(results[0]))
-    .then(latLng => {
-      this.setState({
-        locationLatLng: latLng
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          locationLatLng: latlng
+        });
       })
-    })
-    .then(() => {
-      this.props.change('location', selectedLocation)
-    }) 
-  }
+      .then(() => {
+        this.props.change("location", selectedLocation);
+      });
+  };
 
   render() {
     const {
@@ -174,7 +173,7 @@ class EventForm extends Component {
                 options={{
                   location: new google.maps.LatLng(nusLatLng),
                   radius: 800,
-                  types: ['establishment']
+                  types: ["establishment", "geocode"]
                 }}
                 onSelect={this.handleLocationSelect}
                 placeholder="Select Location"
