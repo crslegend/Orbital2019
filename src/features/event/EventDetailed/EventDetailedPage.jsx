@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { withFirestore } from "react-redux-firebase";
 import { objectToArray } from "../../../app/common/util/helpers";
 import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -26,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
     event,
     auth: state.firebase.auth,
     profile: state.firebase.profile,
-    userLatLng: {}
+    loading: state.loading
   };
 };
 
@@ -36,9 +37,18 @@ const mapDispatchToProps = {
 };
 
 class EventDetailedPage extends Component {
+  state = {
+    loadingEvent: true
+  };
+
   async componentDidMount() {
     const { firestore, match } = this.props;
     await firestore.setListener(`events/${match.params.id}`);
+    if (firestore && match) {
+      this.setState({
+        loadingEvent: false
+      });
+    }
   }
 
   async componentWillUnmount() {
@@ -51,7 +61,7 @@ class EventDetailedPage extends Component {
       event,
       auth,
       profile,
-      userLatLng,
+      loading,
       goingToEvent,
       cancelGoingToEvent
     } = this.props;
@@ -62,25 +72,31 @@ class EventDetailedPage extends Component {
     // }); // to make sure tutor is always at the top of the going list
     const isHost = event.tutorUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
-    return (
-      <Grid>
-        <Grid.Column width={10}>
-          <EventDetailedHeader
-            event={event}
-            isGoing={isGoing}
-            isHost={isHost}
-            profile={profile}
-            goingToEvent={goingToEvent}
-            cancelGoingToEvent={cancelGoingToEvent}
-            attendees={attendees}
-          />
-          <EventDetailedInfo event={event} userLatLng={userLatLng}/>
-        </Grid.Column>
-        <Grid.Column width={6}>
-          <EventDetailedSidebar attendees={attendees} />
-        </Grid.Column>
-      </Grid>
-    );
+
+    if (loading && this.state.loadingEvent) {
+      return <LoadingComponent />;
+    } else {
+      return (
+        <Grid>
+          <Grid.Column width={10}>
+            <EventDetailedHeader
+            loading={loading}
+              event={event}
+              isGoing={isGoing}
+              isHost={isHost}
+              profile={profile}
+              goingToEvent={goingToEvent}
+              cancelGoingToEvent={cancelGoingToEvent}
+              attendees={attendees}
+            />
+            <EventDetailedInfo event={event} />
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <EventDetailedSidebar attendees={attendees} />
+          </Grid.Column>
+        </Grid>
+      );
+    }
   }
 }
 
