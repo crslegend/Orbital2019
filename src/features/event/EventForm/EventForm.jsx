@@ -57,7 +57,8 @@ const validate = combineValidators({
   )(),
   location: isRequired({ message: "Please select a location" }),
   venue: isRequired({ message: "Please enter a venue" }),
-  date: isRequired({ message: " Please select a date and time" })
+  date: isRequired({ message: " Please select a date and time" }),
+  area: isRequired({ message: "Please indicate your area" })
 });
 
 const size = [
@@ -83,8 +84,14 @@ const nusLatLng = {
   lng: 103.776565
 };
 
+const defaultLatLng = {
+  lat: 1.363825, 
+  lng: 103.809230
+}
+
 class EventForm extends Component {
   state = {
+    areaLatLng: {},
     locationLatLng: {},
     address: ""
   };
@@ -103,9 +110,16 @@ class EventForm extends Component {
     try {
       values.locationLatLng = this.state.locationLatLng;
       values.address = this.state.address;
+      values.area = this.state.areaLatLng;
       if (this.props.initialValues.id) {
         if (Object.keys(values.locationLatLng).length === 0) {
           values.locationLatLng = this.props.event.locationLatLng;
+        }
+        if (Object.keys(values.address).length === 0) {
+          values.address = this.props.event.address;
+        }
+        if (Object.keys(values.area).length === 0) {
+          values.area = this.props.event.area;
         }
         await this.props.updateEvent(values);
         this.props.history.push(`/classes/${this.props.initialValues.id}`);
@@ -116,6 +130,19 @@ class EventForm extends Component {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  handleAreaSelect = selectedArea => {
+    geocodeByAddress(selectedArea)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          areaLatLng: latlng
+        });
+      })
+      .then(() => {
+        this.props.change("area", selectedArea);
+      });
   };
 
   handleLocationSelect = selectedLocation => {
@@ -189,6 +216,17 @@ class EventForm extends Component {
                 placeholder="Maximum number of students"
               />
               <Header sub color="teal" content="Class Location Details" />
+              <Field
+                name="area"
+                component={PlaceInput}
+                options={{
+                  location: new google.maps.LatLng(defaultLatLng),
+                  radius: 15000,
+                  types: ["geocode"]
+                }}
+                onSelect={this.handleAreaSelect}
+                placeholder="Select Area (eg. NUS, Bukit Batok)"
+              />
               <Field
                 name="location"
                 component={PlaceInput}
