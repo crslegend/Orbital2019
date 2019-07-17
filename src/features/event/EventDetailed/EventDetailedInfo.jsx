@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { Segment, Grid, Icon, Button } from "semantic-ui-react";
 import EventDetailedMap from "./EventDetailedMap.jsx";
 
-const EventDetailedInfo = ({ event }) => {
+const EventDetailedInfo = ({ event, userLatLng }) => {
   const [isMapOpen, showMapToggle] = useState(false);
   return (
     <Segment.Group>

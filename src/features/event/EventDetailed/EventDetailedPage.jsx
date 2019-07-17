@@ -25,7 +25,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     event,
     auth: state.firebase.auth,
-    profile: state.firebase.profile
+    profile: state.firebase.profile,
+    userLatLng: {}
   };
 };
 
@@ -73,7 +74,7 @@ class EventDetailedPage extends Component {
             cancelGoingToEvent={cancelGoingToEvent}
             attendees={attendees}
           />
-          <EventDetailedInfo event={event} />
+          <EventDetailedInfo event={event} userLatLng={userLatLng}/>
         </Grid.Column>
         <Grid.Column width={6}>
           <EventDetailedSidebar attendees={attendees} />
