@@ -17,6 +17,7 @@ import {
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import Geocode from 'react-geocode'
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -84,7 +85,8 @@ const nusLatLng = {
 
 class EventForm extends Component {
   state = {
-    locationLatLng: nusLatLng
+    locationLatLng: nusLatLng,
+    address: ""
   };
 
   async componentDidMount() {
@@ -100,6 +102,7 @@ class EventForm extends Component {
   onFormSubmit = async values => {
     try {
       values.locationLatLng = this.state.locationLatLng;
+      values.address = this.state.address;
       if (this.props.initialValues.id) {
         if (Object.keys(values.locationLatLng).length === 0) {
           values.locationLatLng = this.props.event.locationLatLng;
@@ -126,6 +129,21 @@ class EventForm extends Component {
       .then(() => {
         this.props.change("location", selectedLocation);
       });
+
+    Geocode.setApiKey("AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM");
+    Geocode.enableDebug();
+
+    Geocode.fromLatLng(this.state.locationLatLng.lat, this.state.locationLatLng.lng).then(
+      response => {
+        this.setState({
+          address: response.results[0].formatted_address
+        });
+        console.log(this.state.address);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   };
 
   render() {

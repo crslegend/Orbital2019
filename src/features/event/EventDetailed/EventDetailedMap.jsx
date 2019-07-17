@@ -2,18 +2,19 @@ import React from "react";
 import { Segment, Icon, Popup } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 
-const Marker = ({location}) => (
+const Marker = ({address}) => (
   <Popup
-    trigger={<Icon name="marker" size="big" color="red" />}
-    content={location}
+    trigger={<Icon name="map marker alternate" size="big" color="red" />}
+    content={address}
     position="top center"
     on="click"
-    pinned
+    pinned='true'
   />
 );
 
-const EventDetailedMap = ({ lat, lng, location }) => {
+const EventDetailedMap = ({ lat, lng, address }) => {
   const zoom = 16;
+
   return (
     <Segment attached="bottom" style={{ padding: 0 }}>
       <div style={{ height: "300px", width: "100%" }}>
@@ -22,7 +23,7 @@ const EventDetailedMap = ({ lat, lng, location }) => {
           defaultCenter={{ lat: lat, lng: lng }}
           defaultZoom={zoom}
         >
-          <Marker lat={lat} lng={lng} location={location} />
+          <Marker lat={lat} lng={lng} address={address} />
         </GoogleMapReact>
       </div>
     </Segment>

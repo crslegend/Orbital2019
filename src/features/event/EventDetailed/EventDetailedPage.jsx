@@ -50,6 +50,7 @@ class EventDetailedPage extends Component {
       event,
       auth,
       profile,
+      userLatLng,
       goingToEvent,
       cancelGoingToEvent
     } = this.props;
