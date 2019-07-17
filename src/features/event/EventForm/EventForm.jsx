@@ -17,7 +17,7 @@ import {
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import Geocode from 'react-geocode'
+import Geocode from "react-geocode";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -133,7 +133,10 @@ class EventForm extends Component {
     Geocode.setApiKey("AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM");
     Geocode.enableDebug();
 
-    Geocode.fromLatLng(this.state.locationLatLng.lat, this.state.locationLatLng.lng).then(
+    Geocode.fromLatLng(
+      this.state.locationLatLng.lat,
+      this.state.locationLatLng.lng
+    ).then(
       response => {
         this.setState({
           address: response.results[0].formatted_address
