@@ -225,7 +225,7 @@ class EventForm extends Component {
                   types: ["geocode"]
                 }}
                 onSelect={this.handleAreaSelect}
-                placeholder="Select Area (eg. NUS, Bukit Batok)"
+                placeholder="Select Area (eg. Clementi, Bukit Batok)"
               />
               <Field
                 name="location"
