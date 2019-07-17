@@ -1,6 +1,7 @@
 import React from "react";
 import PlacesAutoComplete from "react-places-autocomplete";
 import { Form, Label, Segment, List } from "semantic-ui-react";
+import LoadingComponent from "../../layout/LoadingComponent";
 
 const PlaceInput = ({
   input: { value, onChange, onBlur },
@@ -37,7 +38,7 @@ const PlaceInput = ({
                 width: "100%"
               }}
             >
-              {loading && <div>Loading...</div>}
+              {loading && <LoadingComponent/>}
               <List selection>
                 {suggestions.map(suggestion => (
                   <List.Item {...getSuggestionItemProps(suggestion)}>

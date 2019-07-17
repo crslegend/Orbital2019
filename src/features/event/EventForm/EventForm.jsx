@@ -91,6 +91,7 @@ const defaultLatLng = {
 
 class EventForm extends Component {
   state = {
+    area: "",
     areaLatLng: {},
     locationLatLng: {},
     address: ""
@@ -110,7 +111,7 @@ class EventForm extends Component {
     try {
       values.locationLatLng = this.state.locationLatLng;
       values.address = this.state.address;
-      values.area = this.state.areaLatLng;
+      values.area = this.state.area;
       if (this.props.initialValues.id) {
         if (Object.keys(values.locationLatLng).length === 0) {
           values.locationLatLng = this.props.event.locationLatLng;
@@ -137,7 +138,8 @@ class EventForm extends Component {
       .then(results => getLatLng(results[0]))
       .then(latlng => {
         this.setState({
-          areaLatLng: latlng
+          areaLatLng: latlng,
+          area: selectedArea
         });
       })
       .then(() => {
@@ -231,7 +233,7 @@ class EventForm extends Component {
                 name="location"
                 component={PlaceInput}
                 options={{
-                  location: new google.maps.LatLng(nusLatLng),
+                  location: new google.maps.LatLng(this.state.areaLatLng),
                   radius: 800,
                   types: ["establishment", "geocode"]
                 }}
