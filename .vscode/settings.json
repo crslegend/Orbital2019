@@ -4,7 +4,12 @@
         "userdoc"
     ],
     "cSpell.ignoreWords": [
+        "bus",
+        "busstop",
         "dropzone",
+        "find",
+        "nearest",
+        "stops",
         "subcollections",
         "vlpj"
     ]

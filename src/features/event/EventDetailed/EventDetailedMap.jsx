@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Segment, Icon, Popup } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
+import EventDetailDirections from "./Directions/EventDetailDirections";
 
 const Marker = ({ address }) => (
   <Popup
@@ -38,37 +39,48 @@ const EventDetailedMap = ({
     }
   }
 
-  if (eventLatLng) {
+  if (address) {
     return (
-      <Segment attached style={{ padding: 0 }}>
-        <div style={{ height: "300px", width: "100%" }}>
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
-            }}
-            defaultCenter={{ lat: eventLatLng.lat, lng: eventLatLng.lng }}
-            defaultZoom={zoom}
-          >
-            <Marker lat={eventLatLng.lat} lng={eventLatLng.lng} address={address} />
-            {coords && (
-              <CurrentMarker
-                lat={coords.latitude}
-                lng={coords.longitude}
-                address="you are here"
+      <Fragment>
+        <Segment attached style={{ padding: 0 }}>
+          <div style={{ height: "300px", width: "100%" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
+              }}
+              defaultCenter={{
+                lat: eventLatLng.lat,
+                lng: eventLatLng.lng
+              }}
+              defaultZoom={zoom}
+            >
+              <Marker
+                lat={eventLatLng.lat}
+                lng={eventLatLng.lng}
+                address={address}
               />
-            )}
-          </GoogleMapReact>
-        </div>
-      </Segment>
+              {coords && (
+                <CurrentMarker
+                  lat={coords.latitude}
+                  lng={coords.longitude}
+                  address="You are here"
+                />
+              )}
+            </GoogleMapReact>
+          </div>
+        </Segment>
+        {coords && (
+          <EventDetailDirections eventLatLng={eventLatLng} coords={coords} />
+        )}
+      </Fragment>
     );
   } else {
     return (
       <Segment attached="bottom">
-        <Icon name="warning circle" size="large" color="red" /> 
-        {" "}
+        <Icon name="warning circle" size="large" color="red" />{" "}
         <span>Invalid Address</span>
       </Segment>
-    )
+    );
   }
 };
 

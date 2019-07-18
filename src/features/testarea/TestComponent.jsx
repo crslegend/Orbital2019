@@ -7,6 +7,7 @@ import TestPlaceInput from "./TestPlaceInput";
 import SimpleMap from "./SimpleMap";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import TestGeoLocation from "./TestGeoLocation";
+import NewMap from "./NewMap";
 
 const mapStateToProps = state => ({
   data: state.test.data,
@@ -70,7 +71,7 @@ class TestComponent extends Component {
           content="Modal"
         />
         <TestPlaceInput selectAddress={this.handleSelect} />
-        <SimpleMap key={this.state.latlng.lng} latlng={this.state.latlng}/>
+        <NewMap latLng={this.state.latlng} />
         <TestGeoLocation/>
       </div>
     );

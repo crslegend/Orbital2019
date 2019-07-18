@@ -1,30 +1,43 @@
 import React, { useState } from "react";
 import { Segment, Button } from "semantic-ui-react";
 import busStops from "./BusStopData";
-import LoadingComponent from "../../../../app/layout/LoadingComponent";
 
-const EventDetailDirections = ({ eventLatLng }) => {
-
+const findNearestBusStop = latLng => {
   var distance = Math.sqrt(
-    Math.pow(eventLatLng.lat - busStops[0].lat, 2) +
-      Math.pow(eventLatLng.lng - busStops[0].lng, 2)
+    Math.pow(latLng.lat - busStops[0].lat, 2) +
+      Math.pow(latLng.lng - busStops[0].lng, 2)
   );
-  var name = busStops[0].name;
-  for (var i = 1; i < 39; i++) {
+  var busStop = busStops[0];
+  for (var i = 1; i < busStops.length; i++) {
     let newDistance = Math.sqrt(
-      Math.pow(eventLatLng.lat - busStops[i].lat, 2) +
-        Math.pow(eventLatLng.lng - busStops[i].lng, 2)
+      Math.pow(latLng.lat - busStops[i].lat, 2) +
+        Math.pow(latLng.lng - busStops[i].lng, 2)
     );
     if (newDistance < distance) {
       distance = newDistance;
-      name = busStops[i].name;
+      busStop = busStops[i];
     }
   }
+  return busStop;
+};
+
+const EventDetailDirections = ({ eventLatLng, coords }) => {
+  
+  const userLatLng = {
+    lat: coords.latitude,
+    lng: coords.longitude
+  }
+
+  var eventStop = findNearestBusStop(eventLatLng);
+  var userStop = findNearestBusStop(userLatLng);
 
   return (
-    <Segment attached="bottom" >
-      <span>Nearest bus stop is: </span>
-      {name}
+    <Segment attached="bottom">
+      <span>Nearest bus stop to venue is: </span>
+      {eventStop.name}
+      <br />
+      <span>Nearest bus stop to you is : </span>
+      {userStop.name}
     </Segment>
   );
 };
