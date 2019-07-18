@@ -24,8 +24,7 @@ const CurrentMarker = ({ address }) => (
 );
 
 const EventDetailedMap = ({
-  lat,
-  lng,
+  eventLatLng,
   address,
   coords,
   isGeolocationAvailable,
@@ -39,18 +38,18 @@ const EventDetailedMap = ({
     }
   }
 
-  if (lat && lng) {
+  if (eventLatLng) {
     return (
-      <Segment attached="bottom" style={{ padding: 0 }}>
+      <Segment attached style={{ padding: 0 }}>
         <div style={{ height: "300px", width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
             }}
-            defaultCenter={{ lat: lat, lng: lng }}
+            defaultCenter={{ lat: eventLatLng.lat, lng: eventLatLng.lng }}
             defaultZoom={zoom}
           >
-            <Marker lat={lat} lng={lng} address={address} />
+            <Marker lat={eventLatLng.lat} lng={eventLatLng.lng} address={address} />
             {coords && (
               <CurrentMarker
                 lat={coords.latitude}

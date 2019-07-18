@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { format } from "date-fns";
 import { Segment, Grid, Icon, Button } from "semantic-ui-react";
 import EventDetailedMap from "./EventDetailedMap.jsx";
+import EventDetailDirections from "./Directions/EventDetailDirections.jsx";
 
 const EventDetailedInfo = ({ event }) => {
   const [isMapOpen, showMapToggle] = useState(false);
@@ -54,11 +55,13 @@ const EventDetailedInfo = ({ event }) => {
         </Grid>
       </Segment>
       {isMapOpen && (
-        <EventDetailedMap
-          lat={event.locationLatLng.lat}
-          lng={event.locationLatLng.lng}
-          address={event.address}
-        />
+        <Fragment>
+          <EventDetailedMap
+            eventLatLng={event.locationLatLng}
+            address={event.address}
+          />
+          <EventDetailDirections eventLatLng={event.locationLatLng} />
+        </Fragment>
       )}
     </Segment.Group>
   );
