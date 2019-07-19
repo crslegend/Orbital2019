@@ -2,29 +2,27 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
-import {
-  Segment,
-  Header,
-  Divider,
-  Grid,
-  Button
-} from "semantic-ui-react";
+import { Segment, Header, Divider, Grid, Button } from "semantic-ui-react";
 import DropzoneInput from "./DropzoneInput";
 import CropperInput from "./CropperInput";
-import { uploadProfileImage, deletePhoto, setMainPhoto } from "../../userActions";
+import {
+  uploadProfileImage,
+  deletePhoto,
+  setMainPhoto
+} from "../../userActions";
 import { toastr } from "react-redux-toastr";
-import UserPhotos from './UserPhotos';
+import UserPhotos from "./UserPhotos";
 
-const query = ({auth}) => {
-    return [
-        {
-            collection: 'users',
-            doc: auth.uid,
-            subcollections: [{collection: 'photos'}],
-            storeAs: 'photos'
-        }
-    ]
-}
+const query = ({ auth }) => {
+  return [
+    {
+      collection: "users",
+      doc: auth.uid,
+      subcollections: [{ collection: "photos" }],
+      storeAs: "photos"
+    }
+  ];
+};
 
 const actions = {
   uploadProfileImage,
@@ -32,14 +30,21 @@ const actions = {
   setMainPhoto
 };
 
-const mapState = (state) => ({
-    auth: state.firebase.auth,
-    profile: state.firebase.profile,
-    photos: state.firestore.ordered.photos,
-    loading: state.async.loading
-})
+const mapState = state => ({
+  auth: state.firebase.auth,
+  profile: state.firebase.profile,
+  photos: state.firestore.ordered.photos,
+  loading: state.async.loading
+});
 
-const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto, setMainPhoto, loading }) => {
+const PhotosPage = ({
+  uploadProfileImage,
+  photos,
+  profile,
+  deletePhoto,
+  setMainPhoto,
+  loading
+}) => {
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState(null);
 
@@ -65,21 +70,21 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto, setMainP
     setImage(null);
   };
 
-  const handleDeletePhoto = async (photo) => {
+  const handleDeletePhoto = async photo => {
     try {
       await deletePhoto(photo);
     } catch (error) {
-      toastr.error('Oops', error.message);
+      toastr.error("Oops", error.message);
     }
-  }
+  };
 
-  const handleSetMainPhoto = async (photo) => {
+  const handleSetMainPhoto = async photo => {
     try {
       await setMainPhoto(photo);
     } catch (error) {
-      toastr.error('Oops', error.message);
+      toastr.error("Oops", error.message);
     }
-  }
+  };
 
   return (
     <Segment>
@@ -131,12 +136,21 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto, setMainP
       </Grid>
 
       <Divider />
-      <UserPhotos photos={photos} profile={profile} deletePhoto={handleDeletePhoto} setMainPhoto={handleSetMainPhoto} />
+      <UserPhotos
+        loading={loading}
+        photos={photos}
+        profile={profile}
+        deletePhoto={handleDeletePhoto}
+        setMainPhoto={handleSetMainPhoto}
+      />
     </Segment>
   );
 };
 
 export default compose(
-  connect(mapState, actions),
+  connect(
+    mapState,
+    actions
+  ),
   firestoreConnect(auth => query(auth))
-)(PhotosPage); 
+)(PhotosPage);

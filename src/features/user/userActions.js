@@ -5,7 +5,7 @@ import {
   asyncActionError,
   asyncActionFinish
 } from "../async/asyncActions";
-import { FETCH_EVENTS, FETCH_USER_EVENTS } from "../event/eventConstants";
+import { FETCH_USER_EVENTS } from "../event/eventConstants";
 import cuid from "cuid";
 
 export const updateProfile = user => async (
@@ -16,41 +16,74 @@ export const updateProfile = user => async (
   const firebase = getFirebase();
   const firestore = firebase.firestore();
   const { isLoaded, isEmpty, ...updatedUser } = user;
+  const userUid = firebase.auth().currentUser.uid;
+  const profile = getState().firebase.profile;
 
   try {
     await firebase.updateProfile(updatedUser);
-    // console.log(updatedUser);
-    // console.log(user);
-    // let userDocRef = firestore.collection("users").doc(user.uid);
+    let batch = firestore.batch();
 
-    // if (
-    //   getState().firestore.ordered.events[0].tutorName !==
-    //   updatedUser.displayName
-    // ) {
-    //   let batch = firestore.batch();
-    //   batch.update(userDocRef, updatedUser);
+    let eventsRef = firestore.collection("events");
+    let eventsActivityRef = firestore.collection("activity");
+    let eventAttendeeRef = firestore.collection("event_attendee");
 
-    //   let eventsRef = firestore.collection("events");
-    //   let eventActivityRef = firestore.collection("activity");
+    let eventsQuery = await eventsRef.where("tutorUid", "==", userUid);
+    let eventsQuerySnap = await eventsQuery.get(); // get in the form of array
 
-    //   let eventsQuery = await eventsRef.where("tutorUid", "==", user.uid);
+    let eventAttendeeQuery = await eventAttendeeRef.where(
+      "userUid",
+      "==",
+      userUid
+    );
+    let eventAttendeeQuerySnap = await eventAttendeeQuery.get(); // get in the form of array
 
-    //   let eventsQuerySnap = await eventsQuery.get();
+    let eventsActivityQuery = await eventsActivityRef.where(
+      "tutorUid",
+      "==",
+      userUid
+    );
+    let eventsActivityQuerySnap = await eventsActivityQuery.get(); // get in the form of array
 
-    //   for (let i = 0; i < eventsQuerySnap.docs.length; i++) {
-    //     let eventsQueryDocRef = await firestore
-    //       .collection("events")
-    //       .doc(eventsQuerySnap.docs[i].id);
+    if (profile.userType === "tutor") {
+      // batch update for tutor's displayName in events collection
+      for (let i = 0; i < eventsQuerySnap.docs.length; i++) {
+        let eventsQueryDocRef = await firestore
+          .collection("events")
+          .doc(eventsQuerySnap.docs[i].id);
 
-    //     batch.update(eventsQueryDocRef, {
-    //       tutorName: updatedUser.displayName
-    //     });
-    //   }
-    //   await batch.commit();
-    // } else {
-    //   userDocRef.update(updatedUser);
-    // }
+        batch.update(eventsQueryDocRef, {
+          tutorName: updatedUser.displayName
+        });
+      }
 
+      // batch update for tutor's displayName in event activity collection
+      for (let i = 0; i < eventsActivityQuerySnap.docs.length; i++) {
+        let eventsActivityQueryDocRef = await firestore
+          .collection("activity")
+          .doc(eventsActivityQuerySnap.docs[i].id);
+
+        batch.update(eventsActivityQueryDocRef, {
+          tutorName: updatedUser.displayName
+        });
+      }
+    }
+
+    // batch update for both tutor's and tutee's displayName in attendee array
+    // which is inside event collection
+    for (let i = 0; i < eventAttendeeQuerySnap.docs.length; i++) {
+      let eventAttendeeQueryDocRef = await firestore
+        .collection("events")
+        .doc(eventAttendeeQuerySnap.docs[i].data().eventId);
+      let event = await eventAttendeeQueryDocRef.get();
+      console.log(event);
+
+      batch.update(eventAttendeeQueryDocRef, {
+        [`attendees.${userUid}.displayName`]: updatedUser.displayName
+      });
+    }
+
+    // commit the updates to firestore
+    await batch.commit();
     toastr.success("Success", "Your profile has been updated");
   } catch (error) {
     console.log(error);
@@ -69,7 +102,7 @@ export const goingToEvent = event => async (
   const attendee = {
     going: true,
     joinDate: firestore.FieldValue.serverTimestamp(),
-    displayName: user.displayName,
+    displayName: profile.displayName,
     isTutor: false,
     photoURL: user.photoURL
   };
@@ -239,18 +272,77 @@ export const deletePhoto = photo => async (
 };
 
 // user action to change main profile photo, no need firestore
-export const setMainPhoto = photo => async (
-  dispatch,
-  getState,
-  { getFirebase }
-) => {
-  const firebase = getFirebase();
+export const setMainPhoto = photo => async (dispatch, getState) => {
+  const firestore = firebase.firestore();
+  const user = firebase.auth().currentUser;
+  let userDocRef = firestore.collection("users").doc(user.uid);
+  let eventAttendeeRef = firestore.collection("event_attendee");
+  let eventActivityRef = firestore.collection("activity");
   try {
-    return await firebase.updateProfile({
+    dispatch(asyncActionStart());
+    let batch = firestore.batch();
+
+    // batch update the photoURL inside the users collection
+    batch.update(userDocRef, {
       photoURL: photo.url
     });
+
+    let eventQuery = await eventAttendeeRef.where("userUid", "==", user.uid);
+    let eventQuerySnap = await eventQuery.get(); // get in the form of array
+
+    let eventActivityQuery = await eventActivityRef.where(
+      "tutorUid",
+      "==",
+      user.uid
+    );
+    let eventActivityQuerySnap = await eventActivityQuery.get(); // get in the form of array
+
+    for (let i = 0; i < eventQuerySnap.docs.length; i++) {
+      let eventDocRef = await firestore
+        .collection("events")
+        .doc(eventQuerySnap.docs[i].data().eventId);
+
+      let event = await eventDocRef.get(); // get in the form of array
+
+      // batch update the photoURL inside the events collection
+      if (event.data().tutorUid === user.uid) {
+        batch.update(eventDocRef, {
+          tutorPhotoURL: photo.url,
+          [`attendees.${user.uid}.photoURL`]: photo.url
+        });
+      } else {
+        batch.update(eventDocRef, {
+          [`attendees.${user.uid}.photoURL`]: photo.url
+        });
+      }
+
+      // batch update the photoURL inside the event attendee collection
+      let eventAttendeeDocRef = await firestore
+        .collection("event_attendee")
+        .doc(eventQuerySnap.docs[i].id);
+
+      batch.update(eventAttendeeDocRef, {
+        photoURL: photo.url
+      });
+    }
+
+    // batch update the photoURL inside the event activity collection
+    for (let i = 0; i < eventActivityQuerySnap.docs.length; i++) {
+      let eventActivityDocRef = await firestore
+        .collection("activity")
+        .doc(eventActivityQuerySnap.docs[i].id);
+
+      batch.update(eventActivityDocRef, {
+        photoURL: photo.url
+      });
+    }
+
+    // commit the updates to firestore
+    await batch.commit();
+    dispatch(asyncActionFinish());
   } catch (error) {
     console.log(error);
+    dispatch(asyncActionError());
     throw new Error("Problem setting main photo");
   }
 };

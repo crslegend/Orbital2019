@@ -69,6 +69,7 @@ export const updateEvent = event => {
         // get a snapshot of this query (array of event activities)
         let eventActivityQuerySnap = await eventActivityQuery.get();
 
+        // update the eventDate inside the event_attendee collection
         for (let i = 0; i < eventAttendeeQuerySnap.docs.length; i++) {
           let eventAttendeeDocRef = await firestore
             .collection("event_attendee")
@@ -79,6 +80,7 @@ export const updateEvent = event => {
           });
         }
 
+        // update the eventDate inside the event activity feed collection
         for (let i = 0; i < eventActivityQuerySnap.docs.length; i++) {
           let eventActivityDocRef = await firestore
             .collection("activity")
