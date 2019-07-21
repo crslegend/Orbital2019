@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Grid } from "semantic-ui-react";
+import React, { Component, Fragment, createRef } from "react";
+import { Grid, List, Segment } from "semantic-ui-react";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
-import EventDetailedSidebar from "./EventDetailedSidebar";
 import { connect } from "react-redux";
 import { withFirestore } from "react-redux-firebase";
 import { objectToArray } from "../../../app/common/util/helpers";
 import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import EventListAttendee from "../EventList/EventListAttendee";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -37,6 +37,8 @@ const mapDispatchToProps = {
 };
 
 class EventDetailedPage extends Component {
+  contextRef = createRef();
+
   state = {
     loadingEvent: true
   };
@@ -77,24 +79,137 @@ class EventDetailedPage extends Component {
       return <LoadingComponent />;
     } else {
       return (
-        <Grid>
-          <Grid.Column width={10}>
-            <EventDetailedHeader
-            loading={loading}
-              event={event}
-              isGoing={isGoing}
-              isHost={isHost}
-              profile={profile}
-              goingToEvent={goingToEvent}
-              cancelGoingToEvent={cancelGoingToEvent}
-              attendees={attendees}
-            />
-            <EventDetailedInfo event={event} />
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <EventDetailedSidebar attendees={attendees} />
-          </Grid.Column>
-        </Grid>
+        <Fragment>
+          <Grid>
+            <Grid.Column width={16} only="mobile">
+              <EventDetailedHeader
+                loading={loading}
+                event={event}
+                isGoing={isGoing}
+                isHost={isHost}
+                profile={profile}
+                goingToEvent={goingToEvent}
+                cancelGoingToEvent={cancelGoingToEvent}
+                attendees={attendees}
+              />
+              {/* <EventDetailedSidebar attendees={attendees} /> */}
+              <Segment
+                textAlign="center"
+                style={{ border: "none" }}
+                attached="top"
+                secondary
+                inverted
+                color="teal"
+              >
+                {attendees && attendees.length - 1}{" "}
+                {attendees && attendees.length - 1 === 1 ? "Person" : "People"}{" "}
+                Going
+              </Segment>
+              <Segment attached>
+                <List horizontal>
+                  {event.attendees &&
+                    objectToArray(event.attendees)
+                      .filter(attendee => attendee.isTutor === false)
+                      .map(attendee => (
+                        <EventListAttendee
+                          key={attendee.id}
+                          attendee={attendee}
+                        />
+                      ))}
+                </List>
+              </Segment>
+              <EventDetailedInfo event={event} />
+            </Grid.Column>
+
+            <Grid.Column width={10} only="computer">
+              <EventDetailedHeader
+                loading={loading}
+                event={event}
+                isGoing={isGoing}
+                isHost={isHost}
+                profile={profile}
+                goingToEvent={goingToEvent}
+                cancelGoingToEvent={cancelGoingToEvent}
+                attendees={attendees}
+              />
+            </Grid.Column>
+            {/* <EventDetailedSidebar attendees={attendees} /> */}
+            <Grid.Column width={6} only="computer">
+              <Segment
+                textAlign="center"
+                style={{ border: "none" }}
+                attached
+                secondary
+                inverted
+                color="teal"
+              >
+                {attendees && attendees.length - 1}{" "}
+                {attendees && attendees.length - 1 === 1 ? "Person" : "People"}{" "}
+                Going
+              </Segment>
+              <Segment attached>
+                <List horizontal>
+                  {event.attendees &&
+                    objectToArray(event.attendees)
+                      .filter(attendee => attendee.isTutor === false)
+                      .map(attendee => (
+                        <EventListAttendee
+                          key={attendee.id}
+                          attendee={attendee}
+                        />
+                      ))}
+                </List>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column width={10} only="computer">
+              <EventDetailedInfo event={event} />
+            </Grid.Column>
+
+            <Grid.Column width={10} only="tablet">
+              <EventDetailedHeader
+                loading={loading}
+                event={event}
+                isGoing={isGoing}
+                isHost={isHost}
+                profile={profile}
+                goingToEvent={goingToEvent}
+                cancelGoingToEvent={cancelGoingToEvent}
+                attendees={attendees}
+              />
+            </Grid.Column>
+            {/* <EventDetailedSidebar attendees={attendees} /> */}
+            <Grid.Column width={6} only="tablet">
+              <Segment
+                textAlign="center"
+                style={{ border: "none" }}
+                attached="top"
+                secondary
+                inverted
+                color="teal"
+              >
+                {attendees && attendees.length - 1}{" "}
+                {attendees && attendees.length - 1 === 1 ? "Person" : "People"}{" "}
+                Going
+              </Segment>
+              <Segment attached>
+                <List horizontal>
+                  {event.attendees &&
+                    objectToArray(event.attendees)
+                      .filter(attendee => attendee.isTutor === false)
+                      .map(attendee => (
+                        <EventListAttendee
+                          key={attendee.id}
+                          attendee={attendee}
+                        />
+                      ))}
+                </List>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column width={10} only="tablet">
+              <EventDetailedInfo event={event} />
+            </Grid.Column>
+          </Grid>
+        </Fragment>
       );
     }
   }

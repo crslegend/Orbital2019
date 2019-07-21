@@ -10,7 +10,7 @@ class EventListAttendee extends Component {
         <Popup
           trigger={
             <Image
-              src={attendee.photoURL || 'assets/user.png'}
+              src={attendee.photoURL || "assets/user.png"}
               circular
               size="mini"
               as={Link}
@@ -20,6 +20,7 @@ class EventListAttendee extends Component {
           key={attendee.id}
           header={attendee.displayName}
           size="tiny"
+          position="top center"
         />
       </List.Item>
     );

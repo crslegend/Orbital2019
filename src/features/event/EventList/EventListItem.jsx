@@ -24,32 +24,24 @@ class EventListItem extends Component {
                     {event.tutorName}
                   </Link>
                 </Item.Description>
-                {event.cancelled && (
-                  <Label
-                    style={{ top: "-50px" }}
-                    ribbon="right"
-                    color="red"
-                    content="This class has been cancelled"
-                  />
-                )}
-                {attendees && attendees.length > event.size && (
-                  <Label
-                    style={{ middle: "-40px" }}
-                    ribbon="right"
-                    color="orange"
-                    content="This class is full"
-                  />
-                )}
               </Item.Content>
             </Item>
           </Item.Group>
         </Segment>
         <Segment>
           <span>
-            <Icon name="clock" />
-            {format(event.date.toDate(), "EEEE do LLL")} at{" "}
-            {format(event.date.toDate(), "h:mm a")} |
-            <Icon name="marker" /> {event.location}
+            <p>
+              <Icon name="calendar alternate" />
+              {format(event.date.toDate(), "EEEE do LLL")} at{" "}
+              {format(event.date.toDate(), "h:mm a")}{" "}
+            </p>
+            <p>
+              <Icon name="map marker alternate" />
+              {event.location}
+            </p>
+            <p>
+              <Icon name="users" /> {event.size}
+            </p>
           </span>
         </Segment>
         <Segment secondary>
@@ -57,11 +49,17 @@ class EventListItem extends Component {
             {event.attendees &&
               objectToArray(event.attendees)
                 .filter(attendee => attendee.isTutor === false)
-                .map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)}
+                .map(attendee => (
+                  <EventListAttendee key={attendee.id} attendee={attendee} />
+                ))}
           </List>
         </Segment>
         <Segment clearing>
-          <span>{event.description}</span>
+          {event.cancelled && <Label color="red" content="Cancelled" tag />}
+          {attendees && attendees.length > event.size && (
+            <Label color="orange" content="Full" tag />
+          )}
+          {/* <span>{event.description}</span> */}
           {/* <Button
             onClick={() => deleteEvent(event.id)}
             as="a"

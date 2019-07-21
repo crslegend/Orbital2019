@@ -1,5 +1,14 @@
 import React, { Fragment } from "react";
-import { Segment, Image, Item, Header, Button, Label } from "semantic-ui-react";
+import {
+  Segment,
+  Image,
+  Item,
+  Header,
+  Button,
+  Label,
+  Icon,
+  Grid
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
@@ -26,106 +35,113 @@ const EventDetailedHeader = ({
   attendees
 }) => {
   return (
-    <Segment.Group>
-      <Segment basic attached="top" style={{ padding: "0" }}>
-        <Image src="/assets/classroom.jpg" fluid style={eventImageStyle} />
+    <Fragment>
+      <Segment.Group>
+        <Segment basic attached="top" style={{ padding: "0" }}>
+          <Image src="/assets/classroom.jpg" fluid style={eventImageStyle} />
 
-        <Segment basic style={eventImageTextStyle}>
-          <Item.Group>
-            <Item>
-              <Item.Content>
-                <Header
-                  size="huge"
-                  content={event.subject}
-                  style={{ color: "white" }}
-                />
-                <p>
-                  {event.date && format(event.date.toDate(), "EEEE do LLLL")}
-                </p>
-                <p>
-                  Tutor:{" "}
-                  <strong>
-                    <Link
-                      to={`/profile/${event.tutorUid}`}
-                      style={{ color: "white" }}
-                    >
-                      {event.tutorName}
-                    </Link>
-                  </strong>
-                </p>
-              </Item.Content>
-            </Item>
-          </Item.Group>
+          <Segment basic style={eventImageTextStyle}>
+            <Item.Group>
+              <Grid>
+                <Grid.Column width={12}>
+                  <Item>
+                    <Item.Content>
+                      <Header
+                        size="huge"
+                        content={event.subject}
+                        style={{ color: "white" }}
+                      />
+                      <p>
+                        {event.date &&
+                          format(event.date.toDate(), "EEEE do LLLL")}
+                      </p>
+                      <p>
+                        Tutor:{" "}
+                        <strong>
+                          <Link
+                            to={`/profile/${event.tutorUid}`}
+                            style={{ color: "white" }}
+                          >
+                            {event.tutorName}
+                          </Link>
+                        </strong>
+                      </p>
+                    </Item.Content>
+                  </Item>
+                </Grid.Column>
+                <Grid.Column width={4} verticalAlign="bottom">
+                  {isHost && (
+                    <Button as={Link} to={`/manage/${event.id}`} icon inverted>
+                      <Icon name="edit" />
+                    </Button>
+                  )}
+
+                  {!isHost && profile.userType === "tutee" && (
+                    <Fragment>
+                      {isGoing ? (
+                        <Button
+                          onClick={() => cancelGoingToEvent(event)}
+                          icon
+                          inverted
+                        >
+                          <Icon name="user times" />
+                        </Button>
+                      ) : (
+                        !event.cancelled &&
+                        attendees &&
+                        attendees.length < event.size + 1 && (
+                          <Button
+                            onClick={() => goingToEvent(event)}
+                            icon
+                            inverted
+                          >
+                            <Icon name="user plus" />
+                          </Button>
+                        )
+                      )}
+                    </Fragment>
+                  )}
+                </Grid.Column>
+              </Grid>
+            </Item.Group>
+          </Segment>
         </Segment>
-      </Segment>
 
-      <Segment attached="bottom" clearing>
-        {!isHost && profile.userType === "tutee" && (
-          <Fragment>
-            {isGoing ? (
-              <Button onClick={() => cancelGoingToEvent(event)}>
-                Cancel My Place
-              </Button>
-            ) : (
-              [
-                !event.cancelled &&
+        <Segment attached="bottom" clearing>
+          {!isHost && profile.userType === "tutee" && (
+            <Fragment>
+              {event.cancelled &&
+              attendees &&
+              attendees.length < event.size + 1 ? (
+                <Label color="red" tag>
+                  Cancelled
+                </Label>
+              ) : (
                 attendees &&
-                attendees.length < event.size + 1 ? (
-                  <Button onClick={() => goingToEvent(event)} color="teal">
-                    Join This Class
-                  </Button>
-                ) : (
-                  [
-                    event.cancelled &&
-                    attendees &&
-                    attendees.length < event.size + 1 ? (
-                      <Button disabled color="teal">
-                        Class Cancelled
-                      </Button>
-                    ) : (
-                      <Button disabled color="teal">
-                        Class is Full
-                      </Button>
-                    )
-                  ]
+                attendees.length > event.size && (
+                  <Label color="orange" tag>
+                    Full
+                  </Label>
                 )
-              ]
-            )}
-          </Fragment>
-        )}
+              )}
+            </Fragment>
+          )}
 
-        {isHost && (
-          <Fragment>
-            {event.cancelled ? (
-              <Fragment>
-                <Button
-                  as={Link}
-                  to={`/manage/${event.id}`}
-                  color="orange"
-                  floated="right"
-                >
-                  Edit Class Details
-                </Button>
-                <Label
-                  color="red"
-                  content="You have cancelled this class"
-                  size="large"
-                />
-              </Fragment>
-            ) : (
-              <Button
-                as={Link}
-                to={`/manage/${event.id}`}
-                color="orange"
-                floated="right"
-              >
-                Edit Class Details
-              </Button>
-            )}
-          </Fragment>
-        )}
-      </Segment>
-    </Segment.Group>
+          {isHost && (
+            <Fragment>
+              {event.cancelled ? (
+                <Label color="red" content="Cancelled" tag />
+              ) : (
+                attendees &&
+                attendees.length > event.size && (
+                  <Label color="orange" content="Full" tag />
+                )
+              )}
+            </Fragment>
+          )}
+        </Segment>
+      </Segment.Group>
+    </Fragment>
   );
 };
 
