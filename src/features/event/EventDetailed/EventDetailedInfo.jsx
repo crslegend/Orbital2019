@@ -34,6 +34,16 @@ const EventDetailedInfo = ({ event }) => {
         </Grid>
       </Segment>
       <Segment attached>
+        <Grid>
+          <Grid.Column width={1}>
+            <Icon size="large" color="teal" name="users" />
+          </Grid.Column>
+          <Grid.Column width={15}>
+            <p>{event.size}</p>
+          </Grid.Column>
+        </Grid>
+      </Segment>
+      <Segment attached>
         <Grid verticalAlign="middle">
           <Grid.Column width={1}>
             <Icon name="marker" size="large" color="teal" />
