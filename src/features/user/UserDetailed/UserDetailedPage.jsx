@@ -64,8 +64,9 @@ class UserDetailedPage extends Component {
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
-        {isCurrentUser && <UserDetailedSideBar />}
+        {/* {isCurrentUser && <UserDetailedSideBar />} */}
         <UserDetailedEvents
+          profile={profile}
           events={events}
           eventsLoading={eventsLoading}
           changeTab={this.changeTab}

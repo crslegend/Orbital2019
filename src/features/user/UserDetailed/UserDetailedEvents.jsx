@@ -1,28 +1,67 @@
 import React from "react";
-import { Card, Grid, Header, Image, Segment, Tab } from "semantic-ui-react";
+import {
+  Card,
+  Grid,
+  Header,
+  Image,
+  Segment,
+  Tab,
+  List
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
-const panes = [
-  { menuItem: "All Classes", pane: { key: "allclasses" } },
+const panesForTutor = [
+  { menuItem: "Classes Tutored", pane: { key: "tutoring" } },
   { menuItem: "Past Classes", pane: { key: "pastclasses" } },
-  { menuItem: "Future Classes", pane: { key: "futureclasses" } },
-  { menuItem: "Classes Tutored", pane: { key: "tutoring" } }
+  { menuItem: "Future Classes", pane: { key: "futureclasses" } }
 ];
 
-const UserDetailedEvents = ({ events, eventsLoading, changeTab }) => {
+const panesForTutee = [
+  { menuItem: "Classes Attended", pane: { key: "allclasses" } },
+  { menuItem: "Past Classes", pane: { key: "pastclasses" } },
+  { menuItem: "Future Classes", pane: { key: "futureclasses" } }
+];
+
+const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
   return (
-    <Grid.Column width={12}>
+    <Grid.Column width={16}>
       <Segment attached loading={eventsLoading}>
         <Header icon="calendar" content="Classes" />
         <Tab
           onTabChange={(e, data) => changeTab(e, data)}
-          panes={panes}
+          panes={profile.userType === "tutor" ? panesForTutor : panesForTutee}
           menu={{ secondary: true, pointing: true, className: "wrapped" }}
         />
         <br />
 
-        <Card.Group itemsPerRow={2} only="mobile">
+        <List>
+          {events &&
+            events.map(event => (
+              <List.Item>
+                <Image src={"/assets/classroom.jpg"} size="tiny" />
+                <List.Content>
+                  <br />
+                  <List.Header
+                    as={Link}
+                    to={`/classes/${event.id}`}
+                    key={event.id}
+                  >
+                    {event.subject}
+                  </List.Header>
+                  <List.Description>
+                    <div>
+                      {format(event.date && event.date.toDate(), "dd LLL yyyy")}
+                      {" at "}
+                      {format(event.date && event.date.toDate(), "h:mm a")}
+                    </div>
+                  </List.Description>
+                </List.Content>
+              </List.Item>
+            ))}
+        </List>
+
+        {/* <Card.Group itemsPerRow={2} only="mobile">
           {events &&
             events.map(event => (
               <Card as={Link} to={`/classes/${event.id}`} key={event.id}>
@@ -40,7 +79,7 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab }) => {
                 </Card.Content>
               </Card>
             ))}
-        </Card.Group>
+        </Card.Group> */}
       </Segment>
     </Grid.Column>
   );

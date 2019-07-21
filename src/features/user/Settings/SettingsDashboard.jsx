@@ -32,19 +32,23 @@ const SettingsDashboard = ({
     <Grid stackable>
       <Grid.Column width={12}>
         <Switch>
-          <Redirect exact from="/settings" to="/settings/basic" />
+          <Redirect exact from="/settings" to="/settings/about" />
           <Route
-            path="/settings/basic"
+            path="/settings/about"
             render={() => (
-              <BasicPage initialValues={user} updateProfile={updateProfile} />
+              <BasicPage
+                initialValues={user}
+                updateProfile={updateProfile}
+                user={user}
+              />
             )}
           />
-          <Route
+          {/* <Route
             path="/settings/about"
             render={() => (
               <AboutPage initialValues={user} updateProfile={updateProfile} />
             )}
-          />
+          /> */}
           <Route path="/settings/photos" component={PhotosPage} />
           <Route
             path="/settings/account"

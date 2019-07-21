@@ -79,8 +79,8 @@ class EventDetailedPage extends Component {
       return <LoadingComponent />;
     } else {
       return (
-        <Fragment>
-          <Grid>
+        <Grid>
+          <Fragment>
             <Grid.Column width={16} only="mobile">
               <EventDetailedHeader
                 loading={loading}
@@ -208,8 +208,8 @@ class EventDetailedPage extends Component {
             <Grid.Column width={10} only="tablet">
               <EventDetailedInfo event={event} />
             </Grid.Column>
-          </Grid>
-        </Fragment>
+          </Fragment>
+        </Grid>
       );
     }
   }

@@ -22,7 +22,7 @@ const HomePage = ({ history }) => {
           HelpDen
         </Header>
         <Button onClick={() => history.push("/classes")} size="huge" inverted>
-          Get started
+          Welcome!
           <Icon name="right arrow" inverted />
         </Button>
       </Container>
