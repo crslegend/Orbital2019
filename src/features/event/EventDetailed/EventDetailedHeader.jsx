@@ -137,6 +137,11 @@ const EventDetailedHeader = ({
                   <Label color="orange" content="Full" tag />
                 )
               )}
+              {event.cancelled &&
+                attendees &&
+                attendees.length > event.size && (
+                  <Label color="orange" content="Full" tag />
+                )}
             </Fragment>
           )}
         </Segment>
