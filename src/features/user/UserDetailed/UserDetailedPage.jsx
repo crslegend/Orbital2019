@@ -3,11 +3,11 @@ import { Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { firestoreConnect, isEmpty } from "react-redux-firebase";
 import UserDetailedEvents from "./UserDetailedEvents";
-import UserDetailedSideBar from "./UserDetailedSidebar";
 import UserDetailedHeader from "./UserDetailedHeader";
 import { userDetailedQuery } from "../userQueries";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { getUserEvents } from "../userActions";
+import UserDetailedInfo from "./UserDetailedInfo";
 
 const mapStateToProps = (state, ownProps) => {
   let userUid = null;
@@ -64,6 +64,7 @@ class UserDetailedPage extends Component {
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
+        <UserDetailedInfo profile={profile} />
         {/* {isCurrentUser && <UserDetailedSideBar />} */}
         <UserDetailedEvents
           profile={profile}
