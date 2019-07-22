@@ -2,10 +2,8 @@ import React, { Fragment } from "react";
 import {
   Menu,
   Image,
-  Header,
   Icon,
-  Container,
-  Button
+  Container
 } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
 
@@ -21,6 +19,7 @@ const SignedInMenu = ({ signOut, profile, auth, hideSidebar }) => {
             circular
             size="small"
             src={profile.photoURL}
+            onClick={hideSidebar}
           />
         </Menu.Item>
       </Container>
@@ -59,7 +58,7 @@ const SignedInMenu = ({ signOut, profile, auth, hideSidebar }) => {
           </p>
         </Menu.Item>
       )}
-      <Menu.Item onClick={signOut}>
+      <Menu.Item onClick={() => {signOut(); hideSidebar();}} >
         <p>
           <Icon circular color="red" name="power" /> Sign Out
         </p>

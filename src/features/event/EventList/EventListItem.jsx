@@ -17,7 +17,7 @@ class EventListItem extends Component {
             <Item>
               <Item.Image size="small" src="/assets/classroom.jpg" />
               <Item.Content verticalAlign="middle">
-                <Item.Header>{event.subject}</Item.Header>
+                <Item.Header>{event.className}</Item.Header>
                 <Item.Description>
                   Tutor:{" "}
                   <Link to={`/profile/${event.tutorUid}`}>
