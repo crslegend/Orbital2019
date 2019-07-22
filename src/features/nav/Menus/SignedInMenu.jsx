@@ -1,39 +1,70 @@
-import React from "react";
-import { Menu, Image, Dropdown } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import React, { Fragment } from "react";
+import {
+  Menu,
+  Image,
+  Header,
+  Icon,
+  Container,
+  Button
+} from "semantic-ui-react";
+import { Link, NavLink } from "react-router-dom";
 
-const SignedInMenu = ({ signOut, profile, auth }) => {
+const SignedInMenu = ({ signOut, profile, auth, hideSidebar }) => {
   return (
-    <Menu.Item position="right">
-      <Image avatar spaced="right" src={profile.photoURL} />
-      <Dropdown pointing="top left" text={profile.displayName}>
-        <Dropdown.Menu direction="left">
-          {profile.userType === "tutor" && (
-            <Dropdown.Item
-              as={Link}
-              to={"/createEvent"}
-              text="Create A New Class"
-              icon="plus"
-            />
-          )}
-          {/* <Dropdown.Item text="My Events" icon="calendar" /> */}
-          {/* <Dropdown.Item text="My Network" icon="users" /> */}
-          <Dropdown.Item
+    <Fragment>
+      <Container textAlign="center">
+        <Menu.Item>
+          <Image
+            centered
             as={Link}
             to={`/profile/${auth.uid}`}
-            text="My Profile"
-            icon="user"
+            circular
+            size="small"
+            src={profile.photoURL}
           />
-          <Dropdown.Item
+        </Menu.Item>
+      </Container>
+      <Menu.Item>
+        <Menu.Header size="medium">{profile.displayName}</Menu.Header>
+        <Menu.Menu>
+          <Menu.Item
             as={Link}
-            to="/settings"
-            text="Settings"
-            icon="settings"
-          />
-          <Dropdown.Item onClick={signOut} text="Sign Out" icon="power" />
-        </Dropdown.Menu>
-      </Dropdown>
-    </Menu.Item>
+            to={`/profile/${auth.uid}`}
+            onClick={hideSidebar}
+          >
+            <p>
+              <Icon name="user" />
+              My Profile
+            </p>
+          </Menu.Item>
+          <Menu.Item as={Link} to="/settings" onClick={hideSidebar}>
+            <p>
+              <Icon name="settings" /> Settings
+            </p>
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu.Item>
+      <Menu.Item as={NavLink} to={"/classes"} onClick={hideSidebar}>
+        <p>
+          <Icon circular name="book" />
+          Classes
+        </p>
+      </Menu.Item>
+
+      {profile.userType === "tutor" && (
+        <Menu.Item as={NavLink} to={"/createEvent"} onClick={hideSidebar}>
+          <p>
+            <Icon circular color="green" name="plus" />
+            Create Class
+          </p>
+        </Menu.Item>
+      )}
+      <Menu.Item onClick={signOut}>
+        <p>
+          <Icon circular color="red" name="power" /> Sign Out
+        </p>
+      </Menu.Item>
+    </Fragment>
   );
 };
 
