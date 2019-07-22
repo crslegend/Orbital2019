@@ -39,7 +39,7 @@ class NavBar extends Component {
     const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
       <Fragment>
-        <Menu inverted fixed="top">
+        <Menu inverted fixed="top" borderless>
           <Container>
             <Menu.Item as={Link} to="/classes" header>
               <img src="/assets/logo.png" alt="logo" />
