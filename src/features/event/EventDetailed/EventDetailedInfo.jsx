@@ -11,7 +11,7 @@ const EventDetailedInfo = ({ event }) => {
       <Segment attached="top">
         <Grid>
           <Grid.Column width={1}>
-            <Icon size="large" color="teal" name="info" />
+            <Icon size="large" style={{ color: "#b21f1f" }} name="info" />
           </Grid.Column>
           <Grid.Column width={15}>
             <p>{event.description}</p>
@@ -21,7 +21,7 @@ const EventDetailedInfo = ({ event }) => {
       <Segment attached>
         <Grid verticalAlign="middle">
           <Grid.Column width={1}>
-            <Icon name="calendar" size="large" color="teal" />
+            <Icon name="calendar" size="large" style={{ color: "#b21f1f" }} />
           </Grid.Column>
           <Grid.Column width={15}>
             {event.date && (
@@ -36,7 +36,17 @@ const EventDetailedInfo = ({ event }) => {
       <Segment attached>
         <Grid>
           <Grid.Column width={1}>
-            <Icon size="large" color="teal" name="users" />
+            <Icon size="large" style={{ color: "#b21f1f" }} name="time" />
+          </Grid.Column>
+          <Grid.Column width={15}>
+            <p>{event.duration} mins</p>
+          </Grid.Column>
+        </Grid>
+      </Segment>
+      <Segment attached>
+        <Grid>
+          <Grid.Column width={1}>
+            <Icon size="large" style={{ color: "#b21f1f" }} name="users" />
           </Grid.Column>
           <Grid.Column width={15}>
             <p>{event.size}</p>
@@ -46,7 +56,7 @@ const EventDetailedInfo = ({ event }) => {
       <Segment attached>
         <Grid verticalAlign="middle">
           <Grid.Column width={1}>
-            <Icon name="marker" size="large" color="teal" />
+            <Icon name="marker" size="large" style={{ color: "#b21f1f" }} />
           </Grid.Column>
           <Grid.Column width={11}>
             <span>{event.location}</span>
@@ -68,6 +78,7 @@ const EventDetailedInfo = ({ event }) => {
         <EventDetailedMap
           eventLatLng={event.locationLatLng}
           address={event.address}
+          inNus={event.inNus}
         />
       )}
     </Segment.Group>

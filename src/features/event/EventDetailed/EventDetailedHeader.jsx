@@ -13,7 +13,8 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 const eventImageStyle = {
-  filter: "brightness(30%)"
+  filter: "brightness(30%)",
+  height: "300px"
 };
 
 const eventImageTextStyle = {
@@ -47,14 +48,17 @@ const EventDetailedHeader = ({
                   <Item>
                     <Item.Content>
                       <Header
+                        as="h1"
                         size="huge"
-                        content={event.subject}
+                        content={event.className}
                         style={{ color: "white" }}
                       />
-                      <p>
-                        {event.date &&
-                          format(event.date.toDate(), "EEEE do LLLL")}
-                      </p>
+                      <Header
+                        as="h3"
+                        style={{ color: "white" }}
+                      >
+                        Subject: {event.subject}
+                      </Header>
                       <p>
                         Tutor:{" "}
                         <strong>

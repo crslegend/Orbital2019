@@ -27,6 +27,7 @@ const CurrentMarker = ({ address }) => (
 const EventDetailedMap = ({
   eventLatLng,
   address,
+  inNus,
   coords,
   isGeolocationAvailable,
   isGeolocationEnabled
@@ -69,7 +70,7 @@ const EventDetailedMap = ({
             </GoogleMapReact>
           </div>
         </Segment>
-        {coords && (
+        {coords && inNus && (
           <EventDetailDirections eventLatLng={eventLatLng} coords={coords} />
         )}
       </Fragment>

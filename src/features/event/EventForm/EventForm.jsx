@@ -1,6 +1,13 @@
 /*global google*/
-import React, { Component } from "react";
-import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
+import React, { Component, Fragment } from "react";
+import {
+  Segment,
+  Form,
+  Button,
+  Grid,
+  Header,
+  Checkbox
+} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { updateEvent, createEvent, cancelToggle } from "../eventActions";
 import { reduxForm, Field } from "redux-form";
@@ -9,6 +16,7 @@ import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
 import PlaceInput from "../../../app/common/form/PlaceInput";
+import RadioInput from "../../../app/common/form/RadioInput";
 import {
   combineValidators,
   composeValidators,
@@ -58,7 +66,9 @@ const validate = combineValidators({
   location: isRequired({ message: "Please select a location" }),
   venue: isRequired({ message: "Please enter a venue" }),
   date: isRequired({ message: " Please select a date and time" }),
-  area: isRequired({ message: "Please indicate your area" })
+  area: isRequired({ message: "Please indicate your area" }),
+  duration: isRequired({ message: "Please indicate a duration" }),
+  className: isRequired({ message: "Please enter a class name" })
 });
 
 const size = [
@@ -79,22 +89,30 @@ const subject = [
   { key: "tamil", text: "Tamil", value: "Tamil" }
 ];
 
+const durations = [
+  { key: "30", text: "30mins", value: "30" },
+  { key: "60", text: "60mins", value: "60" },
+  { key: "90", text: "90mins", value: "90" },
+  { key: "120", text: "120mins", value: "120" }
+];
+
 const nusLatLng = {
   lat: 1.294732,
   lng: 103.776565
 };
 
 const defaultLatLng = {
-  lat: 1.363825, 
-  lng: 103.809230
-}
+  lat: 1.363825,
+  lng: 103.80923
+};
 
 class EventForm extends Component {
   state = {
     area: "",
     areaLatLng: {},
     locationLatLng: {},
-    address: ""
+    address: "",
+    inNus: false
   };
 
   async componentDidMount() {
@@ -112,6 +130,7 @@ class EventForm extends Component {
       values.locationLatLng = this.state.locationLatLng;
       values.address = this.state.address;
       values.area = this.state.area;
+      values.inNus = this.state.inNus;
       if (this.props.initialValues.id) {
         if (Object.keys(values.locationLatLng).length === 0) {
           values.locationLatLng = this.props.event.locationLatLng;
@@ -122,6 +141,9 @@ class EventForm extends Component {
         if (Object.keys(values.area).length === 0) {
           values.area = this.props.event.area;
         }
+        if (Object.keys(values.inNus).length === 0) {
+          values.inNus = this.props.event.inNus;
+        }
         await this.props.updateEvent(values);
         this.props.history.push(`/classes/${this.props.initialValues.id}`);
       } else {
@@ -131,6 +153,12 @@ class EventForm extends Component {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  handleToggle = (e, { inNus }) => {
+    this.setState({
+      inNus: inNus
+    });
   };
 
   handleAreaSelect = selectedArea => {
@@ -190,6 +218,7 @@ class EventForm extends Component {
       cancelToggle,
       loading
     } = this.props;
+    const { inNus } = this.state;
     return (
       <Grid>
         <Grid.Column mobile={16} computer={10}>
@@ -200,6 +229,11 @@ class EventForm extends Component {
               autoComplete="off"
             >
               <Field
+                name="className"
+                component={TextInput}
+                placeholder="Enter a class name (eg. A-Math Chapter 12)"
+              />
+              <Field
                 name="subject"
                 component={SelectInput}
                 options={subject}
@@ -209,41 +243,13 @@ class EventForm extends Component {
                 name="description"
                 component={TextArea}
                 rows={3}
-                placeholder="Description of the class OR the topic of the subject"
+                placeholder="Enter a description of the class OR the topic of the subject"
               />
               <Field
                 name="size"
                 component={SelectInput}
                 options={size}
-                placeholder="Maximum number of students"
-              />
-              <Header sub color="teal" content="Class Location Details" />
-              <Field
-                name="area"
-                component={PlaceInput}
-                options={{
-                  location: new google.maps.LatLng(defaultLatLng),
-                  radius: 15000,
-                  types: ["geocode"]
-                }}
-                onSelect={this.handleAreaSelect}
-                placeholder="Select Area (eg. Clementi, Bukit Batok)"
-              />
-              <Field
-                name="location"
-                component={PlaceInput}
-                options={{
-                  location: new google.maps.LatLng(this.state.areaLatLng),
-                  radius: 800,
-                  types: ["establishment", "geocode"]
-                }}
-                onSelect={this.handleLocationSelect}
-                placeholder="Select Location"
-              />
-              <Field
-                name="venue"
-                component={TextInput}
-                placeholder="Enter Venue Details (eg. classroom no.)"
+                placeholder="Select maximum number of students"
               />
               <Field
                 name="date"
@@ -253,6 +259,79 @@ class EventForm extends Component {
                 showTimeSelect
                 timeFormat="HH:mm"
               />
+              <Field
+                name="duration"
+                component={SelectInput}
+                options={durations}
+                placeholder="Select duration of class"
+              />
+              <Form.Group inline>
+                <label>Is your venue in NUS? </label>
+                <Form.Radio
+                  label="Yes"
+                  inNus={true}
+                  checked={inNus === true}
+                  onChange={this.handleToggle}
+                />
+                <Form.Radio
+                  label="No"
+                  inNus={false}
+                  checked={inNus === false}
+                  onChange={this.handleToggle}
+                />
+              </Form.Group>
+              <Header sub color="teal" content="Class Location Details" />
+              {!inNus ? (
+                <Fragment>
+                  <Field
+                    name="area"
+                    component={PlaceInput}
+                    options={{
+                      location: new google.maps.LatLng(defaultLatLng),
+                      radius: 15000,
+                      types: ["geocode"]
+                    }}
+                    onSelect={this.handleAreaSelect}
+                    placeholder="Select Area (eg. Clementi, Bukit Batok)"
+                  />
+                  <Field
+                    name="location"
+                    component={PlaceInput}
+                    options={{
+                      location: new google.maps.LatLng(this.state.areaLatLng),
+                      radius: 800,
+                      types: ["establishment", "geocode"]
+                    }}
+                    onSelect={this.handleLocationSelect}
+                    placeholder="Select Location"
+                  />
+                  <Field
+                    name="venue"
+                    component={TextInput}
+                    placeholder="Enter Venue Details (eg. classroom no.)"
+                  />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Field
+                    name="location"
+                    component={PlaceInput}
+                    options={{
+                      location: new google.maps.LatLng(nusLatLng),
+                      radius: 500,
+                      types: ["establishment", "geocode"]
+                    }}
+                    onSelect={this.handleLocationSelect}
+                    placeholder="Select Location in NUS (eg. YIH)"
+                  />
+                  <Field
+                    name="venue"
+                    component={TextInput}
+                    placeholder="Enter Venue Details (eg. classroom no.)"
+                  />
+                </Fragment>
+              )}
+
               <Button
                 disabled={invalid || submitting || pristine}
                 loading={loading}
