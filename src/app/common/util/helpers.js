@@ -1,17 +1,17 @@
-export const createNewEvent = (user, event) => {
+export const createNewEvent = (user, event, profile) => {
   return {
     ...event,
     tutorUid: user.uid,
-    tutorName: user.displayName,
-    tutorPhotoURL: user.photoURL,
+    tutorName: profile.displayName,
+    tutorPhotoURL: profile.photoURL,
     created: new Date(),
     attendees: {
       [user.uid]: {
         going: true,
         joinDate: new Date(),
-        displayName: user.displayName,
+        displayName: profile.displayName,
         isTutor: true,
-        photoURL: user.photoURL
+        photoURL: profile.photoURL
       }
     }
   };
