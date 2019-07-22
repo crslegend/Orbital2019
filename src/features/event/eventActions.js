@@ -13,7 +13,9 @@ export const createEvent = event => {
     const firestore = getFirestore();
     const firebase = getFirebase();
     const user = firebase.auth().currentUser;
-    const newEvent = createNewEvent(user, event);
+    const profile = getState().firebase.profile;
+    const newEvent = createNewEvent(user, event, profile);
+
     try {
       let createdEvent = await firestore.add("events", newEvent);
 
