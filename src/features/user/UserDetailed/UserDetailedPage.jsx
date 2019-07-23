@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { firestoreConnect, isEmpty } from "react-redux-firebase";
 import UserDetailedEvents from "./UserDetailedEvents";
@@ -72,6 +72,7 @@ class UserDetailedPage extends Component {
           eventsLoading={eventsLoading}
           changeTab={this.changeTab}
         />
+        <Divider />
       </Grid>
     );
   }

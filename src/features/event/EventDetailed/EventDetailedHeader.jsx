@@ -44,7 +44,7 @@ const EventDetailedHeader = ({
           <Segment basic style={eventImageTextStyle}>
             <Item.Group>
               <Grid>
-                <Grid.Column width={12}>
+                <Grid.Column width={13}>
                   <Item>
                     <Item.Content>
                       <Header
@@ -73,7 +73,7 @@ const EventDetailedHeader = ({
                     </Item.Content>
                   </Item>
                 </Grid.Column>
-                <Grid.Column width={4} verticalAlign="bottom">
+                <Grid.Column width={3} verticalAlign="bottom">
                   {isHost && (
                     <Button as={Link} to={`/manage/${event.id}`} icon inverted>
                       <Icon name="edit" />
