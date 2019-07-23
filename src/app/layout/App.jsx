@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import EventDashBoard from "../../features/event/EventDashboard/EventDashBoard";
 import NavBar from "../../features/nav/NavBar/NavBar";
-import { Container } from "semantic-ui-react";
+import { Container, Sidebar, Menu, Segment, Icon } from "semantic-ui-react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import EventDetailedPage from "../../features/event/EventDetailed/EventDetailedPage";
@@ -13,33 +13,57 @@ import ModalManager from "../../features/modals/ModalManager";
 import TestComponent from "../../features/testarea/TestComponent";
 
 class App extends Component {
+  state = {
+    visible: false
+  };
+
+  handleShowClick = () => {
+    this.setState({
+      visible: !this.state.visible
+    });
+  };
+
+  handleSidebarHide = () => {
+    this.setState({
+      visible: false
+    });
+  };
+
   render() {
+    const { visible } = this.state;
     return (
       <Fragment>
-        <ModalManager />
-        <Route exact path="/" component={HomePage} />
-        <Route
-          path="/(.+)" // this means if the path is more than just a '/', it will render the respective component
-          render={() => (
-            <Fragment>
-              <NavBar />
-              <Container className="main">
-                <Switch key={this.props.location.key}>
-                  <Route exact path="/classes" component={EventDashBoard} />
-                  <Route path="/classes/:id" component={EventDetailedPage} />
-                  <Route path="/people" component={PeopleDashboard} />
-                  <Route path="/profile/:id" component={UserDetailedPage} />
-                  <Route path="/settings" component={SettingsDashBoard} />
-                  <Route path="/test" component={TestComponent} />
-                  <Route
-                    path={["/createEvent", "/manage/:id"]}
-                    component={EventForm}
-                  />
-                </Switch>
-              </Container>
-            </Fragment>
-          )}
-        />
+        <Sidebar.Pushable>
+          <NavBar handleShowClick={this.handleShowClick} handleSidebarHide={this.handleSidebarHide} visible={visible} />
+          <Sidebar.Pusher dimmed={visible}>
+            <ModalManager />
+            <Route exact path="/" component={HomePage} />
+            <Route
+              path="/(.+)" // this means if the path is more than just a '/', it will render the respective component
+              render={() => (
+                <Fragment>
+                  <Container className="main">
+                    <Switch key={this.props.location.key}>
+                      <Route exact path="/classes" component={EventDashBoard} />
+                      <Route
+                        path="/classes/:id"
+                        component={EventDetailedPage}
+                      />
+                      <Route path="/people" component={PeopleDashboard} />
+                      <Route path="/profile/:id" component={UserDetailedPage} />
+                      <Route path="/settings" component={SettingsDashBoard} />
+                      <Route path="/test" component={TestComponent} />
+                      <Route
+                        path={["/createEvent", "/manage/:id"]}
+                        component={EventForm}
+                      />
+                    </Switch>
+                  </Container>
+                </Fragment>
+              )}
+            />
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </Fragment>
     );
   }

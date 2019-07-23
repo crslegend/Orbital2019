@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { Menu, Container, Button } from "semantic-ui-react";
-import { NavLink, Link, withRouter } from "react-router-dom";
+import { Menu, Container, Icon, Sidebar, Button } from "semantic-ui-react";
+import { Link, withRouter } from "react-router-dom";
 import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
 import { connect } from "react-redux";
@@ -29,49 +29,53 @@ class NavBar extends Component {
   };
 
   render() {
-    const { auth, profile } = this.props;
+    const {
+      auth,
+      profile,
+      handleShowClick,
+      handleSidebarHide,
+      visible
+    } = this.props;
     const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
-      <Menu inverted fixed="top">
-        <Container>
-          <Menu.Item as={Link} to="/classes" header>
-            <img src="/assets/logo.png" alt="logo" />
-            HelpDen
-          </Menu.Item>
-          <Menu.Item as={NavLink} exact to="/classes" name="Classes" />
-          {authenticated && (
-            <Fragment>
-              {/* <Menu.Item as={NavLink} to="/people" name="People" />
-              <Menu.Item as={NavLink} to="/test" name="Test" /> */}
-              {/* {profile.userType === "tutor" && (
-                <Menu.Item>
-                  <Button
-                    as={Link}
-                    to="/createEvent"
-                    floated="right"
-                    positive
-                    inverted
-                    content="Create A New Class"
-                  />
-                </Menu.Item>
-              )} */}
-            </Fragment>
-          )}
+      <Fragment>
+        <Menu inverted fixed="top" borderless>
+          <Container>
+            <Menu.Item as={Link} to="/classes" header>
+              <img src="/assets/logo.png" alt="logo" />
+              HelpDen
+            </Menu.Item>
 
-          {authenticated ? (
-            <SignedInMenu
-              signOut={this.handleSignOut}
-              profile={profile}
-              auth={auth}
-            />
-          ) : (
-            <SignedOutMenu
-              signIn={this.handleSignIn}
-              register={this.handleRegister}
-            />
-          )}
-        </Container>
-      </Menu>
+            {authenticated ? (
+              <Menu.Item position="right">
+                <Button basic inverted icon="bars" onClick={handleShowClick} />
+              </Menu.Item>
+            ) : (
+              <SignedOutMenu
+                signIn={this.handleSignIn}
+                register={this.handleRegister}
+              />
+            )}
+          </Container>
+        </Menu>
+        <Sidebar
+          as={Menu}
+          pointing
+          animation="overlay"
+          direction="right"
+          onHide={handleSidebarHide}
+          vertical
+          visible={visible}
+          width="thin"
+        >
+          <SignedInMenu
+            signOut={this.handleSignOut}
+            profile={profile}
+            auth={auth}
+            hideSidebar={handleSidebarHide}
+          />
+        </Sidebar>
+      </Fragment>
     );
   }
 }
