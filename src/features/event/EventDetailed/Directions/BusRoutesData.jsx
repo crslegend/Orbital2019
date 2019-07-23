@@ -43,7 +43,7 @@ const busRoutes = [
         "KR-BT",
         "COMCEN",
         "YIH-OPP",
-        "UTOWN",
+        "UTown",
         "YIH",
         "CENLIB",
         "LT13",
@@ -60,28 +60,67 @@ const busRoutes = [
         "LT13-OPP",
         "COMCEN",
         "YIH-OPP",
-        "UTOWN",
+        "UTown",
         "RAFFLES",
         "BLK-EA-OPP",
         "KR-BT"
     ]
 },
 {
-    key: "A1",
+    key: "C",
     route: [
-        "KR-MRT",
+        "KR-BT",
+        "JP-SCH-16151",
+        "KV",
+        "MUSEUM",
+        "UTown",
+        "STAFFCLUB",
+        "UHALL-OPP",
+        "S17",
         "LT27",
         "UHALL",
         "STAFFCLUB-OPP",
+        "UTown",
+        "RAFFLES",
+        "BLK-EA-OPP",
+        "KR-BT"
+    ]
+},
+{
+    key: "D1",
+    route: [
+        "LT13-OPP",
+        "COMCEN",
+        "YIH-OPP",
+        "UTown",
+        "MUSEUM",
         "YIH",
         "CENLIB",
         "LT13",
         "AS7",
         "COM2",
-        "BIZ2",
+        "NUSS-OPP",
+        "HSSML-OPP",
+        "BIZ2"
+    ]
+},
+{
+    key: "D2",
+    route: [
         "PGP12-OPP",
-        "PGP7",
-        "PGPT"
+        "PGPT",
+        "KR-MRT",
+        "LT27",
+        "UHALL",
+        "STAFFCLUB-OPP",
+        "MUSEUM",
+        "UTown",
+        "STAFFCLUB",
+        "UHALL-OPP",
+        "S17",
+        "KR-MRT-OPP",
+        "PGP",
+        "PGP12"
     ]
 },
 ]
