@@ -11,6 +11,7 @@ import UserDetailedPage from "../../features/user/UserDetailed/UserDetailedPage"
 import EventForm from "../../features/event/EventForm/EventForm";
 import ModalManager from "../../features/modals/ModalManager";
 import TestComponent from "../../features/testarea/TestComponent";
+import NotFound from "./NotFound";
 
 class App extends Component {
   state = {
@@ -34,7 +35,11 @@ class App extends Component {
     return (
       <Fragment>
         <Sidebar.Pushable>
-          <NavBar handleShowClick={this.handleShowClick} handleSidebarHide={this.handleSidebarHide} visible={visible} />
+          <NavBar
+            handleShowClick={this.handleShowClick}
+            handleSidebarHide={this.handleSidebarHide}
+            visible={visible}
+          />
           <Sidebar.Pusher dimmed={visible}>
             <ModalManager />
             <Route exact path="/" component={HomePage} />
@@ -57,6 +62,7 @@ class App extends Component {
                         path={["/createEvent", "/manage/:id"]}
                         component={EventForm}
                       />
+                      <Route component={NotFound} />
                     </Switch>
                   </Container>
                 </Fragment>

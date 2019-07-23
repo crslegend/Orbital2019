@@ -8,6 +8,7 @@ import { objectToArray } from "../../../app/common/util/helpers";
 import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventListAttendee from "../EventList/EventListAttendee";
+import NotFound from "../../../app/layout/NotFound";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -27,7 +28,8 @@ const mapStateToProps = (state, ownProps) => {
     event,
     auth: state.firebase.auth,
     profile: state.firebase.profile,
-    loading: state.async.loading
+    loading: state.async.loading,
+    requesting: state.firestore.status.requesting
   };
 };
 
@@ -65,7 +67,9 @@ class EventDetailedPage extends Component {
       profile,
       loading,
       goingToEvent,
-      cancelGoingToEvent
+      cancelGoingToEvent,
+      requesting,
+      match
     } = this.props;
     const attendees =
       event && event.attendees && objectToArray(event.attendees);
@@ -74,8 +78,13 @@ class EventDetailedPage extends Component {
     // }); // to make sure tutor is always at the top of the going list
     const isHost = event.tutorUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
+    const loadingEvent = requesting[`events/${match.params.id}`];
 
-    if (loading && this.state.loadingEvent) {
+    if (Object.keys(event).length === 0) {
+      return <NotFound />;
+    }
+
+    if (loadingEvent) {
       return <LoadingComponent />;
     } else {
       return (
