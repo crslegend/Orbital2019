@@ -104,7 +104,7 @@ export const goingToEvent = event => async (
     joinDate: firestore.FieldValue.serverTimestamp(),
     displayName: profile.displayName,
     isTutor: false,
-    photoURL: user.photoURL
+    photoURL: profile.photoURL
   };
 
   try {
@@ -116,7 +116,7 @@ export const goingToEvent = event => async (
       userUid: user.uid,
       eventDate: event.date,
       isTutor: false,
-      photoURL: user.photoURL
+      photoURL: profile.photoURL
     });
     toastr.success("Success", "You have signed up for this class");
   } catch (error) {
