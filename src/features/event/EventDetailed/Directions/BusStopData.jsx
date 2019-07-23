@@ -46,7 +46,7 @@ const busStops = [
     lat: 1.29416704177856,
     lng: 103.773612976074,
     name: "COM2",
-    buses: ["A1", "A2", "D1u", "D1b"]
+    buses: ["A1", "A2", "D1", "D1"]
   },
   {
     caption: "EA",
@@ -199,7 +199,7 @@ const busStops = [
       lat: 1.29370222151434,
       lng: 103.776525914669,
       name: "PGP12",
-      buses: ["A2", "D2"]
+      buses: ["A2"]
     }
   },
   {
@@ -273,20 +273,6 @@ const busStops = [
     }
   },
   {
-    caption: "PGPR",
-    lat: 1.29083299636841,
-    lng: 103.780830383301,
-    name: "PGP",
-    buses: ["D2"],
-    opposite: {
-      caption: "Prince George's Park",
-      lat: 1.29194402694702,
-      lng: 103.7802734375,
-      name: "PGPT",
-      buses: ["A1", "A2", "D2", "A1E"]
-    }
-  },
-  {
     caption: "Prince George's Park",
     lat: 1.29194402694702,
     lng: 103.7802734375,
@@ -326,7 +312,7 @@ const busStops = [
     lat: 1.29370222151434,
     lng: 103.776525914669,
     name: "PGP12",
-    buses: ["A2", "D2"],
+    buses: ["A2"],
     opposite: {
       caption: "Opp TCOMS",
       lat: 1.29379999637604,

@@ -34,15 +34,15 @@ class App extends Component {
     const { visible } = this.state;
     return (
       <Fragment>
+        <ModalManager />
+        <Route exact path="/" component={HomePage} />
+        <NavBar
+          handleShowClick={this.handleShowClick}
+          handleSidebarHide={this.handleSidebarHide}
+          visible={visible}
+        />
         <Sidebar.Pushable>
-          <NavBar
-            handleShowClick={this.handleShowClick}
-            handleSidebarHide={this.handleSidebarHide}
-            visible={visible}
-          />
           <Sidebar.Pusher dimmed={visible}>
-            <ModalManager />
-            <Route exact path="/" component={HomePage} />
             <Route
               path="/(.+)" // this means if the path is more than just a '/', it will render the respective component
               render={() => (

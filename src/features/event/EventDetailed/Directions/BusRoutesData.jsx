@@ -119,7 +119,7 @@ const busRoutes = [
         "UHALL-OPP",
         "S17",
         "KR-MRT-OPP",
-        "PGP",
+        "PGPT",
         "PGP12"
     ]
 },
