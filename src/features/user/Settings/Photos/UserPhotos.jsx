@@ -19,7 +19,7 @@ const UserPhotos = ({
     <Fragment>
       <Header sub color="teal" content="All Photos" />
 
-      <Card.Group itemsPerRow={5}>
+      <Card.Group itemsPerRow={5} doubling>
         <Card>
           <Image src={profile.photoURL || "/public/assets/user.png"} />
           <Button positive>Main Photo</Button>

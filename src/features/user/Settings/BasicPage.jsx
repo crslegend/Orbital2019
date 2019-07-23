@@ -158,6 +158,7 @@ class BasicPage extends Component {
             />
           </Form>
         </Segment>
+        <Divider />
       </Fragment>
     );
   }

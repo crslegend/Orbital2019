@@ -1,5 +1,5 @@
 import React, { Component, Fragment, createRef } from "react";
-import { Grid, List, Segment } from "semantic-ui-react";
+import { Grid, List, Segment, Divider } from "semantic-ui-react";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
 import { connect } from "react-redux";
@@ -119,6 +119,7 @@ class EventDetailedPage extends Component {
                 </List>
               </Segment>
               <EventDetailedInfo event={event} />
+              <Divider />
             </Grid.Column>
 
             <Grid.Column width={10} only="computer">
@@ -163,6 +164,7 @@ class EventDetailedPage extends Component {
             </Grid.Column>
             <Grid.Column width={10} only="computer">
               <EventDetailedInfo event={event} />
+              <Divider />
             </Grid.Column>
 
             <Grid.Column width={10} only="tablet">
@@ -207,6 +209,7 @@ class EventDetailedPage extends Component {
             </Grid.Column>
             <Grid.Column width={10} only="tablet">
               <EventDetailedInfo event={event} />
+              <Divider />
             </Grid.Column>
           </Fragment>
         </Grid>
