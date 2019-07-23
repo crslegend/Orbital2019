@@ -16,7 +16,7 @@ const UserDetailedHeader = ({ profile }) => {
   return (
     <Grid.Column width={16}>
       <Segment>
-        <Item.Group>
+        <Item.Group unstackable>
           <Item>
             <LazyLoad
               height={150}

@@ -13,6 +13,7 @@ export const updateProfile = user => async (
   getState,
   { getFirebase }
 ) => {
+  dispatch(asyncActionStart());
   const firebase = getFirebase();
   const firestore = firebase.firestore();
   const { isLoaded, isEmpty, ...updatedUser } = user;
@@ -84,43 +85,62 @@ export const updateProfile = user => async (
 
     // commit the updates to firestore
     await batch.commit();
+    dispatch(asyncActionFinish());
     toastr.success("Success", "Your profile has been updated");
   } catch (error) {
+    dispatch(asyncActionError());
     console.log(error);
+    toastr.success("Oops", "Something went wrong");
   }
 };
 
 export const goingToEvent = event => async (
   dispatch,
   getState,
-  { getFirebase, getFirestore }
+  { getFirebase }
 ) => {
-  const firestore = getFirestore();
+  dispatch(asyncActionStart());
   const firebase = getFirebase();
+  const firestore = firebase.firestore();
   const user = firebase.auth().currentUser;
   const profile = getState().firebase.profile;
   const attendee = {
     going: true,
-    joinDate: firestore.FieldValue.serverTimestamp(),
+    joinDate: new Date(),
     displayName: profile.displayName,
     isTutor: false,
     photoURL: profile.photoURL
   };
 
   try {
-    await firestore.update(`events/${event.id}`, {
-      [`attendees.${user.uid}`]: attendee
+    // just in case if multiple transactions are happening
+    // (Eg. tutor editing class details and tutee join class at the same time)
+    // .runTransaction() is use to check whether any changes to event details
+    // if there is a change, the method to sign up a tutee to the class will be re-run
+    let eventDocRef = firestore.collection("events").doc(event.id);
+    let eventAttendeeDocRef = firestore
+      .collection("event_attendee")
+      .doc(`${event.id}_${user.uid}`);
+
+    await firestore.runTransaction(async transaction => {
+      await transaction.get(eventDocRef);
+      await transaction.update(eventDocRef, {
+        [`attendees.${user.uid}`]: attendee
+      });
+      await transaction.set(eventAttendeeDocRef, {
+        eventId: event.id,
+        userUid: user.uid,
+        eventDate: event.date,
+        isTutor: false,
+        photoURL: profile.photoURL
+      });
     });
-    await firestore.set(`event_attendee/${event.id}_${user.uid}`, {
-      eventId: event.id,
-      userUid: user.uid,
-      eventDate: event.date,
-      isTutor: false,
-      photoURL: profile.photoURL
-    });
+
+    dispatch(asyncActionFinish());
     toastr.success("Success", "You have signed up for this class");
   } catch (error) {
     console.log(error);
+    dispatch(asyncActionError());
     toastr.error("Oops", "Problem signing up to this class");
   }
 };
@@ -130,6 +150,7 @@ export const cancelGoingToEvent = event => async (
   getState,
   { getFirebase, getFirestore }
 ) => {
+  dispatch(asyncActionStart());
   const firestore = getFirestore();
   const firebase = getFirebase();
   const user = firebase.auth().currentUser;
@@ -139,9 +160,11 @@ export const cancelGoingToEvent = event => async (
       [`attendees.${user.uid}`]: firestore.FieldValue.delete()
     });
     await firestore.delete(`event_attendee/${event.id}_${user.uid}`);
+    dispatch(asyncActionFinish());
     toastr.success("Success", "You have removed yourself from this class");
   } catch (error) {
     console.log(error);
+    dispatch(asyncActionError());
     toastr.error("Oops", "Something went wrong");
   }
 };
