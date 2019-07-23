@@ -6,7 +6,7 @@ const UserDetailedInfo = ({ profile }) => {
     <Grid.Column width={16}>
       <Segment>
         <Grid columns={2}>
-          <Grid.Column width={10}>
+          <Grid.Column width={9}>
             <Header icon="smile" content="About Me" />
             <p>
               I am a: <strong>{profile.userType || "-"}</strong>
@@ -27,6 +27,7 @@ const UserDetailedInfo = ({ profile }) => {
               <strong>{profile.about || "Nothing interesting :("}</strong>
             </p>
           </Grid.Column>
+          <Grid.Column width={1} />
           <Grid.Column width={6}>
             <Header icon="heart outline" content="Interests" />
             <List>

@@ -6,7 +6,8 @@ import {
   Button,
   Grid,
   Header,
-  Checkbox
+  Checkbox,
+  Divider
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { updateEvent, createEvent, cancelToggle } from "../eventActions";
@@ -364,6 +365,7 @@ class EventForm extends Component {
               )}
             </Form>
           </Segment>
+          <Divider />
         </Grid.Column>
       </Grid>
     );

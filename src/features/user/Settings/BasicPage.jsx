@@ -24,7 +24,8 @@ class BasicPage extends Component {
       submitting,
       handleSubmit,
       updateProfile,
-      user
+      user,
+      loading
     } = this.props;
     return (
       <Fragment>
@@ -104,6 +105,7 @@ class BasicPage extends Component {
               size="large"
               positive
               content="Update Profile"
+              loading={loading}
             />
           </Form>
         </Segment>
@@ -155,9 +157,11 @@ class BasicPage extends Component {
               size="large"
               positive
               content="Update Profile"
+              loading={loading}
             />
           </Form>
         </Segment>
+        <Divider />
       </Fragment>
     );
   }

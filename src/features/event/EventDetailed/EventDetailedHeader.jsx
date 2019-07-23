@@ -33,7 +33,8 @@ const EventDetailedHeader = ({
   profile,
   goingToEvent,
   cancelGoingToEvent,
-  attendees
+  attendees,
+  loading
 }) => {
   return (
     <Fragment>
@@ -53,10 +54,7 @@ const EventDetailedHeader = ({
                         content={event.className}
                         style={{ color: "white" }}
                       />
-                      <Header
-                        as="h3"
-                        style={{ color: "white" }}
-                      >
+                      <Header as="h3" style={{ color: "white" }}>
                         Subject: {event.subject}
                       </Header>
                       <p>
@@ -84,6 +82,7 @@ const EventDetailedHeader = ({
                     <Fragment>
                       {isGoing ? (
                         <Button
+                          loading={loading}
                           onClick={() => cancelGoingToEvent(event)}
                           icon
                           inverted
@@ -95,6 +94,7 @@ const EventDetailedHeader = ({
                         attendees &&
                         attendees.length < event.size + 1 && (
                           <Button
+                            loading={loading}
                             onClick={() => goingToEvent(event)}
                             icon
                             inverted
