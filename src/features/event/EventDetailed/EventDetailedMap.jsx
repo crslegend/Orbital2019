@@ -198,11 +198,12 @@ const EventDetailedMap = ({
     var path = getBusPath(map, userStop, eventStop);
 
     var pathInfo = getPathInfo(path);
+    eventStop = pathInfo[pathInfo.length - 1];
+    userStop = pathInfo[0];
     pathInfo.push(eventLatLng);
     pathInfo.unshift(userLatLng);
     console.log(pathInfo);
-    eventStop = pathInfo[pathInfo.length - 1];
-    userStop = pathInfo[0];
+    
 
     var busInfo = getBusInfo(pathInfo);
     console.log(busInfo);
