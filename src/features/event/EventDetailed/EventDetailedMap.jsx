@@ -4,6 +4,7 @@ import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
 import EventDetailDirections from "./Directions/EventDetailDirections";
 
+
 const Marker = ({ address }) => (
   <Popup
     trigger={<Icon name="map marker alternate" size="big" color="red" />}
