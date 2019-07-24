@@ -1,76 +1,16 @@
-import React, { Fragment } from "react";
-import { Segment, Icon, Popup, Loader } from "semantic-ui-react";
+import React, { Fragment, useState, useEffect } from "react";
+import { Segment, Icon, Popup, Loader, Container } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
-import EventDetailDirections from "./Directions/EventDetailDirections";
+import EventDetailDirections from "./EventDetailDirections";
 import {
   findNearestBusStop,
   getBusInfo,
   getPathInfo,
-  getBusPath
+  getBusPath,
+  handleApiLoaded
 } from "./Directions/DirectionsUtil";
 import bsMap from "./Directions/DirectionsMap";
-import axios from "axios";
-
-// get array of latlng to render on google maps
-const getLatLngArr = (maps, pathInfo) => {
-  var arrLatLng = [];
-  pathInfo.forEach(stop => {
-    arrLatLng.push(new maps.LatLng(stop.lat, stop.lng));
-  });
-  return arrLatLng;
-};
-
-const handleApiLoaded = (map, maps, pathInfo) => {
-  if (pathInfo) {
-    // set bounds of map
-    var bounds = new maps.LatLngBounds();
-    pathInfo.forEach(stop => {
-      bounds.extend(new maps.LatLng(stop.lat, stop.lng));
-    });
-    map.setCenter(bounds.getCenter());
-
-    // initialize values for snapToRoad function
-    var pathValues = [];
-    var arrLatLng = getLatLngArr(maps, pathInfo);
-    arrLatLng.forEach(latlng => {
-      pathValues.push(latlng.toUrlValue());
-    });
-    var path = pathValues.join("|");
-
-    var snappedCoords = [];
-    axios
-      .get("https://roads.googleapis.com/v1/snapToRoads", {
-        params: {
-          interpolate: true,
-          path: path,
-          key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
-        }
-      })
-      .then(data => {
-        data.data.snappedPoints.forEach(snappedPoint => {
-          snappedCoords.push({
-            lat: snappedPoint.location.latitude,
-            lng: snappedPoint.location.longitude
-          });
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .then(() => {
-        var busPath = new maps.Polyline({
-          path: snappedCoords,
-          geodesic: false,
-          strokeColor: "#b21f1f",
-          strokeOpacity: 0.8,
-          strokeWeight: 3.5
-        });
-
-        busPath.setMap(map);
-      });
-  }
-};
 
 // map components
 const Marker = ({ message }) => (
@@ -125,6 +65,7 @@ const EventDetailedMap = ({
 }) => {
   const map = bsMap;
   var userLatLng = {};
+  const [zoom, setZoom] = useState(16);
 
   if (coords && inNus) {
     userLatLng = {
@@ -149,12 +90,7 @@ const EventDetailedMap = ({
     }
   }
 
-  var zoom = 16;
-  if (inNus) {
-    zoom = 15;
-  }
-
-  if (address) {
+  if (address && coords) {
     return (
       <Fragment>
         <Segment attached style={{ padding: 0 }}>
@@ -167,10 +103,10 @@ const EventDetailedMap = ({
                 lat: eventLatLng.lat,
                 lng: eventLatLng.lng
               }}
-              defaultZoom={zoom}
+              zoom={zoom}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) =>
-                handleApiLoaded(map, maps, pathInfo)
+                handleApiLoaded(map, maps, pathInfo, inNus, coords, eventLatLng)
               }
             >
               <Marker
@@ -178,14 +114,15 @@ const EventDetailedMap = ({
                 lng={eventLatLng.lng}
                 message={address}
               />
-              {busInfo && busInfo.map(stop => (
-                <BusMarker
-                  key={stop.stopName}
-                  lat={stop.lat}
-                  lng={stop.lng}
-                  message={stop.buses}
-                />
-              ))}
+              {busInfo &&
+                busInfo.map(stop => (
+                  <BusMarker
+                    key={stop.stopName}
+                    lat={stop.lat}
+                    lng={stop.lng}
+                    message={stop.buses}
+                  />
+                ))}
               {coords && (
                 <CurrentMarker
                   lat={coords.latitude}
@@ -197,14 +134,20 @@ const EventDetailedMap = ({
           </div>
         </Segment>
         {coords && inNus && (
-          <EventDetailDirections busInfo={busInfo} eventStop={eventStop} />
+          <EventDetailDirections
+            busInfo={busInfo}
+            eventStop={eventStop}
+            setZoom={setZoom}
+          />
         )}
       </Fragment>
     );
   } else {
     return (
       <Segment attached="bottom">
-        <Loader active />
+        <Container>
+          <Loader active />
+        </Container>
       </Segment>
     );
   }
@@ -212,7 +155,7 @@ const EventDetailedMap = ({
 
 export default geolocated({
   positionOptions: {
-    enableHighAccuracy: false
+    enableHighAccuracy: true
   },
   userDecisionTimeout: 5000
 })(EventDetailedMap);

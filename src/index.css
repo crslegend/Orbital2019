@@ -167,6 +167,7 @@ body {
   background-color: #b21f1f!important;
   border-color: #b21f1f!important;
   color: #fff!important;
+  opacity: 0.8;
 }
 
 i.big.icon, i.big.icons {

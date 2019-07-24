@@ -6,14 +6,15 @@ const BusLabel = ({ buses }) => {
     <Fragment>
       {buses.map(bus => (
         <Label key={bus} size="small" color="teal">
-          {" "}{bus}{" "}
+          {" "}
+          {bus}{" "}
         </Label>
       ))}
     </Fragment>
   );
 };
 
-const EventDetailDirections = ({ busInfo, eventStop }) => {
+const EventDetailDirections = ({ busInfo, eventStop, setZoom }) => {
   var subsequentBuses = [...busInfo];
   subsequentBuses.shift();
   console.log(subsequentBuses);

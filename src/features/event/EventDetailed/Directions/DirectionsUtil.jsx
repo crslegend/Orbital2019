@@ -1,4 +1,7 @@
 import busStops from "./BusStopData";
+import { extend } from "@firebase/util";
+import { Route } from "react-router";
+import axios from "axios";
 
 export const findNearestBusStop = latLng => {
   var distance = Math.sqrt(
@@ -85,8 +88,8 @@ export const getBusInfo = (pathInfo, eventStop) => {
         busInfo.push({
           stopName: pathInfo[j - counter].caption,
           buses: pathInfo[j - counter].buses,
-          lat: pathInfo[j-counter].lat,
-          lng: pathInfo[j-counter].lng,
+          lat: pathInfo[j - counter].lat,
+          lng: pathInfo[j - counter].lng,
           endName: ""
         });
         i++;
@@ -108,4 +111,94 @@ const compareArr = (arr1, arr2) => {
     })
   );
   return finalArr;
+};
+
+// get array of latlng to render on google maps
+const getLatLngArr = (maps, pathInfo) => {
+  var arrLatLng = [];
+  pathInfo.forEach(stop => {
+    arrLatLng.push(new maps.LatLng(stop.lat, stop.lng));
+  });
+  return arrLatLng;
+};
+
+export const handleApiLoaded = (
+  map,
+  maps,
+  pathInfo,
+  inNus,
+  userLatLng,
+  eventLatLng
+) => {
+  var bounds = new maps.LatLngBounds();
+  if (inNus && pathInfo) {
+    // set bounds of map
+    pathInfo.forEach(stop => {
+      bounds.extend(new maps.LatLng(stop.lat, stop.lng));
+    });
+    map.fitBounds(bounds);
+
+    // initialize values for snapToRoad function
+    var pathValues = [];
+    var arrLatLng = getLatLngArr(maps, pathInfo);
+    arrLatLng.forEach(latlng => {
+      pathValues.push(latlng.toUrlValue());
+    });
+    var path = pathValues.join("|");
+
+    var snappedCoords = [];
+    axios
+      .get("https://roads.googleapis.com/v1/snapToRoads", {
+        params: {
+          interpolate: true,
+          path: path,
+          key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
+        }
+      })
+      .then(data => {
+        data.data.snappedPoints.forEach(snappedPoint => {
+          snappedCoords.push({
+            lat: snappedPoint.location.latitude,
+            lng: snappedPoint.location.longitude
+          });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        var busPath = new maps.Polyline({
+          path: snappedCoords,
+          geodesic: false,
+          strokeColor: "#b21f1f",
+          strokeOpacity: 0.8,
+          strokeWeight: 3.5
+        });
+
+        busPath.setMap(map);
+      });
+  } else {
+    var directionsService = new maps.DirectionsService();
+    var renderer = new maps.DirectionsRenderer();
+
+    var start = new maps.LatLng(userLatLng.latitude, userLatLng.longitude);
+    var end = new maps.LatLng(eventLatLng.lat, eventLatLng.lng);
+    var request = {
+      origin: start,
+      destination: end,
+      travelMode: "TRANSIT"
+    };
+
+    directionsService.route(request, (result, status) => {
+      console.log(status);
+      if (status === 'OK') {
+        renderer.setDirections(result);
+      }
+    });
+    renderer.setMap(map);
+
+    bounds.extend(start);
+    bounds.extend(end);
+    map.fitBounds(bounds);
+  }
 };
