@@ -21,8 +21,8 @@ const getLatLngArr = (maps, pathInfo) => {
   return arrLatLng;
 };
 
-const handleApiLoaded = (map, maps, pathInfo, inNus) => {
-  if (inNus) {
+const handleApiLoaded = (map, maps, pathInfo) => {
+  if (pathInfo) {
     // set bounds of map
     var bounds = new maps.LatLngBounds();
     pathInfo.forEach(stop => {
@@ -170,7 +170,7 @@ const EventDetailedMap = ({
               defaultZoom={zoom}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) =>
-                handleApiLoaded(map, maps, pathInfo, inNus)
+                handleApiLoaded(map, maps, pathInfo)
               }
             >
               <Marker
