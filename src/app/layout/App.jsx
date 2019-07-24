@@ -11,6 +11,7 @@ import UserDetailedPage from "../../features/user/UserDetailed/UserDetailedPage"
 import EventForm from "../../features/event/EventForm/EventForm";
 import ModalManager from "../../features/modals/ModalManager";
 import TestComponent from "../../features/testarea/TestComponent";
+import NotFound from "./NotFound";
 
 class App extends Component {
   state = {
@@ -61,6 +62,7 @@ class App extends Component {
                         path={["/createEvent", "/manage/:id"]}
                         component={EventForm}
                       />
+                      <Route component={NotFound} />
                     </Switch>
                   </Container>
                 </Fragment>

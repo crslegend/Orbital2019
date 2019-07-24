@@ -17,6 +17,7 @@ export const createEvent = event => {
     const newEvent = createNewEvent(user, event, profile);
 
     try {
+      dispatch(asyncActionStart());
       let createdEvent = await firestore.add("events", newEvent);
 
       // below properties are used for queries
@@ -28,9 +29,11 @@ export const createEvent = event => {
         photoURL: user.photoURL
       });
       toastr.success("Success!", "A class has been created");
+      dispatch(asyncActionFinish());
       return createdEvent;
     } catch (error) {
       toastr.error("Oops", "Something went wrong");
+      dispatch(asyncActionError());
     }
   };
 };
