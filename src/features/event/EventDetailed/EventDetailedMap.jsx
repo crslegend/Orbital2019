@@ -3,98 +3,14 @@ import { Segment, Icon, Popup, Loader } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
 import EventDetailDirections from "./Directions/EventDetailDirections";
-import busStops from "./Directions/BusStopData";
+import {
+  findNearestBusStop,
+  getBusInfo,
+  getPathInfo,
+  getBusPath
+} from "./Directions/DirectionsUtil";
 import bsMap from "./Directions/DirectionsMap";
 import axios from "axios";
-
-const findNearestBusStop = latLng => {
-  var distance = Math.sqrt(
-    Math.pow(latLng.lat - busStops[0].lat, 2) +
-      Math.pow(latLng.lng - busStops[0].lng, 2)
-  );
-  var busStop = busStops[0];
-  for (var i = 1; i < busStops.length; i++) {
-    let newDistance = Math.sqrt(
-      Math.pow(latLng.lat - busStops[i].lat, 2) +
-        Math.pow(latLng.lng - busStops[i].lng, 2)
-    );
-    if (newDistance < distance) {
-      distance = newDistance;
-      busStop = busStops[i];
-    }
-  }
-  return busStop;
-};
-
-// returns shortest path of bus stops
-const getBusPath = (map, start, end) => {
-  // compute 4 diff paths of permutations of user, event bus stops
-  // and opposite bus stops
-  map.bfs(start.name);
-  map.backtrack(end.name);
-  var path = [...map.path];
-  map.bfs(start.name);
-  map.backtrack(end.opposite.name);
-  if (map.path.length < path.length) {
-    path = [...map.path];
-  }
-  map.bfs(start.opposite.name);
-  map.backtrack(end.name);
-  if (map.path.length < path.length) {
-    path = [...map.path];
-  }
-  map.bfs(start.opposite.name);
-  map.backtrack(end.opposite.name);
-  if (map.path.length < path.length) {
-    path = [...map.path];
-  }
-  return path;
-};
-
-// get array of bus stop info in path
-const getPathInfo = path => {
-  var pathInfo = [];
-  path.forEach(stop => {
-    pathInfo.push(busStops.find(e => e.name === stop));
-  });
-  return pathInfo;
-};
-
-const getBusInfo = pathInfo => {
-  var i = 0;
-  var busInfo = [
-    {
-      stopName: pathInfo[1].caption,
-      buses: pathInfo[1].buses
-    }
-  ];
-  for (var j = 1; j < pathInfo.length - 1; j++) {
-    var busArr = compareArr(busInfo[i].buses, pathInfo[j].buses);
-    if (busArr.length !== 0) {
-      busInfo[i].buses = busArr;
-    } else {
-      busInfo.push({
-        stopName: pathInfo[j - 1].caption,
-        buses: pathInfo[j - 1].buses
-      });
-      i++;
-    }
-  }
-
-  return busInfo;
-};
-
-const compareArr = (arr1, arr2) => {
-  var finalArr = [];
-  arr1.forEach(e1 =>
-    arr2.forEach(e2 => {
-      if (e1 === e2) {
-        finalArr.push(e1);
-      }
-    })
-  );
-  return finalArr;
-};
 
 // get array of latlng to render on google maps
 const getLatLngArr = (maps, pathInfo) => {
@@ -105,51 +21,67 @@ const getLatLngArr = (maps, pathInfo) => {
   return arrLatLng;
 };
 
-const handleApiLoaded = (map, maps, pathInfo) => {
-  var pathValues = [];
-  var arrLatLng = getLatLngArr(maps, pathInfo);
-  arrLatLng.forEach(latlng => {
-    pathValues.push(latlng.toUrlValue());
-  });
-  var path = pathValues.join("|");
-
-  var snappedCoords = [];
-  axios
-    .get("https://roads.googleapis.com/v1/snapToRoads", {
-      params: {
-        interpolate: true,
-        path: path,
-        key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
-      }
-    })
-    .then(data => {
-      data.data.snappedPoints.forEach(snappedPoint => {
-        snappedCoords.push({
-          lat: snappedPoint.location.latitude,
-          lng: snappedPoint.location.longitude
-        });
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    })
-    .then(() => {
-      var busPath = new maps.Polyline({
-        path: snappedCoords,
-        geodesic: false,
-        strokeColor: "#b21f1f",
-        strokeOpacity: 0.8,
-        strokeWeight: 3
-      });
-
-      busPath.setMap(map);
+const handleApiLoaded = (map, maps, pathInfo, inNus) => {
+  if (inNus) {
+    // set bounds of map
+    var bounds = new maps.LatLngBounds();
+    pathInfo.forEach(stop => {
+      bounds.extend(new maps.LatLng(stop.lat, stop.lng));
     });
+    map.setCenter(bounds.getCenter());
+
+    // initialize values for snapToRoad function
+    var pathValues = [];
+    var arrLatLng = getLatLngArr(maps, pathInfo);
+    arrLatLng.forEach(latlng => {
+      pathValues.push(latlng.toUrlValue());
+    });
+    var path = pathValues.join("|");
+
+    var snappedCoords = [];
+    axios
+      .get("https://roads.googleapis.com/v1/snapToRoads", {
+        params: {
+          interpolate: true,
+          path: path,
+          key: "AIzaSyA8jB-vlpj9lB0wvsFVXGqlQHflAGJGjMM"
+        }
+      })
+      .then(data => {
+        data.data.snappedPoints.forEach(snappedPoint => {
+          snappedCoords.push({
+            lat: snappedPoint.location.latitude,
+            lng: snappedPoint.location.longitude
+          });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        var busPath = new maps.Polyline({
+          path: snappedCoords,
+          geodesic: false,
+          strokeColor: "#b21f1f",
+          strokeOpacity: 0.8,
+          strokeWeight: 3.5
+        });
+
+        busPath.setMap(map);
+      });
+  }
 };
 
 // map components
 const Marker = ({ message }) => (
   <Popup
-    trigger={<Icon name="map marker alternate" size="big" color="red" />}
+    trigger={
+      <Icon
+        name="map marker alternate"
+        size="big"
+        style={{ color: "#b21f1f" }}
+      />
+    }
     content={message}
     position="top center"
     on="click"
@@ -159,7 +91,13 @@ const Marker = ({ message }) => (
 
 const CurrentMarker = ({ message }) => (
   <Popup
-    trigger={<Icon name="marker" size="big" color="red" />}
+    trigger={
+      <Icon
+        name="map marker alternate"
+        size="big"
+        style={{ color: "#b21f1f" }}
+      />
+    }
     content={message}
     position="top center"
     on="click"
@@ -169,7 +107,7 @@ const CurrentMarker = ({ message }) => (
 
 const BusMarker = ({ message }) => (
   <Popup
-    trigger={<Icon name="marker" size="big" color="red" />}
+    trigger={<Icon name="bus" size="big" style={{ color: "#1a2a6c" }} />}
     content={message}
     position="top center"
     on="click"
@@ -186,9 +124,10 @@ const EventDetailedMap = ({
   isGeolocationEnabled
 }) => {
   const map = bsMap;
+  var userLatLng = {};
 
-  if (coords) {
-    const userLatLng = {
+  if (coords && inNus) {
+    userLatLng = {
       lat: coords.latitude,
       lng: coords.longitude
     };
@@ -201,17 +140,21 @@ const EventDetailedMap = ({
     eventStop = pathInfo[pathInfo.length - 1];
     userStop = pathInfo[0];
     pathInfo.push(eventLatLng);
-    pathInfo.unshift(userLatLng);
+    //pathInfo.unshift(userLatLng);
     console.log(pathInfo);
-    
 
-    var busInfo = getBusInfo(pathInfo);
-    console.log(busInfo);
+    if (pathInfo) {
+      var busInfo = getBusInfo(pathInfo, eventStop);
+      console.log(busInfo);
+    }
   }
 
-  const zoom = 16;
+  var zoom = 16;
+  if (inNus) {
+    zoom = 15;
+  }
 
-  if (address && pathInfo) {
+  if (address) {
     return (
       <Fragment>
         <Segment attached style={{ padding: 0 }}>
@@ -227,7 +170,7 @@ const EventDetailedMap = ({
               defaultZoom={zoom}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) =>
-                handleApiLoaded(map, maps, pathInfo)
+                handleApiLoaded(map, maps, pathInfo, inNus)
               }
             >
               <Marker
@@ -235,11 +178,14 @@ const EventDetailedMap = ({
                 lng={eventLatLng.lng}
                 message={address}
               />
-              <BusMarker
-                lat={userStop.lat}
-                lng={userStop.lng}
-                message="buses"
-              />
+              {busInfo && busInfo.map(stop => (
+                <BusMarker
+                  key={stop.stopName}
+                  lat={stop.lat}
+                  lng={stop.lng}
+                  message={stop.buses}
+                />
+              ))}
               {coords && (
                 <CurrentMarker
                   lat={coords.latitude}
