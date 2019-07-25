@@ -86,18 +86,25 @@ class BusMarker extends Component {
         <Popup.Content>
           {this.state.busTimings ? (
             <Segment.Group size="tiny">
-              <Segment clearing>
-                <Header as="h5">
-                  Bus Timings
-                  <Button
-                    floated="right"
-                    size="mini"
-                    onClick={this.handleClick}
-                  >
-                    Refresh
-                  </Button>
-                </Header>
+              <Segment>
+                <Grid columns={2}>
+                  <Grid.Row verticalAlign="middle">
+                    <Grid.Column width={9}>
+                      <Header as="h5">Bus Timings</Header>
+                    </Grid.Column>
+                    <Grid.Column width={7}>
+                      <Button
+                        floated="right"
+                        size="mini"
+                        onClick={this.handleClick}
+                      >
+                        Refresh
+                      </Button>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
               </Segment>
+
               {this.state.busTimings.map(bus => (
                 <Segment key={bus.name} textAlign="center" attached>
                   <Grid divided>

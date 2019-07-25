@@ -203,3 +203,8 @@ a {
   color: #1a2a6c;
   text-decoration: none;
 }
+
+.ui.header:last-child {
+  margin-bottom: 0;
+  margin-top: 0;
+}

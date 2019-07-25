@@ -36,11 +36,12 @@ const EventDetailedHeader = ({
   attendees,
   loading
 }) => {
+  var imageSrc = "/assets/" + event.subject + ".jpg";
   return (
     <Fragment>
       <Segment.Group>
         <Segment basic attached="top" style={{ padding: "0" }}>
-          <Image src="/assets/classroom.jpg" fluid style={eventImageStyle} />
+          <Image src={imageSrc} fluid style={eventImageStyle} />
 
           <Segment basic style={eventImageTextStyle}>
             <Item.Group>

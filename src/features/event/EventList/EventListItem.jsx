@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Segment, Item, Icon, List, Button, Label } from "semantic-ui-react";
+import {
+  Segment,
+  Item,
+  Icon,
+  List,
+  Button,
+  Label,
+  Grid,
+  Image,
+  Header
+} from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -10,23 +20,31 @@ class EventListItem extends Component {
     const { event } = this.props;
     const attendees =
       event && event.attendees && objectToArray(event.attendees);
+    var imageSrc = "/assets/" + event.subject + ".jpg";
+    const imageStyle = {
+      height: "100px",
+    };
     return (
       <Segment.Group>
         <Segment>
-          <Item.Group>
-            <Item>
-              <Item.Image size="small" src="/assets/classroom.jpg" />
-              <Item.Content verticalAlign="middle">
-                <Item.Header>{event.className}</Item.Header>
-                <Item.Description>
-                  Tutor:{" "}
-                  <Link to={`/profile/${event.tutorUid}`}>
-                    {event.tutorName}
-                  </Link>
-                </Item.Description>
-              </Item.Content>
-            </Item>
-          </Item.Group>
+          <Grid verticalAlign="middle" stackable columns={2}>
+            <Grid.Column width={4}>
+              <Image rounded src={imageSrc} size="small" style={imageStyle} fluid/>
+            </Grid.Column>
+            <Grid.Column width={11}>
+              <Item>
+                <Item.Content>
+                  <Item.Header as="h2">{event.className}</Item.Header>
+                  <Item.Description>
+                    Tutor:{" "}
+                    <Link to={`/profile/${event.tutorUid}`}>
+                      {event.tutorName}
+                    </Link>
+                  </Item.Description>
+                </Item.Content>
+              </Item>
+            </Grid.Column>
+          </Grid>
         </Segment>
         <Segment>
           <span>
