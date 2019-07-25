@@ -273,6 +273,13 @@ const busStops = [
     }
   },
   {
+    caption: "PGPR",
+    lat: 1.29083299636841,
+    lng: 103.780830383301,
+    name: "PGP",
+    buses: ["D2"]
+  },
+  {
     caption: "Prince George's Park",
     lat: 1.29194402694702,
     lng: 103.7802734375,
@@ -368,7 +375,35 @@ const busStops = [
     lat: 1.30357886193758,
     lng: 103.774490177631,
     name: "UTown",
-    buses: ["D1", "D2", "B1", "B2", "Cs", "Ckr"]
+    buses: ["D1", "D2", "B1", "B2", "C"]
+  },
+  {
+    caption: "mid",
+    lat: 1.303732,  
+    lng: 103.775703,
+    name: "UTownBridge1",
+    buses: ["D1", "D2", "B1", "B2", "C"]
+  },
+  {
+    caption: "mid",
+    lat: 1.303470,   
+    lng: 103.774895,
+    name: "UTownBridge2",
+    buses: ["D1", "D2", "B1", "B2", "C"]
+  },
+  {
+    caption: "mid",
+    lat: 1.299492,    
+    lng: 103.774714,
+    name: "YIHroundabout",
+    buses: ["C", "D2"]
+  },
+  {
+    caption: "mid",
+    lat: 1.301090,     
+    lng: 103.773145,
+    name: "MuseumU-turn",
+    buses: []
   },
   {
     caption: "Ventus (Opp LT13)",

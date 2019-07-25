@@ -162,3 +162,18 @@ body {
   font-style: italic;
   color: red;
 }
+
+.ui.teal.label, .ui.teal.labels .label {
+  background-color: #b21f1f!important;
+  border-color: #b21f1f!important;
+  color: #fff!important;
+  opacity: 0.8;
+}
+
+i.big.icon, i.big.icons {
+  /* line-height: 1; */
+  position: absolute;
+  transform: translate(-50%, -50%);
+  vertical-align: middle;
+  font-size: 1.5em;
+}
