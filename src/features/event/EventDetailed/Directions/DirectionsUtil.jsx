@@ -32,21 +32,21 @@ export const getBusPath = (map, start, end) => {
   if (end.opposite) {
     map.bfs(start.name);
     map.backtrack(end.opposite.name);
-    if (map.path.length < path.length || path.length === 1) {
+    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
       path = [...map.path];
     }
   }
   if (start.opposite) {
     map.bfs(start.opposite.name);
     map.backtrack(end.name);
-    if (map.path.length < path.length || path.length === 1) {
+    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
       path = [...map.path];
     }
   }
   if (end.opposite && start.opposite) {
     map.bfs(start.opposite.name);
     map.backtrack(end.opposite.name);
-    if (map.path.length < path.length || path.length === 1) {
+    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
       path = [...map.path];
     }
   }

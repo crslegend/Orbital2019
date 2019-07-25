@@ -14,7 +14,7 @@ const BusLabel = ({ buses }) => {
   );
 };
 
-const EventDetailedDirections = ({ busInfo, eventStop, setZoom }) => {
+const EventDetailedDirections = ({ busInfo, eventStop }) => {
   var subsequentBuses = [...busInfo];
   subsequentBuses.shift();
   return (
@@ -25,7 +25,7 @@ const EventDetailedDirections = ({ busInfo, eventStop, setZoom }) => {
       </Header>
       <Container text>
         <span>
-          (Click on the <Icon name="bus" style={{ color: "#b21f1f" }} /> icon to
+          (Click on the{" "} <Icon name="bus" style={{ color: "#b21f1f" }} />icon to
           view bus timings)
           <br />
         </span>

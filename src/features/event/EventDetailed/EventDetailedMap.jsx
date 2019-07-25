@@ -49,12 +49,12 @@ const EventDetailedMap = ({
 }) => {
   const map = bsMap;
   var userLatLng = {};
-  const [zoom, setZoom] = useState(16);
+  const zoom = 16;
 
   if (coords && inNus) {
     userLatLng = {
-      lat: coords.latitude,
-      lng: coords.longitude
+      lat: 1.29379999637604,
+      lng: 103.784896850586
     };
 
     var eventStop = findNearestBusStop(eventLatLng);
@@ -66,11 +66,11 @@ const EventDetailedMap = ({
     userStop = pathInfo[0];
     pathInfo.push(eventLatLng);
     //pathInfo.unshift(userLatLng);
-    console.log(pathInfo);
+    // console.log(pathInfo);
 
     if (pathInfo) {
       var busInfo = getBusInfo(pathInfo, eventStop);
-      console.log(busInfo);
+      // console.log(busInfo);
     }
   }
 
@@ -123,7 +123,6 @@ const EventDetailedMap = ({
           <EventDetailedDirections
             busInfo={busInfo}
             eventStop={eventStop}
-            setZoom={setZoom}
           />
         )}
       </Fragment>

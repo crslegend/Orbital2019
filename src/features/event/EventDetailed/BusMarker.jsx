@@ -47,7 +47,7 @@ class BusMarker extends Component {
       })
       .then(() => {
         timings = stopObj.ShuttleServiceResult.shuttles;
-        console.log(timings);
+        // console.log(timings);
         this.setState({
           busTimings: timings
         });
