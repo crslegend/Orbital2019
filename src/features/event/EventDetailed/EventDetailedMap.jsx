@@ -1,13 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
-import {
-  Segment,
-  Icon,
-  Popup,
-  Loader,
-  Container,
-  Grid,
-  Label
-} from "semantic-ui-react";
+import React, { Fragment, useState } from "react";
+import { Segment, Icon, Popup, Loader, Container } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
 import EventDetailedDirections from "./EventDetailedDirections";

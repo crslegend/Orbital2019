@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Segment, Header, Label, Icon } from "semantic-ui-react";
+import { Segment, Header, Label, Icon, Container } from "semantic-ui-react";
 
 const BusLabel = ({ buses }) => {
   return (
@@ -23,16 +23,28 @@ const EventDetailedDirections = ({ busInfo, eventStop, setZoom }) => {
         <Icon size="large" style={{ color: "#b21f1f" }} name="location arrow" />
         <Header.Content>From {busInfo[0].stopName}:</Header.Content>
       </Header>
-      <span>
-        Take bus <BusLabel buses={busInfo[0].buses} /> and alight at {busInfo[0].endName}
-        <br />
-      </span>
-      {subsequentBuses.map(stop => (
-        <span key={stop}>
-          Then change to bus <BusLabel buses={stop.buses} /> and alight at {stop.endName}
+      <Container text>
+        <span>
+          (Click on the <Icon name="bus" style={{ color: "#b21f1f" }} /> icon to
+          view bus timings)
           <br />
         </span>
-      ))}
+      </Container>
+
+      <Container text>
+        <span>
+          Take bus <BusLabel buses={busInfo[0].buses} /> and alight at{" "}
+          {busInfo[0].endName}
+          <br />
+        </span>
+        {subsequentBuses.map(stop => (
+          <span key={stop}>
+            Then change to bus <BusLabel buses={stop.buses} /> and alight at{" "}
+            {stop.endName}
+            <br />
+          </span>
+        ))}
+      </Container>
     </Segment>
   );
 };

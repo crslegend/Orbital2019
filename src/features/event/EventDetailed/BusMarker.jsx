@@ -8,7 +8,8 @@ import {
   Label,
   Header,
   Loader,
-  Container
+  Container,
+  Segment
 } from "semantic-ui-react";
 
 class BusMarker extends Component {
@@ -22,7 +23,6 @@ class BusMarker extends Component {
     this.setState({
       name: stopName
     });
-    console.log(stopName);
     await this.getBusTimings(stopName);
   }
 
@@ -47,6 +47,7 @@ class BusMarker extends Component {
       })
       .then(() => {
         timings = stopObj.ShuttleServiceResult.shuttles;
+        console.log(timings);
         this.setState({
           busTimings: timings
         });
@@ -65,7 +66,6 @@ class BusMarker extends Component {
       </Popup>
   );*/
 
-
   render() {
     return (
       <Popup
@@ -75,24 +75,36 @@ class BusMarker extends Component {
         pinned="true"
       >
         <Popup.Content>
-          <Header as="h4">Bus Timings</Header>
           {this.state.busTimings ? (
-            <Grid columns="equal" divided>
+            <Segment.Group size="tiny">
+            <Header as="h4" attached>Bus Timings</Header>
               {this.state.busTimings.map(bus => (
-                <Grid.Row>
-                  <Grid.Column width={4}>
-                    <Label key={bus.name} size="small" color="teal">
-                      {" "}
-                      {bus.name}{" "}
-                    </Label>
-                  </Grid.Column>
-                  <Grid.Column width={6}>{bus.arrivalTime} mins</Grid.Column>
-                  <Grid.Column width={6}>
-                    {bus.nextArrivalTime} mins
-                  </Grid.Column>
-                </Grid.Row>
+                <Segment textAlign="center" attached>
+                  <Grid divided>
+                    <Grid.Row>
+                      <Grid.Column width={5}>
+                        <Label key={bus.name} size="small" color="teal">
+                          {" "}
+                          {bus.name}{" "}
+                        </Label>
+                      </Grid.Column>
+                      {bus.arrivalTime === "Arr" ? (
+                        <Grid.Column width={5}>
+                          <Label basic color="green">Arr</Label>
+                        </Grid.Column>
+                      ) : (
+                        <Grid.Column width={5}>
+                          {bus.arrivalTime}mins
+                        </Grid.Column>
+                      )}
+                      <Grid.Column width={5}>
+                        {bus.nextArrivalTime}mins
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Segment>
               ))}
-            </Grid>
+            </Segment.Group>
           ) : (
             <Container>
               <Loader active />
