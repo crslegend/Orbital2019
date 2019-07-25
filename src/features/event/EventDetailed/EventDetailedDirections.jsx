@@ -25,8 +25,8 @@ const EventDetailedDirections = ({ busInfo, eventStop }) => {
       </Header>
       <Container text>
         <span>
-          (Click on the{" "} <Icon name="bus" style={{ color: "#b21f1f" }} />icon to
-          view bus timings)
+          (<i>Click on the{" "} <Icon name="bus" style={{ color: "#b21f1f" }} />icon to
+          view bus timings</i>)
           <br />
         </span>
       </Container>

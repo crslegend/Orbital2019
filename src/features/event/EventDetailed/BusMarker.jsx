@@ -9,13 +9,15 @@ import {
   Header,
   Loader,
   Container,
-  Segment
+  Segment,
+  Button,
+  SegmentGroup
 } from "semantic-ui-react";
 
 class BusMarker extends Component {
   state = {
     name: "",
-    busTimings: []
+    busTimings: null
   };
 
   async componentDidMount() {
@@ -27,6 +29,9 @@ class BusMarker extends Component {
   }
 
   getBusTimings = stopName => {
+    this.setState({
+      busTimings: null
+    });
     var timings = [];
     var stopObj = {};
     axios
@@ -47,11 +52,15 @@ class BusMarker extends Component {
       })
       .then(() => {
         timings = stopObj.ShuttleServiceResult.shuttles;
-        // console.log(timings);
+        console.log(timings);
         this.setState({
           busTimings: timings
         });
       });
+  };
+
+  handleClick = () => {
+    this.getBusTimings(this.state.name);
   };
 
   /*return (
@@ -77,20 +86,33 @@ class BusMarker extends Component {
         <Popup.Content>
           {this.state.busTimings ? (
             <Segment.Group size="tiny">
-            <Header as="h4" attached>Bus Timings</Header>
+              <Segment clearing>
+                <Header as="h5">
+                  Bus Timings
+                  <Button
+                    floated="right"
+                    size="mini"
+                    onClick={this.handleClick}
+                  >
+                    Refresh
+                  </Button>
+                </Header>
+              </Segment>
               {this.state.busTimings.map(bus => (
-                <Segment textAlign="center" attached>
+                <Segment key={bus.name} textAlign="center" attached>
                   <Grid divided>
                     <Grid.Row>
                       <Grid.Column width={5}>
-                        <Label key={bus.name} size="small" color="teal">
+                        <Label size="small" color="teal">
                           {" "}
                           {bus.name}{" "}
                         </Label>
                       </Grid.Column>
                       {bus.arrivalTime === "Arr" ? (
                         <Grid.Column width={5}>
-                          <Label basic color="green">Arr</Label>
+                          <Label basic color="green">
+                            Arr
+                          </Label>
                         </Grid.Column>
                       ) : (
                         <Grid.Column width={5}>
@@ -106,9 +128,9 @@ class BusMarker extends Component {
               ))}
             </Segment.Group>
           ) : (
-            <Container>
-              <Loader active />
-            </Container>
+            <Segment basic padded>
+              <Icon name="circle notch" size="large" loading />
+            </Segment>
           )}
         </Popup.Content>
       </Popup>
