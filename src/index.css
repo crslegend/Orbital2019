@@ -181,3 +181,7 @@ i.big.icon, i.big.icons {
 .pushable:not(body) {
   transform: none;
 }
+
+.ui.thin.right.sidebar {
+  width: 200px;
+}

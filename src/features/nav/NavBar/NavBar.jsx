@@ -1,5 +1,11 @@
-import React, { Component, Fragment } from "react";
-import { Menu, Container, Icon, Sidebar, Button } from "semantic-ui-react";
+import React, { Component, Fragment, createRef } from "react";
+import {
+  Menu,
+  Container,
+  Sidebar,
+  Button,
+  Sticky
+} from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
@@ -27,6 +33,8 @@ class NavBar extends Component {
     this.props.firebase.logout();
     this.props.history.push("/classes");
   };
+
+  contextRef = createRef();
 
   render() {
     const {
@@ -58,23 +66,25 @@ class NavBar extends Component {
             )}
           </Container>
         </Menu>
-        <Sidebar
-          as={Menu}
-          pointing
-          animation="overlay"
-          direction="right"
-          onHide={handleSidebarHide}
-          vertical
-          visible={visible}
-          width="thin"
-        >
-          <SignedInMenu
-            signOut={this.handleSignOut}
-            profile={profile}
-            auth={auth}
-            hideSidebar={handleSidebarHide}
-          />
-        </Sidebar>
+        <Sticky context={this.contextRef}>
+          <Sidebar
+            as={Menu}
+            pointing
+            animation="overlay"
+            direction="right"
+            onHide={handleSidebarHide}
+            vertical
+            visible={visible}
+            width="thin"
+          >
+            <SignedInMenu
+              signOut={this.handleSignOut}
+              profile={profile}
+              auth={auth}
+              hideSidebar={handleSidebarHide}
+            />
+          </Sidebar>
+        </Sticky>
       </Fragment>
     );
   }
