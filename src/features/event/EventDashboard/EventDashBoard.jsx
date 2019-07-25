@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid, Loader, Container } from "semantic-ui-react";
 import EventList from "../EventList/EventList";
 import { connect } from "react-redux";
 import { getEventsforDashboard } from "../eventActions";
@@ -85,7 +85,7 @@ class EventDashBoard extends Component {
       return <SocialLoginModal />;
     } else {
       if (this.state.loadingInitial) {
-        return <LoadingComponent />;
+        return <Container className="main"><LoadingComponent /></Container>;
       }
       return (
         <Grid>

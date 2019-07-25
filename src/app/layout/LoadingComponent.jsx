@@ -1,11 +1,13 @@
 import React from "react";
-import { Dimmer, Loader } from "semantic-ui-react";
+import { Dimmer, Loader, Segment } from "semantic-ui-react";
 
 const LoadingComponent = ({ inverted = true }) => {
   return (
-    <Dimmer inverted={inverted} active={true}>
-      <Loader content="Loading..." />
-    </Dimmer>
+    <Segment padded="very">
+      <Dimmer inverted={inverted} active={true}>
+        <Loader content="Loading..." />
+      </Dimmer>
+    </Segment>
   );
 };
 
