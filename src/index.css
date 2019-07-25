@@ -44,6 +44,7 @@ body {
     rgb(253, 187, 45) 89%
   ) !important;
   height: 100vh;
+  z-index: 103;
 }
 
 /* .masthead.segment {
@@ -184,4 +185,21 @@ i.big.icon, i.big.icons {
 
 .ui.thin.right.sidebar {
   width: 200px;
+}
+
+.ui.inverted.blue.segment {
+  background-color: #1a2a6c!important;
+  color: #fff!important;
+}
+
+.ui.blue.button, .ui.blue.buttons .button {
+  background-color: #1a2a6c;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+a {
+  color: #1a2a6c;
+  text-decoration: none;
 }
