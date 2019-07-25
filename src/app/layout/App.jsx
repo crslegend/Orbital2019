@@ -36,12 +36,13 @@ class App extends Component {
       <Fragment>
         <ModalManager />
         <Route exact path="/" component={HomePage} />
-        <NavBar
-          handleShowClick={this.handleShowClick}
-          handleSidebarHide={this.handleSidebarHide}
-          visible={visible}
-        />
+
         <Sidebar.Pushable>
+          <NavBar
+            handleShowClick={this.handleShowClick}
+            handleSidebarHide={this.handleSidebarHide}
+            visible={visible}
+          />
           <Sidebar.Pusher dimmed={visible}>
             <Route
               path="/(.+)" // this means if the path is more than just a '/', it will render the respective component

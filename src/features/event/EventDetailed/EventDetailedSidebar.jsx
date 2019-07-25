@@ -34,6 +34,7 @@ const EventDetailedSidebar = ({ attendees }) => {
                     </Label>
                   )}
                   <Item.Image
+                    avatar
                     size="tiny"
                     src={attendee.photoURL || "assets/user.png"}
                   />

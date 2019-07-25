@@ -9,6 +9,7 @@ import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventListAttendee from "../EventList/EventListAttendee";
 import NotFound from "../../../app/layout/NotFound";
+import EventDetailedSidebar from "./EventDetailedSidebar";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -80,13 +81,12 @@ class EventDetailedPage extends Component {
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     const loadingEvent = requesting[`events/${match.params.id}`];
 
-    if (Object.keys(event).length === 0) {
-      return <NotFound />;
-    }
-
     if (loadingEvent) {
       return <LoadingComponent />;
     } else {
+      if (Object.keys(event).length === 0) {
+        return <NotFound />;
+      }
       return (
         <Grid>
           <Fragment>
@@ -143,33 +143,9 @@ class EventDetailedPage extends Component {
                 attendees={attendees}
               />
             </Grid.Column>
-            {/* <EventDetailedSidebar attendees={attendees} /> */}
+
             <Grid.Column width={6} only="computer">
-              <Segment
-                textAlign="center"
-                style={{ border: "none" }}
-                attached
-                secondary
-                inverted
-                color="teal"
-              >
-                {attendees && attendees.length - 1}{" "}
-                {attendees && attendees.length - 1 === 1 ? "Person" : "People"}{" "}
-                Going
-              </Segment>
-              <Segment attached>
-                <List horizontal>
-                  {event.attendees &&
-                    objectToArray(event.attendees)
-                      .filter(attendee => attendee.isTutor === false)
-                      .map(attendee => (
-                        <EventListAttendee
-                          key={attendee.id}
-                          attendee={attendee}
-                        />
-                      ))}
-                </List>
-              </Segment>
+              <EventDetailedSidebar attendees={attendees} />
             </Grid.Column>
             <Grid.Column width={10} only="computer">
               <EventDetailedInfo event={event} />
@@ -188,33 +164,9 @@ class EventDetailedPage extends Component {
                 attendees={attendees}
               />
             </Grid.Column>
-            {/* <EventDetailedSidebar attendees={attendees} /> */}
+
             <Grid.Column width={6} only="tablet">
-              <Segment
-                textAlign="center"
-                style={{ border: "none" }}
-                attached="top"
-                secondary
-                inverted
-                color="teal"
-              >
-                {attendees && attendees.length - 1}{" "}
-                {attendees && attendees.length - 1 === 1 ? "Person" : "People"}{" "}
-                Going
-              </Segment>
-              <Segment attached>
-                <List horizontal>
-                  {event.attendees &&
-                    objectToArray(event.attendees)
-                      .filter(attendee => attendee.isTutor === false)
-                      .map(attendee => (
-                        <EventListAttendee
-                          key={attendee.id}
-                          attendee={attendee}
-                        />
-                      ))}
-                </List>
-              </Segment>
+              <EventDetailedSidebar attendees={attendees} />
             </Grid.Column>
             <Grid.Column width={10} only="tablet">
               <EventDetailedInfo event={event} />
