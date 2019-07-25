@@ -67,7 +67,7 @@ const EventDetailedInfo = ({ event }) => {
             <Button
               fluid
               onClick={() => showMapToggle(!isMapOpen)}
-              color="teal"
+              color="blue"
               size="tiny"
               content={isMapOpen ? "Close Map" : "Show on Map"}
             />

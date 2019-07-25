@@ -14,10 +14,9 @@ const BusLabel = ({ buses }) => {
   );
 };
 
-const EventDetailDirections = ({ busInfo, eventStop, setZoom }) => {
+const EventDetailedDirections = ({ busInfo, eventStop, setZoom }) => {
   var subsequentBuses = [...busInfo];
   subsequentBuses.shift();
-  console.log(subsequentBuses);
   return (
     <Segment attached="bottom" clearing>
       <Header as="h4">
@@ -25,12 +24,12 @@ const EventDetailDirections = ({ busInfo, eventStop, setZoom }) => {
         <Header.Content>From {busInfo[0].stopName}:</Header.Content>
       </Header>
       <span>
-        Take bus <BusLabel buses={busInfo[0].buses} /> to {busInfo[0].endName}
+        Take bus <BusLabel buses={busInfo[0].buses} /> and alight at {busInfo[0].endName}
         <br />
       </span>
       {subsequentBuses.map(stop => (
         <span key={stop}>
-          Then take bus <BusLabel buses={stop.buses} /> to {stop.endName}
+          Then change to bus <BusLabel buses={stop.buses} /> and alight at {stop.endName}
           <br />
         </span>
       ))}
@@ -38,4 +37,4 @@ const EventDetailDirections = ({ busInfo, eventStop, setZoom }) => {
   );
 };
 
-export default EventDetailDirections;
+export default EventDetailedDirections;

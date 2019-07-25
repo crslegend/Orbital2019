@@ -1,8 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Segment, Icon, Popup, Loader, Container } from "semantic-ui-react";
+import {
+  Segment,
+  Icon,
+  Popup,
+  Loader,
+  Container,
+  Grid,
+  Label
+} from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
-import EventDetailDirections from "./EventDetailDirections";
+import EventDetailedDirections from "./EventDetailedDirections";
 import {
   findNearestBusStop,
   getBusInfo,
@@ -11,6 +19,7 @@ import {
   handleApiLoaded
 } from "./Directions/DirectionsUtil";
 import bsMap from "./Directions/DirectionsMap";
+import BusMarker from "./BusMarker";
 
 // map components
 const Marker = ({ message }) => (
@@ -24,30 +33,13 @@ const Marker = ({ message }) => (
     }
     content={message}
     position="top center"
-    on="click"
-    pinned="true"
+    hideOnScroll
   />
 );
 
 const CurrentMarker = ({ message }) => (
   <Popup
-    trigger={
-      <Icon
-        name="map marker alternate"
-        size="big"
-        style={{ color: "#b21f1f" }}
-      />
-    }
-    content={message}
-    position="top center"
-    on="click"
-    pinned="true"
-  />
-);
-
-const BusMarker = ({ message }) => (
-  <Popup
-    trigger={<Icon name="bus" size="big" style={{ color: "#1a2a6c" }} />}
+    trigger={<Icon name="male" size="big" style={{ color: "#b21f1f" }} />}
     content={message}
     position="top center"
     on="click"
@@ -109,20 +101,22 @@ const EventDetailedMap = ({
                 handleApiLoaded(map, maps, pathInfo, inNus, coords, eventLatLng)
               }
             >
-              <Marker
-                lat={eventLatLng.lat}
-                lng={eventLatLng.lng}
-                message={address}
-              />
               {busInfo &&
-                busInfo.map(stop => (
+                busInfo.map(bus => (
                   <BusMarker
-                    key={stop.stopName}
-                    lat={stop.lat}
-                    lng={stop.lng}
-                    message={stop.buses}
+                    key={bus.name}
+                    lat={bus.lat}
+                    lng={bus.lng}
+                    stopName={bus.name}
                   />
                 ))}
+              {inNus && (
+                <Marker
+                  lat={eventLatLng.lat}
+                  lng={eventLatLng.lng}
+                  message={address}
+                />
+              )}
               {coords && (
                 <CurrentMarker
                   lat={coords.latitude}
@@ -134,7 +128,7 @@ const EventDetailedMap = ({
           </div>
         </Segment>
         {coords && inNus && (
-          <EventDetailDirections
+          <EventDetailedDirections
             busInfo={busInfo}
             eventStop={eventStop}
             setZoom={setZoom}
@@ -144,7 +138,7 @@ const EventDetailedMap = ({
     );
   } else {
     return (
-      <Segment attached="bottom">
+      <Segment attached="bottom" padded="very">
         <Container>
           <Loader active />
         </Container>

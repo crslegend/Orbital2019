@@ -68,6 +68,7 @@ export const getBusInfo = (pathInfo, eventStop) => {
   var busInfo = [
     {
       stopName: pathInfo[0].caption,
+      name: pathInfo[0].name,
       buses: pathInfo[0].buses,
       lat: pathInfo[0].lat,
       lng: pathInfo[0].lng,
@@ -87,6 +88,7 @@ export const getBusInfo = (pathInfo, eventStop) => {
         busInfo[i].endName = pathInfo[j - counter].caption;
         busInfo.push({
           stopName: pathInfo[j - counter].caption,
+          name: pathInfo[j-counter].name,
           buses: pathInfo[j - counter].buses,
           lat: pathInfo[j - counter].lat,
           lng: pathInfo[j - counter].lng,
@@ -170,9 +172,9 @@ export const handleApiLoaded = (
         var busPath = new maps.Polyline({
           path: snappedCoords,
           geodesic: false,
-          strokeColor: "#b21f1f",
-          strokeOpacity: 0.8,
-          strokeWeight: 3.5
+          strokeColor: "#0080ff",
+          strokeOpacity: 0.55,
+          strokeWeight: 6
         });
 
         busPath.setMap(map);

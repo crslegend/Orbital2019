@@ -11,7 +11,7 @@ const EventDetailedSidebar = ({ attendees }) => {
         attached="top"
         secondary
         inverted
-        color="teal"
+        color="blue"
       >
         {attendees && attendees.length - 1}{" "}
         {attendees && attendees.length - 1 === 1 ? "Person" : "People"} Going
