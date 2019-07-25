@@ -177,3 +177,7 @@ i.big.icon, i.big.icons {
   vertical-align: middle;
   font-size: 1.5em;
 }
+
+.pushable:not(body) {
+  transform: none;
+}
