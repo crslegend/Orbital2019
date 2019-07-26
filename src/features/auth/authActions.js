@@ -34,7 +34,8 @@ export const registerUser = user => {
       let newUser = {
         displayName: user.displayName,
         createdAt: firestore.FieldValue.serverTimestamp(),
-        userType: user.userType
+        userType: user.userType,
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/helpden-ba041.appspot.com/o/user.png?alt=media&token=13ee949b-fe14-46f7-84e3-86dd09ee19f2"
       };
       await firestore.set(`users/${createdUser.user.uid}`, { ...newUser });
       dispatch(closeModal());

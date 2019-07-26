@@ -33,7 +33,6 @@ class EventListItem extends Component {
                 src={imageSrc}
                 size="small"
                 style={imageStyle}
-                fluid
               />
             </Grid.Column>
             <Grid.Column width={11}>
