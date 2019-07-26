@@ -1,24 +1,16 @@
 import React from "react";
-import {
-  Card,
-  Grid,
-  Header,
-  Image,
-  Segment,
-  Tab,
-  List
-} from "semantic-ui-react";
+import { Grid, Header, Image, Segment, Tab, List } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 const panesForTutor = [
-  { menuItem: "Classes Tutored", pane: { key: "tutoring" } },
+  { menuItem: "Classes Taught/Teaching", pane: { key: "tutoring" } },
   { menuItem: "Past Classes", pane: { key: "pastclasses" } },
   { menuItem: "Future Classes", pane: { key: "futureclasses" } }
 ];
 
 const panesForTutee = [
-  { menuItem: "Classes Attended", pane: { key: "allclasses" } },
+  { menuItem: "Classes Attended/Attending", pane: { key: "allclasses" } },
   { menuItem: "Past Classes", pane: { key: "pastclasses" } },
   { menuItem: "Future Classes", pane: { key: "futureclasses" } }
 ];
@@ -39,7 +31,7 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
           {events &&
             events.map(event => (
               <List.Item>
-                <Image src={"/assets/classroom.jpg"} size="tiny" />
+                <Image src={"/assets/" + event.subject + ".jpg"} size="tiny" />
                 <List.Content>
                   <br />
                   <List.Header

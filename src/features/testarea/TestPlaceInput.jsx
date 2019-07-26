@@ -1,6 +1,5 @@
 import React from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
-import { deepStrictEqual } from "assert";
 
 class TestPlaceInput extends React.Component {
   constructor(props) {
@@ -16,8 +15,7 @@ class TestPlaceInput extends React.Component {
   };
 
   render() {
-
-    const {selectAddress} = this.props;
+    const { selectAddress } = this.props;
     return (
       <PlacesAutocomplete
         value={this.state.address}

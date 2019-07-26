@@ -3,7 +3,6 @@ import { Grid, Divider } from "semantic-ui-react";
 import SettingsNav from "./SettingsNav";
 import { Route, Redirect, Switch } from "react-router-dom";
 import BasicPage from "./BasicPage";
-import AboutPage from "./AboutPage";
 import PhotosPage from "./Photos/PhotosPage";
 import AccountPage from "./AccountPage";
 import { connect } from "react-redux";

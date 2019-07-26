@@ -47,15 +47,8 @@ class UserDetailedPage extends Component {
   };
 
   render() {
-    const {
-      profile,
-      auth,
-      match,
-      requesting,
-      events,
-      eventsLoading
-    } = this.props;
-    const isCurrentUser = auth.uid === match.params.id;
+    const { profile, requesting, events, eventsLoading } = this.props;
+    //const isCurrentUser = auth.uid === match.params.id;
 
     // this below means if any request statuses in firestore when loading this page is
     // true, then loading is set to true

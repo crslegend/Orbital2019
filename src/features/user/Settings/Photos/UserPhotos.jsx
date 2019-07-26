@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { Header, Card, Image, Button } from "semantic-ui-react";
-import { setMinutes } from "date-fns/esm";
 
 const UserPhotos = ({
   photos,

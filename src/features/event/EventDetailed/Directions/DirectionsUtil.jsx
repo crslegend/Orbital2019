@@ -1,6 +1,4 @@
 import busStops from "./BusStopData";
-import { extend } from "@firebase/util";
-import { Route } from "react-router";
 import axios from "axios";
 
 export const findNearestBusStop = latLng => {
@@ -32,21 +30,30 @@ export const getBusPath = (map, start, end) => {
   if (end.opposite) {
     map.bfs(start.name);
     map.backtrack(end.opposite.name);
-    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
+    if (
+      (map.path.length < path.length && map.path.length > 1) ||
+      path.length === 1
+    ) {
       path = [...map.path];
     }
   }
   if (start.opposite) {
     map.bfs(start.opposite.name);
     map.backtrack(end.name);
-    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
+    if (
+      (map.path.length < path.length && map.path.length > 1) ||
+      path.length === 1
+    ) {
       path = [...map.path];
     }
   }
   if (end.opposite && start.opposite) {
     map.bfs(start.opposite.name);
     map.backtrack(end.opposite.name);
-    if ((map.path.length < path.length && map.path.length > 1) || path.length === 1) {
+    if (
+      (map.path.length < path.length && map.path.length > 1) ||
+      path.length === 1
+    ) {
       path = [...map.path];
     }
   }
@@ -88,7 +95,7 @@ export const getBusInfo = (pathInfo, eventStop) => {
         busInfo[i].endName = pathInfo[j - counter].caption;
         busInfo.push({
           stopName: pathInfo[j - counter].caption,
-          name: pathInfo[j-counter].name,
+          name: pathInfo[j - counter].name,
           buses: pathInfo[j - counter].buses,
           lat: pathInfo[j - counter].lat,
           lng: pathInfo[j - counter].lng,
@@ -193,7 +200,7 @@ export const handleApiLoaded = (
 
     directionsService.route(request, (result, status) => {
       console.log(status);
-      if (status === 'OK') {
+      if (status === "OK") {
         renderer.setDirections(result);
       }
     });
