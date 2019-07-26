@@ -11,7 +11,7 @@ const newActivity = (type, event, id) => {
     type: type,
     eventDate: event.date,
     tutorName: event.tutorName,
-    subject: event.subject,
+    subject: event.className,
     // photoURL: newEvent.photoURL,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
     tutorUid: event.tutorUid,
