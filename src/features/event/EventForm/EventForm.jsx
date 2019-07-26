@@ -6,7 +6,6 @@ import {
   Button,
   Grid,
   Header,
-  Checkbox,
   Divider
 } from "semantic-ui-react";
 import { connect } from "react-redux";

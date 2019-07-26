@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Segment, Icon, Popup, Loader, Container } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import { geolocated } from "react-geolocated";
@@ -120,10 +120,7 @@ const EventDetailedMap = ({
           </div>
         </Segment>
         {coords && inNus && (
-          <EventDetailedDirections
-            busInfo={busInfo}
-            eventStop={eventStop}
-          />
+          <EventDetailedDirections busInfo={busInfo} eventStop={eventStop} />
         )}
       </Fragment>
     );

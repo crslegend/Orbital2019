@@ -1,8 +1,7 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
 import { Segment, Grid, Icon, Button } from "semantic-ui-react";
 import EventDetailedMap from "./EventDetailedMap.jsx";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const EventDetailedInfo = ({ event }) => {
   const [isMapOpen, showMapToggle] = useState(false);

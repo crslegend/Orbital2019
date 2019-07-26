@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import XMLParser from "react-xml-parser";
 import {
@@ -7,11 +7,8 @@ import {
   Grid,
   Label,
   Header,
-  Loader,
-  Container,
   Segment,
-  Button,
-  SegmentGroup
+  Button
 } from "semantic-ui-react";
 
 class BusMarker extends Component {

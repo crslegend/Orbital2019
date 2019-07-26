@@ -7,8 +7,7 @@ import {
   Button,
   Label,
   Grid,
-  Image,
-  Header
+  Image
 } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";

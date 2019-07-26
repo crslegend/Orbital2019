@@ -1,11 +1,5 @@
-import React, { Component, Fragment, createRef } from "react";
-import {
-  Menu,
-  Container,
-  Sidebar,
-  Button,
-  Sticky
-} from "semantic-ui-react";
+import React, { Component, Fragment } from "react";
+import { Menu, Container, Sidebar, Button, Sticky } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";

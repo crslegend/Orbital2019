@@ -4,7 +4,6 @@ import { incrementAsync, decrementAsync } from "./testActions";
 import { Button } from "semantic-ui-react";
 import { openModal } from "../modals/modalActions";
 import TestPlaceInput from "./TestPlaceInput";
-import SimpleMap from "./SimpleMap";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import TestGeoLocation from "./TestGeoLocation";
 import NewMap from "./NewMap";
@@ -35,7 +34,7 @@ class TestComponent extends Component {
       .then(latLng => {
         this.setState({
           latlng: latLng
-        })
+        });
       })
       .catch(error => console.error("Error", error));
   };
@@ -72,7 +71,7 @@ class TestComponent extends Component {
         />
         <TestPlaceInput selectAddress={this.handleSelect} />
         <NewMap latLng={this.state.latlng} />
-        <TestGeoLocation/>
+        <TestGeoLocation />
       </div>
     );
   }
