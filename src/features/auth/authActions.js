@@ -35,7 +35,8 @@ export const registerUser = user => {
         displayName: user.displayName,
         createdAt: firestore.FieldValue.serverTimestamp(),
         userType: user.userType,
-        photoURL: "https://firebasestorage.googleapis.com/v0/b/helpden-ba041.appspot.com/o/user.png?alt=media&token=13ee949b-fe14-46f7-84e3-86dd09ee19f2"
+        photoURL:
+          "https://firebasestorage.googleapis.com/v0/b/helpden-ba041.appspot.com/o/user.png?alt=media&token=13ee949b-fe14-46f7-84e3-86dd09ee19f2"
       };
       await firestore.set(`users/${createdUser.user.uid}`, { ...newUser });
       dispatch(closeModal());
@@ -84,7 +85,7 @@ export const socialLogin = selectedProvider => async (
     if (user.additionalUserInfo.isNewUser) {
       await firestore.set(`users/${user.user.uid}`, {
         displayName: user.profile.displayName,
-        // photoURL: user.profile.avatarUrl,
+        photoURL: user.profile.avatarUrl,
         createdAt: firestore.FieldValue.serverTimestamp()
       });
     }
