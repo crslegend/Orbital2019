@@ -11,7 +11,7 @@ class SocialLoginModal extends Component {
 
   handleClose = () => {
     this.setState({ modalOpen: false });
-    this.props.history.push("/settings/basic");
+    this.props.history.push("/settings/about");
   };
   render() {
     return (
