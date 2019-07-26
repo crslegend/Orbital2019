@@ -22,14 +22,20 @@ class EventListItem extends Component {
       event && event.attendees && objectToArray(event.attendees);
     var imageSrc = "/assets/" + event.subject + ".jpg";
     const imageStyle = {
-      height: "100px",
+      height: "100px"
     };
     return (
       <Segment.Group>
         <Segment>
           <Grid verticalAlign="middle" stackable columns={2}>
             <Grid.Column width={4}>
-              <Image rounded src={imageSrc} size="small" style={imageStyle} fluid/>
+              <Image
+                rounded
+                src={imageSrc}
+                size="small"
+                style={imageStyle}
+                fluid
+              />
             </Grid.Column>
             <Grid.Column width={11}>
               <Item>
@@ -73,6 +79,7 @@ class EventListItem extends Component {
           </List>
         </Segment>
         <Segment clearing>
+          {event.inNus && <Label color="blue" content="NUS" tag />}
           {event.cancelled && <Label color="red" content="Cancelled" tag />}
           {attendees && attendees.length > event.size && (
             <Label color="orange" content="Full" tag />

@@ -208,3 +208,9 @@ a {
   margin-bottom: 0;
   margin-top: 0;
 }
+
+.ui.blue.label, .ui.blue.labels .label {
+  background-color: #1a2a6c!important;
+  border-color: #1a2a6c!important;
+  color: #fff!important;
+}

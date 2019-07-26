@@ -34,8 +34,6 @@ class NavBar extends Component {
     this.props.history.push("/classes");
   };
 
-  contextRef = createRef();
-
   render() {
     const {
       auth,
@@ -66,10 +64,9 @@ class NavBar extends Component {
             )}
           </Container>
         </Menu>
-        <Sticky context={this.contextRef}>
+        <Sticky>
           <Sidebar
             as={Menu}
-            pointing
             animation="overlay"
             direction="right"
             onHide={handleSidebarHide}
