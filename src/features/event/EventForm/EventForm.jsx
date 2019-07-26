@@ -17,7 +17,6 @@ import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
 import PlaceInput from "../../../app/common/form/PlaceInput";
-import RadioInput from "../../../app/common/form/RadioInput";
 import {
   combineValidators,
   composeValidators,
@@ -113,12 +112,15 @@ class EventForm extends Component {
     areaLatLng: {},
     locationLatLng: {},
     address: "",
-    inNus: false
+    inNus: null
   };
 
   async componentDidMount() {
-    const { firestore, match } = this.props;
+    const { firestore, match, event } = this.props;
     await firestore.setListener(`events/${match.params.id}`);
+    this.setState({
+      inNus: event.inNus
+    });
   }
 
   async componentWillUnmount() {
