@@ -324,11 +324,10 @@ export const setMainPhoto = photo => async (dispatch, getState) => {
       let eventDocRef = await firestore
         .collection("events")
         .doc(eventQuerySnap.docs[i].data().eventId);
-
       let event = await eventDocRef.get(); // get in the form of array
 
       // batch update the photoURL inside the events collection
-      if (event.data().tutorUid === user.uid) {
+      if (event.data() && event.data().tutorUid === user.uid) {
         batch.update(eventDocRef, {
           tutorPhotoURL: photo.url,
           [`attendees.${user.uid}.photoURL`]: photo.url
@@ -338,7 +337,6 @@ export const setMainPhoto = photo => async (dispatch, getState) => {
           [`attendees.${user.uid}.photoURL`]: photo.url
         });
       }
-
       // batch update the photoURL inside the event attendee collection
       let eventAttendeeDocRef = await firestore
         .collection("event_attendee")
