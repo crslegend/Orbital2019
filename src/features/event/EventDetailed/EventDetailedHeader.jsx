@@ -72,83 +72,98 @@ const EventDetailedHeader = ({
                     </Item.Content>
                   </Item>
                 </Grid.Column>
-                <Grid.Column width={3} verticalAlign="bottom">
-                  {isHost && (
-                    <Button as={Link} to={`/manage/${event.id}`} icon inverted>
-                      <Icon name="edit" />
-                    </Button>
-                  )}
-
-                  {!isHost && profile.userType === "tutee" && (
-                    <Fragment>
-                      {isGoing ? (
-                        <Button
-                          loading={loading}
-                          onClick={() => cancelGoingToEvent(event)}
-                          icon
-                          inverted
-                        >
-                          <Icon name="user times" />
-                        </Button>
-                      ) : (
-                        !event.cancelled &&
-                        attendees &&
-                        attendees.length < event.size + 1 && (
-                          <Button
-                            loading={loading}
-                            onClick={() => goingToEvent(event)}
-                            icon
-                            inverted
-                          >
-                            <Icon name="user plus" />
-                          </Button>
-                        )
-                      )}
-                    </Fragment>
-                  )}
-                </Grid.Column>
               </Grid>
             </Item.Group>
           </Segment>
         </Segment>
 
         <Segment attached="bottom" clearing>
-          {!isHost && profile.userType === "tutee" && (
-            <Fragment>
-              {event.cancelled &&
-              attendees &&
-              attendees.length < event.size + 1 ? (
-                <Label color="red" tag>
-                  Cancelled
-                </Label>
-              ) : (
-                attendees &&
-                attendees.length > event.size && (
-                  <Label color="orange" tag>
-                    Full
-                  </Label>
-                )
+          <Grid>
+            <Grid.Column width={10} verticalAlign="middle">
+              {isHost && (
+                <Fragment>
+                  {event.cancelled ? (
+                    <Label color="red" content="Cancelled" tag />
+                  ) : (
+                    attendees &&
+                    attendees.length > event.size && (
+                      <Label color="orange" content="Full" tag />
+                    )
+                  )}
+                  {event.cancelled &&
+                    attendees &&
+                    attendees.length > event.size && (
+                      <Label color="orange" content="Full" tag />
+                    )}
+                </Fragment>
               )}
-            </Fragment>
-          )}
+              {!isHost && profile.userType === "tutee" && (
+                <Fragment>
+                  {event.cancelled &&
+                  attendees &&
+                  attendees.length < event.size + 1 ? (
+                    <Label color="red" tag>
+                      Cancelled
+                    </Label>
+                  ) : (
+                    attendees &&
+                    attendees.length > event.size && (
+                      <Label color="orange" tag>
+                        Full
+                      </Label>
+                    )
+                  )}
+                </Fragment>
+              )}
+            </Grid.Column>
 
-          {isHost && (
-            <Fragment>
-              {event.cancelled ? (
-                <Label color="red" content="Cancelled" tag />
-              ) : (
-                attendees &&
-                attendees.length > event.size && (
-                  <Label color="orange" content="Full" tag />
-                )
+            <Grid.Column width={6} verticalAlign="middle">
+              {isHost && (
+                <Button
+                  as={Link}
+                  to={`/manage/${event.id}`}
+                  icon
+                  labelPosition="right"
+                  floated="right"
+                >
+                  Edit
+                  <Icon name="edit" />
+                </Button>
               )}
-              {event.cancelled &&
-                attendees &&
-                attendees.length > event.size && (
-                  <Label color="orange" content="Full" tag />
-                )}
-            </Fragment>
-          )}
+
+              {!isHost && profile.userType === "tutee" && (
+                <Fragment>
+                  {isGoing ? (
+                    <Button
+                      loading={loading}
+                      onClick={() => cancelGoingToEvent(event)}
+                      icon
+                      labelPosition="right"
+                      floated="right"
+                    >
+                      Cancel Place
+                      <Icon name="user times" />
+                    </Button>
+                  ) : (
+                    !event.cancelled &&
+                    attendees &&
+                    attendees.length < event.size + 1 && (
+                      <Button
+                        loading={loading}
+                        onClick={() => goingToEvent(event)}
+                        icon
+                        labelPosition="right"
+                        floated="right"
+                      >
+                        Sign Up
+                        <Icon name="user plus" />
+                      </Button>
+                    )
+                  )}
+                </Fragment>
+              )}
+            </Grid.Column>
+          </Grid>
         </Segment>
       </Segment.Group>
     </Fragment>
