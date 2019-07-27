@@ -15,7 +15,7 @@ const HomePage = ({ history }) => {
         <Header as="h1" inverted>
           <Image
             className="ui massive image"
-            src="/assets/logo.png"
+            src="/assets/logo2.png"
             alt="logo"
             style={{ marginBottom: 12 }}
           />
