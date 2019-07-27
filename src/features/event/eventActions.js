@@ -38,6 +38,21 @@ export const createEvent = event => {
   };
 };
 
+export const createKeywords = name => {
+  const arrName = [];
+  const arrWords = name.toLowerCase().split(" ");
+
+  arrWords.forEach(word => {
+    let curWord = "";
+    [...word].forEach(letter => {
+      curWord += letter;
+      arrName.push(curWord);
+    });
+  });
+
+  return arrName;
+};
+
 export const updateEvent = event => {
   return async (dispatch, getState) => {
     const firestore = firebase.firestore();
@@ -141,6 +156,33 @@ export const cancelToggle = (cancelled, eventId) => async (
   }
 };
 
+export const getSearchEvents = className => async (dispatch, getState) => {
+  const firestore = firebase.firestore();
+  const eventsRef = firestore.collection("events");
+  try {
+    dispatch(asyncActionStart());
+
+    let querySnap;
+    querySnap = await eventsRef
+      .where("keywords", "array-contains", className.toLowerCase())
+      .orderBy("date")
+      .limit(5)
+      .get();
+    dispatch(asyncActionFinish());
+    let events = [];
+
+    for (let i = 0; i < querySnap.docs.length; i++) {
+      let event = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
+      events.push(event);
+    }
+    dispatch({ type: FETCH_EVENTS, payload: { events } });
+    return querySnap;
+  } catch (error) {
+    console.log(error);
+    dispatch(asyncActionError());
+  }
+};
+
 export const getEventsforDashboard = (lastEvent, subject) => async (
   dispatch,
   getState
@@ -186,7 +228,6 @@ export const getEventsforDashboard = (lastEvent, subject) => async (
     }
 
     let querySnap = await query.get();
-    console.log(querySnap);
 
     if (querySnap.docs.length === 0) {
       dispatch(asyncActionFinish());

@@ -42,7 +42,7 @@ class NavBar extends Component {
         <Menu inverted fixed="top" borderless>
           <Container>
             <Menu.Item as={Link} to="/classes" header>
-              <img src="/assets/logo3.png" alt="logo" />
+              <img src="/assets/logo1.png" alt="logo" />
               HelpDen
             </Menu.Item>
 

@@ -9,7 +9,7 @@ import {
   Divider
 } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { updateEvent, createEvent, cancelToggle } from "../eventActions";
+import { updateEvent, createEvent, cancelToggle, createKeywords } from "../eventActions";
 import { reduxForm, Field } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
@@ -133,6 +133,7 @@ class EventForm extends Component {
       values.address = this.state.address;
       values.area = this.state.area;
       values.inNus = this.state.inNus;
+      values.keywords = createKeywords(values.className);
       if (this.props.initialValues.id) {
         if (Object.keys(values.locationLatLng).length === 0) {
           values.locationLatLng = this.props.event.locationLatLng;
