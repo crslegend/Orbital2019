@@ -146,7 +146,7 @@ const EventDetailedHeader = ({
                   ) : (
                     !event.cancelled &&
                     attendees &&
-                    attendees.length < event.size + 1 && (
+                    attendees.length <= event.size && (
                       <Button
                         loading={loading}
                         onClick={() => goingToEvent(event)}
