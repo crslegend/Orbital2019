@@ -121,24 +121,31 @@ class EventDashBoard extends Component {
       searchIsLoading: true,
       loadedEvents: []
     });
-    if (value.length < 1)
-      return this.setState({
+    if (value.length < 1) {
+      this.setState({
         searchIsLoading: false,
-        searchValue: "",
-        loadedEvents: []
+        searchResults: false
       });
+    }
 
     let result = await this.props.getSearchEvents(value);
 
     if (result && result.docs && result.docs.length < 1) {
       this.setState({
-        loadedEvents: prevEvents,
         searchResults: false
       });
+      let next = await this.props.getEventsforDashboard();
+
+      if (next && next.docs && next.docs.length >= 0) {
+        this.setState({
+          moreEvents: true,
+          loadingInitial: false
+        });
+      }
     } else {
       this.setState({
         searchResults: true
-      })
+      });
     }
 
     this.setState({
@@ -185,9 +192,11 @@ class EventDashBoard extends Component {
                       loading={searchIsLoading}
                       onChange={this.handleSearchChange}
                     />
-                    {!searchResults && <Label basic color="red" pointing="left">
-                      Oops! Class not found!
-                    </Label>}
+                    {!searchResults && (
+                      <Label basic color="red" pointing="left">
+                        Oops! Class not found!
+                      </Label>
+                    )}
                   </Grid.Column>
                   <Grid.Column textAlign="right" floated="right" width={4}>
                     <Dropdown
@@ -222,42 +231,44 @@ class EventDashBoard extends Component {
             </div>
           </Grid.Column>
           <Grid.Column width={16} only="mobile">
-          <Container className="filter">
-                <Grid>
-                  <Grid.Column floated="left" width={8}>
-                    <Input
-                      icon="search"
-                      loading={searchIsLoading}
-                      onChange={this.handleSearchChange}
-                    />
-                    {!searchResults && <Label basic color="red" pointing>
+            <Container className="filter">
+              <Grid>
+                <Grid.Column floated="left" width={8}>
+                  <Input
+                    icon="search"
+                    loading={searchIsLoading}
+                    onChange={this.handleSearchChange}
+                  />
+                  {!searchResults && (
+                    <Label basic color="red" pointing>
                       Oops! Class not found!
-                    </Label>}
-                  </Grid.Column>
-                  <Grid.Column textAlign="right" width={5}>
-                    <Dropdown
-                      text="Filter by:"
-                      icon="filter"
-                      floating
-                      labeled
-                      button
-                      className="icon"
-                    >
-                      <Dropdown.Menu>
-                        <Dropdown.Menu scrolling>
-                          {options.map(option => (
-                            <Dropdown.Item
-                              key={option.value}
-                              {...option}
-                              onClick={this.handleFilterSubject}
-                            />
-                          ))}
-                        </Dropdown.Menu>
+                    </Label>
+                  )}
+                </Grid.Column>
+                <Grid.Column textAlign="right" width={5}>
+                  <Dropdown
+                    text="Filter by:"
+                    icon="filter"
+                    floating
+                    labeled
+                    button
+                    className="icon"
+                  >
+                    <Dropdown.Menu>
+                      <Dropdown.Menu scrolling>
+                        {options.map(option => (
+                          <Dropdown.Item
+                            key={option.value}
+                            {...option}
+                            onClick={this.handleFilterSubject}
+                          />
+                        ))}
                       </Dropdown.Menu>
-                    </Dropdown>
-                  </Grid.Column>
-                </Grid>
-              </Container>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Grid.Column>
+              </Grid>
+            </Container>
             <EventList
               loading={loading}
               events={loadedEvents}
@@ -266,42 +277,44 @@ class EventDashBoard extends Component {
             />
           </Grid.Column>
           <Grid.Column width={16} only="tablet">
-          <Container className="filter">
-                <Grid>
-                  <Grid.Column verticalAlign="middle" floated="left" width={10}>
-                    <Input
-                      icon="search"
-                      loading={searchIsLoading}
-                      onChange={this.handleSearchChange}
-                    />
-                    {!searchResults && <Label basic color="red" pointing>
+            <Container className="filter">
+              <Grid>
+                <Grid.Column verticalAlign="middle" floated="left" width={10}>
+                  <Input
+                    icon="search"
+                    loading={searchIsLoading}
+                    onChange={this.handleSearchChange}
+                  />
+                  {!searchResults && (
+                    <Label basic color="red" pointing>
                       Oops! Class not found!
-                    </Label>}
-                  </Grid.Column>
-                  <Grid.Column textAlign="right" floated="right" width={4}>
-                    <Dropdown
-                      text="Filter by:"
-                      icon="filter"
-                      floating
-                      labeled
-                      button
-                      className="icon"
-                    >
-                      <Dropdown.Menu>
-                        <Dropdown.Menu scrolling>
-                          {options.map(option => (
-                            <Dropdown.Item
-                              key={option.value}
-                              {...option}
-                              onClick={this.handleFilterSubject}
-                            />
-                          ))}
-                        </Dropdown.Menu>
+                    </Label>
+                  )}
+                </Grid.Column>
+                <Grid.Column textAlign="right" floated="right" width={4}>
+                  <Dropdown
+                    text="Filter by:"
+                    icon="filter"
+                    floating
+                    labeled
+                    button
+                    className="icon"
+                  >
+                    <Dropdown.Menu>
+                      <Dropdown.Menu scrolling>
+                        {options.map(option => (
+                          <Dropdown.Item
+                            key={option.value}
+                            {...option}
+                            onClick={this.handleFilterSubject}
+                          />
+                        ))}
                       </Dropdown.Menu>
-                    </Dropdown>
-                  </Grid.Column>
-                </Grid>
-              </Container>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Grid.Column>
+              </Grid>
+            </Container>
             <EventList
               loading={loading}
               events={loadedEvents}
