@@ -9,24 +9,29 @@ import { configureStore } from "./app/store/configureStore";
 import ScrollToTop from "./app/common/util/ScrollToTop";
 import ReduxToastr from "react-redux-toastr";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
+import { loadUser, OidcProvider } from "redux-oidc";
+import userManager from "./features/auth/OidcUtil.jsx";
 
 const store = configureStore();
+loadUser(store, userManager);
 
 const rootEl = document.getElementById("root");
 
 let render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <BrowserRouter>
-        <ScrollToTop>
-          <ReduxToastr
-            position="bottom-right"
-            transitionIn="fadeIn"
-            transitionOut="fadeOut"
-          />
-          <App />
-        </ScrollToTop>
-      </BrowserRouter>
+      <OidcProvider store={store} userManager={userManager}>
+        <BrowserRouter>
+          <ScrollToTop>
+            <ReduxToastr
+              position="bottom-right"
+              transitionIn="fadeIn"
+              transitionOut="fadeOut"
+            />
+            <App />
+          </ScrollToTop>
+        </BrowserRouter>
+      </OidcProvider>
     </Provider>,
     rootEl
   );

@@ -10,6 +10,7 @@ import SettingsDashBoard from "../../features/user/Settings/SettingsDashboard";
 import UserDetailedPage from "../../features/user/UserDetailed/UserDetailedPage";
 import EventForm from "../../features/event/EventForm/EventForm";
 import ModalManager from "../../features/modals/ModalManager";
+import CallBackPage from "../../features/auth/CallBackPage"
 import TestComponent from "../../features/testarea/TestComponent";
 import NotFound from "./NotFound";
 
@@ -55,6 +56,7 @@ class App extends Component {
                         path="/classes/:id"
                         component={EventDetailedPage}
                       />
+                      <Route path="/callback" component={CallBackPage}/>
                       <Route path="/people" component={PeopleDashboard} />
                       <Route path="/profile/:id" component={UserDetailedPage} />
                       <Route path="/settings" component={SettingsDashBoard} />

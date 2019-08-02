@@ -3,14 +3,15 @@ import { Label, Form, Segment, Button, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../../../app/common/form/TextInput";
 import { connect } from "react-redux";
-import { registerUser, socialLogin } from "../authActions";
+import { registerUser, socialLogin, oidcLogin } from "../authActions";
 import { combineValidators, isRequired } from "revalidate";
 import RadioInput from "../../../app/common/form/RadioInput";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
 const mapDispatchToProps = {
   registerUser,
-  socialLogin
+  socialLogin,
+  oidcLogin,
 };
 
 const validate = combineValidators({
@@ -85,7 +86,7 @@ const RegisterForm = ({
             Register
           </Button>
           <Divider horizontal>Or</Divider>
-          <SocialLogin socialLogin={socialLogin} />
+          <SocialLogin socialLogin={socialLogin} oidcLogin={oidcLogin} />
         </Segment>
       </Form>
     </div>

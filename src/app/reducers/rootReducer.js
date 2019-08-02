@@ -8,6 +8,7 @@ import asyncReducer from "../../features/async/asyncReducer";
 import { reducer as ToastrReducer } from "react-redux-toastr";
 import { firebaseReducer } from "react-redux-firebase";
 import { firestoreReducer } from "redux-firestore";
+import { reducer as OidcReducer } from "redux-oidc";
 
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   modals: modalReducer,
   auth: authReducer,
   async: asyncReducer,
-  toastr: ToastrReducer
+  toastr: ToastrReducer,
+  oidc: OidcReducer
 });
 
 export default rootReducer;

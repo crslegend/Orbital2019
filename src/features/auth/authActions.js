@@ -93,3 +93,19 @@ export const socialLogin = selectedProvider => async (
     console.log(error);
   }
 };
+
+export const oidcLogin = selectedProvider => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+
+  try {
+    dispatch(closeModal());
+    console.log(selectedProvider);
+  } catch (error) {
+    console.log(error);
+  }
+};

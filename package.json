@@ -4,12 +4,14 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
+    "babel-polyfill": "^6.26.0",
     "cuid": "^2.1.6",
     "date-fns": "^2.0.0-alpha.27",
     "firebase": "^6.0.2",
     "google-map-react": "^1.1.4",
     "google-maps-react": "^2.0.2",
     "moment": "^2.22.0",
+    "oidc-client": "^1.8.2",
     "react": "^16.8.6",
     "react-cropper": "^1.2.0",
     "react-datepicker": "^2.5.0",
@@ -30,6 +32,7 @@
     "redux-auth-wrapper": "^2.1.0",
     "redux-firestore": "^0.3.2",
     "redux-form": "^7.4.2",
+    "redux-oidc": "^3.1.4",
     "redux-thunk": "^2.3.0",
     "revalidate": "^1.2.0",
     "semantic-ui-react": "^0.87.1"
