@@ -33,7 +33,8 @@ const EventDetailedHeader = ({
   goingToEvent,
   cancelGoingToEvent,
   attendees,
-  loading
+  loading,
+  manage
 }) => {
   var imageSrc = "/assets/" + event.subject + ".jpg";
   return (
@@ -155,6 +156,37 @@ const EventDetailedHeader = ({
                         floated="right"
                       >
                         Sign Up
+                        <Icon name="user plus" />
+                      </Button>
+                    )
+                  )}
+                </Fragment>
+              )}
+              {!isHost && profile.userType === "tuteeAdmin" && (
+                <Fragment>
+                  {isGoing ? (
+                    <Button
+                      loading={loading}
+                      onClick={() => cancelGoingToEvent(event)}
+                      icon
+                      labelPosition="right"
+                      floated="right"
+                    >
+                      Cancel Place
+                      <Icon name="user times" />
+                    </Button>
+                  ) : (
+                    !event.cancelled &&
+                    attendees &&
+                    attendees.length <= event.size && (
+                      <Button
+                        loading={loading}
+                        onClick={manage}
+                        icon
+                        labelPosition="right"
+                        floated="right"
+                      >
+                        Add/Remove Tutees
                         <Icon name="user plus" />
                       </Button>
                     )

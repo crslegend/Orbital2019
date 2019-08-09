@@ -10,6 +10,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventListAttendee from "../EventList/EventListAttendee";
 import NotFound from "../../../app/layout/NotFound";
 import EventDetailedSidebar from "./EventDetailedSidebar";
+import { openModal } from "../../modals/modalActions";
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
@@ -36,7 +37,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
   goingToEvent,
-  cancelGoingToEvent
+  cancelGoingToEvent,
+  openModal
 };
 
 class EventDetailedPage extends Component {
@@ -60,6 +62,10 @@ class EventDetailedPage extends Component {
     const { firestore, match } = this.props;
     await firestore.unsetListener(`events/${match.params.id}`);
   }
+
+  handleManageUsers = () => {
+    this.props.openModal("TuteeAdminModal");
+  };
 
   render() {
     const {
@@ -100,6 +106,7 @@ class EventDetailedPage extends Component {
                 goingToEvent={goingToEvent}
                 cancelGoingToEvent={cancelGoingToEvent}
                 attendees={attendees}
+                manage={this.handleManageUsers}
               />
               {/* <EventDetailedSidebar attendees={attendees} /> */}
               <Segment
@@ -141,6 +148,7 @@ class EventDetailedPage extends Component {
                 goingToEvent={goingToEvent}
                 cancelGoingToEvent={cancelGoingToEvent}
                 attendees={attendees}
+                manage={this.handleManageUsers}
               />
             </Grid.Column>
 
@@ -162,6 +170,7 @@ class EventDetailedPage extends Component {
                 goingToEvent={goingToEvent}
                 cancelGoingToEvent={cancelGoingToEvent}
                 attendees={attendees}
+                manage={this.handleManageUsers}
               />
             </Grid.Column>
 

@@ -4,12 +4,14 @@ import TestModal from "./TestModal";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import SocialLoginModal from "./SocialLoginModal";
+import TuteeAdminModal from "./TuteeAdminModal"
 
 const modalLookup = {
   TestModal,
   LoginModal,
   RegisterModal,
-  SocialLoginModal
+  SocialLoginModal,
+  TuteeAdminModal
 };
 
 const mapStateToProps = state => ({

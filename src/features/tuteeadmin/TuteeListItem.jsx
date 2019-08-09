@@ -15,7 +15,7 @@ class TuteeListItem extends Component {
   };
 
   render() {
-    const { tutee, user } = this.props;
+    const { tutee, user, loading } = this.props;
     let joinDate =
       tutee.createdAt && format(tutee.createdAt.toDate(), "dd LLL yyyy");
 
@@ -36,7 +36,12 @@ class TuteeListItem extends Component {
             <Button basic color="green">
               Edit
             </Button>
-            <Button basic color="red" onClick={this.handleDelete}>
+            <Button
+              basic
+              color="red"
+              onClick={this.handleDelete}
+              loading={loading}
+            >
               Delete
             </Button>
           </div>

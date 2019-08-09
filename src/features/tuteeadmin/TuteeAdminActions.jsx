@@ -63,10 +63,61 @@ export const deleteTutee = tutee => async (
       subcollections: [{ collection: "tutees", doc: tutee.id }]
     });
     dispatch(asyncActionFinish());
-    toastr.success("Success", "Please refresh page");
+    toastr.success("Success", "Deleted a tutee");
   } catch (error) {
     console.log(error);
     dispatch(asyncActionError());
     toastr.error("Oops", "Something went wrong");
+  }
+};
+
+export const goingToEventAdmin = event => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  dispatch(asyncActionStart());
+  const firebase = getFirebase();
+  const firestore = firebase.firestore();
+  const user = firebase.auth().currentUser;
+  const profile = getState().firebase.profile;
+  const attendee = {
+    going: true,
+    joinDate: new Date(),
+    displayName: profile.displayName,
+    isTutor: false,
+    photoURL: profile.photoURL
+  };
+
+  try {
+    // just in case if multiple transactions are happening
+    // (Eg. tutor editing class details and tutee join class at the same time)
+    // .runTransaction() is use to check whether any changes to event details
+    // if there is a change, the method to sign up a tutee to the class will be re-run
+    let eventDocRef = firestore.collection("events").doc(event.id);
+    let eventAttendeeDocRef = firestore
+      .collection("event_attendee")
+      .doc(`${event.id}_${user.uid}`);
+
+    await firestore.runTransaction(async transaction => {
+      await transaction.get(eventDocRef);
+      await transaction.update(eventDocRef, {
+        [`attendees.${user.uid}`]: attendee
+      });
+      await transaction.set(eventAttendeeDocRef, {
+        eventId: event.id,
+        userUid: user.uid,
+        eventDate: event.date,
+        isTutor: false,
+        photoURL: profile.photoURL
+      });
+    });
+
+    dispatch(asyncActionFinish());
+    toastr.success("Success", "You have signed up for this class");
+  } catch (error) {
+    console.log(error);
+    dispatch(asyncActionError());
+    toastr.error("Oops", "Problem signing up to this class");
   }
 };

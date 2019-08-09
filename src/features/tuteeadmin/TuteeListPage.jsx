@@ -21,7 +21,8 @@ const query = ({ auth }) => {
 const mapStateToProps = state => ({
   user: state.firebase.profile,
   auth: state.firebase.auth,
-  tutees: state.firestore.ordered.tutees
+  tutees: state.firestore.ordered.tutees,
+  loading: state.async.loading
 });
 
 const mapDispatchToProps = {
@@ -30,7 +31,7 @@ const mapDispatchToProps = {
 
 class TuteeListPage extends Component {
   render() {
-    const { tutees, user } = this.props;
+    const { tutees, user, loading } = this.props;
     if (!tutees) {
       return (
         <Segment.Group>
@@ -56,6 +57,7 @@ class TuteeListPage extends Component {
                       tutee={tutee}
                       user={user}
                       deleteTutee={deleteTutee}
+                      loading={loading}
                     />
                   ))}
               </Card.Group>
