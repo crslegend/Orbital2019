@@ -1,7 +1,16 @@
 import React from "react";
-import { Grid, Header, Image, Segment, Tab, List } from "semantic-ui-react";
+import {
+  Grid,
+  Header,
+  Image,
+  Segment,
+  Tab,
+  List,
+  Divider
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import UserEventCalendar from "./UserEventCalender";
 
 const panesForTutor = [
   { menuItem: "Classes Taught/Teaching", pane: { key: "tutoring" } },
@@ -20,6 +29,7 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
     <Grid.Column width={16}>
       <Segment attached loading={eventsLoading}>
         <Header icon="calendar" content="Classes" />
+        <UserEventCalendar events={events} />
         <Tab
           onTabChange={(e, data) => changeTab(e, data)}
           panes={profile.userType === "tutor" ? panesForTutor : panesForTutee}
