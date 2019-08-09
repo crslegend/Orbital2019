@@ -12,6 +12,7 @@ import EventForm from "../../features/event/EventForm/EventForm";
 import ModalManager from "../../features/modals/ModalManager";
 import TestComponent from "../../features/testarea/TestComponent";
 import NotFound from "./NotFound";
+import TuteeAdminPage from "../../features/tuteeadmin/TuteeAdminPage";
 
 class App extends Component {
   state = {
@@ -57,6 +58,7 @@ class App extends Component {
                       />
                       <Route path="/people" component={PeopleDashboard} />
                       <Route path="/profile/:id" component={UserDetailedPage} />
+                      <Route path="/admin" component={TuteeAdminPage} />
                       <Route path="/settings" component={SettingsDashBoard} />
                       <Route path="/test" component={TestComponent} />
                       <Route
