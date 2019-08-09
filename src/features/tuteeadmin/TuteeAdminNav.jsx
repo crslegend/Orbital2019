@@ -15,7 +15,7 @@ const TuteeAdminNav = () => {
             content="Tutee Admin"
           />
           <Menu.Item as={NavLink} to="/admin/createtutee">
-            Create Tutee
+            Add New Tutee
           </Menu.Item><Menu.Item as={NavLink} to="/admin/manage">
             Manage Tutees
           </Menu.Item>

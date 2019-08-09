@@ -17,7 +17,7 @@ const mapDispatchToProps = {};
 
 class TuteeAdminPage extends Component {
   render() {
-    const { loading } = this.props;
+    const { loading, tutees, user } = this.props;
     return (
       <Grid stackable>
         <Grid.Column width={12}>

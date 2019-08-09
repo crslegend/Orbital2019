@@ -30,7 +30,7 @@ class CreateTuteeForm extends Component {
     return (
       <Segment.Group>
         <Header as="h2" attached="top">
-          Manage Tutees
+          Admin Dashboard
         </Header>
         <Segment attached>
           <Form
@@ -39,7 +39,7 @@ class CreateTuteeForm extends Component {
             loading={loading}
           >
             <Form.Field inline>
-              <label>Create New Tutee: </label>
+              <label>Add New Tutee: </label>
               <Input
                 placeholder="Tutee's name"
                 name="name"

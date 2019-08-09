@@ -74,6 +74,13 @@ const RegisterForm = ({
               label="Tutee"
               component={RadioInput}
             />
+            <Field
+              name="userType"
+              type="radio"
+              value="tuteeAdmin"
+              label="Admin"
+              component={RadioInput}
+            />
           </Form.Group>
           <Button
             disabled={invalid || submitting}

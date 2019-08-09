@@ -37,7 +37,36 @@ export const createTutee = name => {
     } catch (error) {
       console.log(error);
       dispatch(asyncActionError());
-      toastr.error("Oops", "You do not have permission to access this function");
+      toastr.error(
+        "Oops",
+        "You do not have permission to access this function"
+      );
     }
   };
+};
+
+export const deleteTutee = tutee => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  console.log(tutee);
+  dispatch(asyncActionStart());
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const admin = firebase.auth().currentUser;
+
+  try {
+    await firestore.delete({
+      collection: "users",
+      doc: admin.uid,
+      subcollections: [{ collection: "tutees", doc: tutee.id }]
+    });
+    dispatch(asyncActionFinish());
+    toastr.success("Success", "Please refresh page");
+  } catch (error) {
+    console.log(error);
+    dispatch(asyncActionError());
+    toastr.error("Oops", "Something went wrong");
+  }
 };
