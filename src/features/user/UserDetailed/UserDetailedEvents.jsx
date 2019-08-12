@@ -15,13 +15,13 @@ import UserEventCalendar from "./UserEventCalender";
 const panesForTutor = [
   { menuItem: "Classes Taught/Teaching", pane: { key: "tutoring" } },
   { menuItem: "Past Classes", pane: { key: "pastclasses" } },
-  { menuItem: "Future Classes", pane: { key: "futureclasses" } }
+  { menuItem: "Upcoming Classes", pane: { key: "futureclasses" } }
 ];
 
 const panesForTutee = [
   { menuItem: "Classes Attended/Attending", pane: { key: "allclasses" } },
   { menuItem: "Past Classes", pane: { key: "pastclasses" } },
-  { menuItem: "Future Classes", pane: { key: "futureclasses" } }
+  { menuItem: "Upcoming Classes", pane: { key: "futureclasses" } }
 ];
 
 const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
@@ -43,7 +43,7 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
             <List>
               {events &&
                 events.map(event => (
-                  <List.Item>
+                  <List.Item key={event.id}>
                     <Image
                       src={"/assets/" + event.subject + ".jpg"}
                       size="tiny"

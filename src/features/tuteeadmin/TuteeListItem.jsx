@@ -33,17 +33,14 @@ class TuteeListItem extends Component {
         </Card.Content>
         <Card.Content extra>
           <div className="ui two buttons">
-            <Button basic color="green">
-              Edit
-            </Button>
+            <Button basic color="green" icon="edit" />
             <Button
               basic
               color="red"
               onClick={this.handleDelete}
               loading={loading}
-            >
-              Delete
-            </Button>
+              icon="trash alternate"
+            />
           </div>
         </Card.Content>
       </Card>

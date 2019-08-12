@@ -2,6 +2,19 @@ import React from "react";
 import { Segment, Grid, Header, List, Item, Icon } from "semantic-ui-react";
 
 const UserDetailedInfo = ({ profile }) => {
+  var userType = "";
+  switch (profile.userType) {
+    case "tutee":
+      userType = "Tutee";
+      break;
+    case "tutor":
+      userType = "Tutor";
+      break;
+    case "tuteeAdmin":
+      userType = "Tutee Admin";
+      break;
+    default:
+  }
   return (
     <Grid.Column width={16}>
       <Segment>
@@ -9,7 +22,7 @@ const UserDetailedInfo = ({ profile }) => {
           <Grid.Column width={9}>
             <Header icon="smile" content="About Me" />
             <p>
-              I am a: <strong>{profile.userType || "-"}</strong>
+              I am a: <strong>{userType}</strong>
             </p>
             <p>
               Gender: <strong>{profile.gender || "-"}</strong>
