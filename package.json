@@ -11,6 +11,7 @@
     "google-maps-react": "^2.0.2",
     "moment": "^2.22.0",
     "react": "^16.8.6",
+    "react-big-calendar": "^0.22.0",
     "react-cropper": "^1.2.0",
     "react-datepicker": "^2.5.0",
     "react-dom": "^16.8.6",
