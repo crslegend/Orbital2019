@@ -58,6 +58,14 @@ const SignedInMenu = ({ signOut, profile, auth, hideSidebar }) => {
           </p>
         </Menu.Item>
       )}
+      {profile.userType === "tuteeAdmin" && (
+        <Menu.Item as={NavLink} to={"/admin"} onClick={hideSidebar}>
+          <p>
+            <Icon circular color="green" name="address book outline" />
+            Manage Tutees
+          </p>
+        </Menu.Item>
+      )}
       <Menu.Item onClick={() => {signOut(); hideSidebar();}} >
         <p>
           <Icon circular color="red" name="power" /> Sign Out
