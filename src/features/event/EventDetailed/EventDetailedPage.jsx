@@ -64,7 +64,7 @@ class EventDetailedPage extends Component {
   }
 
   handleManageUsers = () => {
-    this.props.openModal("TuteeAdminModal");
+    this.props.openModal("TuteeAdminModal", this.props.event);
   };
 
   render() {

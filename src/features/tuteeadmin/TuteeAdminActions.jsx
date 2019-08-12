@@ -5,6 +5,7 @@ import {
   asyncActionError,
   asyncActionFinish
 } from "../async/asyncActions";
+import { closeModal } from "../modals/modalActions.js";
 
 export const createTutee = name => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -71,7 +72,7 @@ export const deleteTutee = tutee => async (
   }
 };
 
-export const goingToEventAdmin = event => async (
+export const goingToEventAdmin = (event, tutees) => async (
   dispatch,
   getState,
   { getFirebase }
@@ -79,45 +80,88 @@ export const goingToEventAdmin = event => async (
   dispatch(asyncActionStart());
   const firebase = getFirebase();
   const firestore = firebase.firestore();
-  const user = firebase.auth().currentUser;
-  const profile = getState().firebase.profile;
-  const attendee = {
-    going: true,
-    joinDate: new Date(),
-    displayName: profile.displayName,
-    isTutor: false,
-    photoURL: profile.photoURL
-  };
+  const admin = firebase.auth().currentUser;
+  const attendees = [];
 
-  try {
-    // just in case if multiple transactions are happening
-    // (Eg. tutor editing class details and tutee join class at the same time)
-    // .runTransaction() is use to check whether any changes to event details
-    // if there is a change, the method to sign up a tutee to the class will be re-run
-    let eventDocRef = firestore.collection("events").doc(event.id);
-    let eventAttendeeDocRef = firestore
-      .collection("event_attendee")
-      .doc(`${event.id}_${user.uid}`);
+  // adding tutee details into event object
+  tutees.forEach(async tutee => {
+    let attendee = {
+      going: true,
+      joinDate: new Date(),
+      displayName: tutee.displayName,
+      isTutor: false,
+      photoURL: tutee.photoURL
+    };
 
-    await firestore.runTransaction(async transaction => {
-      await transaction.get(eventDocRef);
-      await transaction.update(eventDocRef, {
-        [`attendees.${user.uid}`]: attendee
+    attendees.push(tutee);
+
+    try {
+      // just in case if multiple transactions are happening
+      // (Eg. tutor editing class details and tutee join class at the same time)
+      // .runTransaction() is use to check whether any changes to event details
+      // if there is a change, the method to sign up a tutee to the class will be re-run
+      let eventDocRef = firestore.collection("events").doc(event.id);
+      let eventAttendeeDocRef = firestore
+        .collection("event_attendee")
+        .doc(`${event.id}_${tutee.tuteeUid}`);
+
+      await firestore.runTransaction(async transaction => {
+        await transaction.get(eventDocRef);
+        await transaction.update(eventDocRef, {
+          [`attendees.${tutee.tuteeUid}`]: attendee
+        });
+
+        await transaction.set(eventAttendeeDocRef, {
+          eventId: event.id,
+          userUid: tutee.tuteeUid,
+          eventDate: event.date,
+          isTutor: false,
+          photoURL: tutee.photoURL
+        });
       });
-      await transaction.set(eventAttendeeDocRef, {
-        eventId: event.id,
-        userUid: user.uid,
-        eventDate: event.date,
-        isTutor: false,
-        photoURL: profile.photoURL
-      });
-    });
+    } catch (error) {
+      console.log(error);
+      dispatch(asyncActionError());
+      dispatch(closeModal());
+      toastr.error("Oops", "Problem signing up to this class");
+    }
+  });
 
-    dispatch(asyncActionFinish());
-    toastr.success("Success", "You have signed up for this class");
-  } catch (error) {
-    console.log(error);
-    dispatch(asyncActionError());
-    toastr.error("Oops", "Problem signing up to this class");
-  }
+  // storing event id and respective tutees in user collection "events"
+  // .set will overwrite current array of tutees
+  let adminDocRef = firestore
+    .collection("users")
+    .doc(admin.uid)
+    .collection("events")
+    .doc(event.id);
+
+  await adminDocRef.set({
+    attendees: attendees
+  });
+
+  dispatch(asyncActionFinish());
+  dispatch(closeModal());
+  toastr.success("Success", "Update successful");
+};
+
+export const cancelGoingToEventAdmin = (event, initialArr) => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  dispatch(asyncActionStart());
+  const firestore = getFirestore();
+
+  initialArr.forEach(async tuteeId => {
+    try {
+      await firestore.update(`events/${event.id}`, {
+        [`attendees.${tuteeId}`]: firestore.FieldValue.delete()
+      });
+      await firestore.delete(`event_attendee/${event.id}_${tuteeId}`);
+    } catch (error) {
+      console.log(error);
+      toastr.error("Oops", "Something went wrong");
+    }
+  })
+  
 };
