@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Grid,
-  Header,
-  Image,
-  Segment,
-  Tab,
-  List,
-  Divider
-} from "semantic-ui-react";
+import { Grid, Header, Image, Segment, Tab, List } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import UserEventCalendar from "./UserEventCalender";
@@ -76,26 +68,6 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab, profile }) => {
           <Grid.Column width={8}>
             <UserEventCalendar events={events} />
           </Grid.Column>
-
-          {/* <Card.Group itemsPerRow={2} only="mobile">
-          {events &&
-            events.map(event => (
-              <Card as={Link} to={`/classes/${event.id}`} key={event.id}>
-                <Image src={"/assets/classroom.jpg"} />
-                <Card.Content>
-                  <Card.Header textAlign="center">{event.subject}</Card.Header>
-                  <Card.Meta textAlign="center">
-                    <div>
-                      {format(event.date && event.date.toDate(), "dd LLL yyyy")}
-                    </div>
-                    <div>
-                      {format(event.date && event.date.toDate(), "h:mm a")}
-                    </div>
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
-            ))}
-        </Card.Group> */}
         </Grid>
       </Segment>
     </Grid.Column>

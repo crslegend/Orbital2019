@@ -3,7 +3,6 @@ import {
   Grid,
   Loader,
   Container,
-  Segment,
   Dropdown,
   Input,
   Label

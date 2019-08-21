@@ -90,15 +90,6 @@ class BasicPage extends Component {
                 maxDate={addYears(new Date(), -18)}
               />
             </Form.Group>
-
-            {/* <Field
-                        name='city'
-                        placeholder='Home Town'
-                        options={{types: ['(cities)']}}
-                        label='Female'
-                        component={PlaceInput}
-                        width={8}
-                    /> */}
             <Divider />
             <Button
               disabled={pristine || submitting}
@@ -144,13 +135,6 @@ class BasicPage extends Component {
               />
             )}
 
-            {/* <Field
-          width={8}
-          name="origin"
-          options={{ types: ['(regions)'] }}
-          component={PlaceInput}
-          placeholder="Country of Origin"
-        /> */}
             <Divider />
             <Button
               disabled={pristine || submitting}
