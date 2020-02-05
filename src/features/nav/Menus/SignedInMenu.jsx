@@ -8,6 +8,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 
 const SignedInMenu = ({ signOut, profile, auth, hideSidebar }) => {
+  // comment
   return (
     <Fragment>
       <Container textAlign="center">
